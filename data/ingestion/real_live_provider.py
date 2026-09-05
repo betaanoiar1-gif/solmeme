@@ -29,6 +29,7 @@ class RealSolanaLiveProvider(BaseDataProvider):
         self.mint_verifier = OnChainMintVerifier(self.rpc)
         self.swap_parser = RealSwapParser()
         self._parsed_swaps_cache: Dict[str, List[RealSwapRecord]] = {}
+        self._live_sol_price_usd: Optional[float] = None
 
     def is_network_connected(self) -> bool:
         """Probes live Solana RPC getHealth endpoint."""
@@ -83,6 +84,10 @@ class RealSolanaLiveProvider(BaseDataProvider):
         """
         Scans for newly active tokens directly from DEX endpoints or on-chain program signatures.
         """
+        # Capture one verified live SOL/USD quote for all swap parsing in this cycle.
+        # Never use a static price or a local-clock substitute.
+        self._live_sol_price_usd = self.get_sol_price_usd()
+
         # Try DEX public API scanner
         dex_tokens = self.dex_api.scan_recent_tokens(limit=limit)
         if dex_tokens:
@@ -100,7 +105,11 @@ class RealSolanaLiveProvider(BaseDataProvider):
             if not tx:
                 continue
 
-            swaps = self.swap_parser.parse_transaction(tx, source_type=SourceType.REAL)
+            swaps = self.swap_parser.parse_transaction(
+                tx,
+                sol_price_usd=self._live_sol_price_usd,
+                source_type=SourceType.REAL
+            )
             for s in swaps:
                 m_data = self.get_token_market_data(s.mint)
                 if m_data:
@@ -120,7 +129,7 @@ class RealSolanaLiveProvider(BaseDataProvider):
             "freeze_auth_revoked": verification.freeze_auth_revoked,
             "lp_locked_pct": None,  # Marked None (UNKNOWN) unless verified from LP vault
             "top10_holder_pct": verification.top10_holder_pct,
-            "dev_holding_pct": None, # Marked None (UNKNOWN)
+            "dev_holding_pct": None, # Marked None (UNKNOWN) unless verified from LP vault
             "is_honeypot": False,
             "is_wash_traded": False,
             "cluster_funder": None,
@@ -141,7 +150,11 @@ class RealSolanaLiveProvider(BaseDataProvider):
             tx = self.rpc.get_transaction(sig)
             if not tx:
                 continue
-            swaps = self.swap_parser.parse_transaction(tx, source_type=SourceType.REAL)
+            swaps = self.swap_parser.parse_transaction(
+                tx,
+                sol_price_usd=self._live_sol_price_usd,
+                source_type=SourceType.REAL
+            )
             for s in swaps:
                 if s.mint == mint:
                     results.append({
