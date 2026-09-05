@@ -3,7 +3,8 @@ Emerging Smart Money Intelligence Engine.
 Identifies early accumulation, order size escalation, and smart wallet behavior
 strictly from observed within-run transaction telemetry (cold start).
 Does NOT use historical pre-seeded reputations.
-Works alongside ProvenSmartMoneyEngine without altering existing logic.
+Zero fallback to default $1,000,000 pool liquidity.
+Zero conversion of unknown USD quotes to 0.0.
 """
 
 from dataclasses import dataclass, field
@@ -21,24 +22,28 @@ logger = logging.getLogger("meme_alpha_hunter.emerging_smart_money")
 class EmergingWalletProfile:
     wallet_pubkey: str
     swap_count: int = 0
+    verified_quote_swaps: int = 0
+    unverified_quote_swaps: int = 0
     buy_count: int = 0
     sell_count: int = 0
-    buy_volume_usd: float = 0.0
-    sell_volume_usd: float = 0.0
-    netflow_usd: float = 0.0
+    buy_volume_usd: Optional[float] = None
+    sell_volume_usd: Optional[float] = None
+    netflow_usd: Optional[float] = None
     first_seen: float = field(default_factory=time.time)
     last_seen: float = field(default_factory=time.time)
-    avg_trade_size_usd: float = 0.0
-    largest_trade_usd: float = 0.0
+    avg_trade_size_usd: Optional[float] = None
+    largest_trade_usd: Optional[float] = None
     consecutive_buys: int = 0
-    buy_acceleration: float = 0.0  # Order size scaling
-    sell_ratio: float = 0.0       # Sell volume / Total volume
+    buy_acceleration: Optional[float] = None  # Order size scaling
+    sell_ratio: Optional[float] = None       # Sell volume / Total volume
     holding_time_sec: float = 0.0
     tokens_traded: set = field(default_factory=set)
     pools_traded: set = field(default_factory=set)
-    max_pool_impact_pct: float = 0.0
+    max_pool_impact_pct: Optional[float] = None
     emerging_smart_money_score: float = 50.0 # 0 to 100
     is_emerging_smart_money: bool = False
+    liquidity_fallback_count: int = 0
+    unknown_quotes_count: int = 0
 
 
 @dataclass
@@ -46,10 +51,11 @@ class TokenEmergingSmartMoneySignal:
     mint: str
     symbol: str
     emerging_smart_score: float  # 0 to 100
-    emerging_netflow_usd: float
+    emerging_netflow_usd: Optional[float]
     accumulating_wallets_count: int
     distributing_wallets_count: int
-    total_emerging_volume_usd: float
+    total_emerging_volume_usd: Optional[float]
+    quote_quality: float  # 0.0 to 1.0 (ratio of verified quote swaps)
     signal_label: str  # "HIGH_CONVICTION_ACCUMULATION", "MODERATE_ACCUMULATION", "NEUTRAL", "DISTRIBUTION"
     provenance: Provenance = field(default_factory=Provenance)
 
@@ -61,9 +67,11 @@ class EmergingSmartMoneyEngine:
         self.wallets: Dict[str, EmergingWalletProfile] = {}
         self.token_swaps: Dict[str, List[RealSwapRecord]] = {}
 
-    def process_swap(self, swap: RealSwapRecord, pool_liquidity_usd: float = 1_000_000.0) -> EmergingWalletProfile:
+    def process_swap(self, swap: RealSwapRecord, pool_liquidity_usd: Optional[float] = None) -> EmergingWalletProfile:
         """
         Updates emerging wallet profile dynamically from a real swap.
+        Does NOT convert unknown quotes to 0.0.
+        Does NOT substitute default $1,000,000 for pool liquidity.
         """
         w = swap.wallet
         mint = swap.mint
@@ -81,36 +89,67 @@ class EmergingSmartMoneyEngine:
         p.tokens_traded.add(mint)
         p.pools_traded.add(swap.pool)
 
-        usd = swap.quote_amount_usd or 0.0
+        usd = swap.quote_amount_usd
 
-        if swap.side == "BUY":
-            p.buy_count += 1
-            p.buy_volume_usd += usd
-            p.consecutive_buys += 1
+        if usd is None:
+            # Quote is unknown: do NOT contribute to volume stats as 0.0
+            p.unverified_quote_swaps += 1
+            p.unknown_quotes_count += 1
+            if swap.side == "BUY":
+                p.buy_count += 1
+                p.consecutive_buys += 1
+            else:
+                p.sell_count += 1
+                p.consecutive_buys = 0
         else:
-            p.sell_count += 1
-            p.sell_volume_usd += usd
-            p.consecutive_buys = 0
+            p.verified_quote_swaps += 1
+            if swap.side == "BUY":
+                p.buy_count += 1
+                p.buy_volume_usd = (p.buy_volume_usd or 0.0) + usd
+                p.consecutive_buys += 1
+            else:
+                p.sell_count += 1
+                p.sell_volume_usd = (p.sell_volume_usd or 0.0) + usd
+                p.consecutive_buys = 0
 
-        p.netflow_usd = p.buy_volume_usd - p.sell_volume_usd
-        total_vol = p.buy_volume_usd + p.sell_volume_usd
-        p.sell_ratio = p.sell_volume_usd / max(total_vol, 1.0)
-        p.avg_trade_size_usd = total_vol / max(p.swap_count, 1)
-        p.largest_trade_usd = max(p.largest_trade_usd, usd)
+            p.netflow_usd = (p.buy_volume_usd or 0.0) - (p.sell_volume_usd or 0.0)
+            total_vol = (p.buy_volume_usd or 0.0) + (p.sell_volume_usd or 0.0)
+            p.sell_ratio = (p.sell_volume_usd or 0.0) / max(total_vol, 1.0)
+            p.avg_trade_size_usd = total_vol / max(p.verified_quote_swaps, 1)
+            p.largest_trade_usd = max(p.largest_trade_usd or 0.0, usd)
 
-        impact = (usd / max(pool_liquidity_usd, 1.0)) * 100.0
-        p.max_pool_impact_pct = max(p.max_pool_impact_pct, impact)
+            if pool_liquidity_usd is not None and pool_liquidity_usd > 0:
+                impact = (usd / pool_liquidity_usd) * 100.0
+                p.max_pool_impact_pct = max(p.max_pool_impact_pct or 0.0, impact)
+            else:
+                # Pool liquidity is unknown: keep as None (UNKNOWN)
+                pass
 
-        # Compute buy acceleration (largest vs average order scaling)
-        p.buy_acceleration = (p.largest_trade_usd - p.avg_trade_size_usd) / max(p.avg_trade_size_usd, 1.0)
+            if p.avg_trade_size_usd and p.avg_trade_size_usd > 0 and p.largest_trade_usd is not None:
+                p.buy_acceleration = (p.largest_trade_usd - p.avg_trade_size_usd) / p.avg_trade_size_usd
 
         # Compute Emerging Smart Money Score
-        # Accumulation consistency (30%) + Netflow scale (25%) + Size acceleration (20%) + Low sell pressure (15%) + Pool impact (10%)
         consec_score = min(p.consecutive_buys * 20.0, 100.0)
-        netflow_score = min(max(p.netflow_usd / 250.0, 0.0), 100.0) if p.netflow_usd > 0 else 0.0
-        accel_score = min(max((p.buy_acceleration + 0.5) * 50.0, 0.0), 100.0)
-        sell_pres_score = max(0.0, (1.0 - p.sell_ratio) * 100.0)
-        impact_score = min(p.max_pool_impact_pct * 100.0, 100.0)
+
+        if p.netflow_usd is not None:
+            netflow_score = min(max(p.netflow_usd / 250.0, 0.0), 100.0) if p.netflow_usd > 0 else 0.0
+        else:
+            netflow_score = 50.0  # Neutral when volume is unverified
+
+        if p.buy_acceleration is not None:
+            accel_score = min(max((p.buy_acceleration + 0.5) * 50.0, 0.0), 100.0)
+        else:
+            accel_score = 50.0  # Neutral
+
+        if p.sell_ratio is not None:
+            sell_pres_score = max(0.0, (1.0 - p.sell_ratio) * 100.0)
+        else:
+            sell_pres_score = 50.0  # Neutral
+
+        if p.max_pool_impact_pct is not None:
+            impact_score = min(p.max_pool_impact_pct * 100.0, 100.0)
+        else:
+            impact_score = 50.0  # Neutral when pool liquidity is unknown (never $1M)
 
         p.emerging_smart_money_score = round(
             (consec_score * 0.30) +
@@ -142,39 +181,51 @@ class EmergingSmartMoneyEngine:
                 accumulating_wallets_count=0,
                 distributing_wallets_count=0,
                 total_emerging_volume_usd=0.0,
+                quote_quality=1.0,
                 signal_label="NEUTRAL",
                 provenance=Provenance(source_type=SourceType.REAL, confidence=0.5)
             )
+
+        verified_swaps = [s for s in swaps if s.quote_amount_usd is not None]
+        quote_quality = len(verified_swaps) / max(len(swaps), 1)
 
         accumulators = set()
         distributors = set()
         emerging_buy_vol = 0.0
         emerging_sell_vol = 0.0
         emerging_scores = []
+        has_verified_emerging_trades = False
 
         for s in swaps:
             p = self.wallets.get(s.wallet)
             if p and p.is_emerging_smart_money:
                 emerging_scores.append(p.emerging_smart_money_score)
-                usd = s.quote_amount_usd or 0.0
-                if s.side == "BUY":
-                    accumulators.add(s.wallet)
-                    emerging_buy_vol += usd
+                if s.quote_amount_usd is not None:
+                    has_verified_emerging_trades = True
+                    usd = s.quote_amount_usd
+                    if s.side == "BUY":
+                        accumulators.add(s.wallet)
+                        emerging_buy_vol += usd
+                    else:
+                        distributors.add(s.wallet)
+                        emerging_sell_vol += usd
                 else:
-                    distributors.add(s.wallet)
-                    emerging_sell_vol += usd
+                    if s.side == "BUY":
+                        accumulators.add(s.wallet)
+                    else:
+                        distributors.add(s.wallet)
 
-        netflow = emerging_buy_vol - emerging_sell_vol
-        total_vol = emerging_buy_vol + emerging_sell_vol
+        netflow = (emerging_buy_vol - emerging_sell_vol) if has_verified_emerging_trades else None
+        total_vol = (emerging_buy_vol + emerging_sell_vol) if has_verified_emerging_trades else None
         avg_score = (sum(emerging_scores) / len(emerging_scores)) if emerging_scores else 50.0
 
-        if netflow >= 5_000.0 and len(accumulators) >= 2:
+        if netflow is not None and netflow >= 5_000.0 and len(accumulators) >= 2:
             token_score = min(avg_score + 15.0, 98.0)
             label = "HIGH_CONVICTION_ACCUMULATION"
-        elif netflow >= 1_000.0:
+        elif netflow is not None and netflow >= 1_000.0:
             token_score = min(avg_score + 8.0, 92.0)
             label = "MODERATE_ACCUMULATION"
-        elif netflow <= -5_000.0:
+        elif netflow is not None and netflow <= -5_000.0:
             token_score = max(avg_score - 25.0, 10.0)
             label = "DISTRIBUTION"
         else:
@@ -185,10 +236,11 @@ class EmergingSmartMoneyEngine:
             mint=mint,
             symbol=symbol,
             emerging_smart_score=round(token_score, 1),
-            emerging_netflow_usd=round(netflow, 2),
+            emerging_netflow_usd=round(netflow, 2) if netflow is not None else None,
             accumulating_wallets_count=len(accumulators),
             distributing_wallets_count=len(distributors),
-            total_emerging_volume_usd=round(total_vol, 2),
+            total_emerging_volume_usd=round(total_vol, 2) if total_vol is not None else None,
+            quote_quality=round(quote_quality, 4),
             signal_label=label,
-            provenance=Provenance(source_type=SourceType.REAL, confidence=1.0, verified_on_chain=True)
+            provenance=Provenance(source_type=SourceType.REAL, confidence=quote_quality, verified_on_chain=True)
         )
