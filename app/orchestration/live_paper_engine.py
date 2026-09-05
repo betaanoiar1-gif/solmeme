@@ -79,7 +79,7 @@ class RealLivePaperEngine:
         self.db = DatabaseManager(self.config.db_path)
         self.health = HealthMonitor(self.db)
 
-        self.rpc = SolanaRPCClient()
+        self.rpc = getattr(data_provider, "rpc", None) or SolanaRPCClient()
         self.provider = data_provider or RealSolanaLiveProvider(self.rpc)
         self.mint_verifier = OnChainMintVerifier(self.rpc)
         self.swap_parser = RealSwapParser()

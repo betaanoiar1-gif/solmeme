@@ -149,6 +149,14 @@ class SolanaRPCClient:
         res = self.call("getHealth")
         return res if isinstance(res, str) else ("ok" if res is not None else None)
 
+    def get_slot(self) -> Optional[int]:
+        res = self.call("getSlot")
+        return int(res) if res is not None and isinstance(res, (int, float)) else None
+
+    def get_latest_blockhash(self) -> Optional[Dict[str, Any]]:
+        res = self.call("getLatestBlockhash")
+        return res if isinstance(res, dict) else None
+
     def get_signatures_for_address(self, address: str, limit: int = 25) -> Optional[List[Dict[str, Any]]]:
         res = self.call("getSignaturesForAddress", [address, {"limit": limit}])
         return res if isinstance(res, list) else None
