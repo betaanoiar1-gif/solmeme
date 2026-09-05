@@ -1,0 +1,1 @@
+trade_id,strategy,mint,symbol,entry_time,entry_price,size_usd,exit_time,exit_price,exit_reason,realized_pnl_usd,return_pct,fee_paid_usd,slippage_paid_usd,mfe_pct,mae_pct,alpha_score,risk_score,regime,source_type
