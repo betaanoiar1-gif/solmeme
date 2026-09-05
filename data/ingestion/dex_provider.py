@@ -60,7 +60,10 @@ class DexPublicProvider(BaseDataProvider):
         url = f"https://api.dexscreener.com/latest/dex/tokens/{mint}"
         res = self._get_json(url)
         if res and "pairs" in res and res["pairs"]:
-            pair = res["pairs"][0]
+            # Prefer a Solana pair when DexScreener returns multiple chains/pairs.
+            solana_pairs = [p for p in res["pairs"] if p.get("chainId") == "solana"]
+            pair = solana_pairs[0] if solana_pairs else res["pairs"][0]
+
             pair_created = float(pair["pairCreatedAt"]) / 1000.0 if pair.get("pairCreatedAt") is not None else None
             price_val = float(pair["priceUsd"]) if pair.get("priceUsd") is not None else None
             liq_val = float(pair["liquidity"]["usd"]) if (pair.get("liquidity") and pair["liquidity"].get("usd") is not None) else None
@@ -95,22 +98,42 @@ class DexPublicProvider(BaseDataProvider):
         return None
 
     def scan_recent_tokens(self, limit: int = 50) -> List[Dict[str, Any]]:
+        """
+        Discovers recent Solana token profiles and enriches each candidate with
+        live DexScreener market data before returning it to the orchestration layer.
+        This is required because the token-profiles endpoint does not itself contain
+        price/liquidity fields, while live paper execution intentionally rejects
+        candidates whose current market price is unknown.
+        """
         url = "https://api.dexscreener.com/token-profiles/latest/v1"
         res = self._get_json(url)
-        tokens = []
+        tokens: List[Dict[str, Any]] = []
+
         if res and isinstance(res, list):
             for item in res[:limit]:
-                if item.get("chainId") == "solana":
-                    tokens.append({
-                        "mint": item.get("tokenAddress"),
-                        "symbol": item.get("symbol", ""),
-                        "name": item.get("description", "")[:20],
-                        "chain": "solana",
-                        "source": "DexScreenerProfiles",
-                        "first_seen_ts": time.time(),
-                        "updated_at": time.time(),
-                        "provenance": self.create_provenance(confidence=0.85).to_dict()
-                    })
+                if item.get("chainId") != "solana":
+                    continue
+
+                mint = item.get("tokenAddress")
+                if not mint:
+                    continue
+
+                # The profile endpoint has identity data only. Fetch the current
+                # live market record so the downstream engine receives a real price,
+                # liquidity, pool and pair creation timestamp.
+                market = self.get_token_market_data(mint)
+                if market is None:
+                    # Keep fail-closed semantics: no fabricated price/liquidity/age.
+                    logger.debug("Skipping discovered token %s: no live market pair", mint)
+                    continue
+
+                # Preserve the profile as discovery provenance while using verified
+                # live market fields for downstream scoring/eligibility.
+                market["source"] = "DexScreenerProfiles+Market"
+                market["discovery_description"] = (item.get("description") or "")[:200]
+                market["discovery_url"] = item.get("url")
+                tokens.append(market)
+
         return tokens
 
     def get_token_security_data(self, mint: str) -> Optional[Dict[str, Any]]:
