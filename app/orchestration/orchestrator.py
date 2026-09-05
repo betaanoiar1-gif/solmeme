@@ -191,7 +191,7 @@ class MemeAlphaHunterOrchestrator:
 
                 # Narrative
                 nar_name = self.narrative_engine.classify_token_narrative(token.symbol, token.name)
-                nar_metrics = narratives_map.get(nar_name, NarrativeMetrics(nar_name, 1, 1000.0, 50.0, 0.0, 0.0, "Emerging"))
+                nar_metrics = narratives_map.get(nar_name, NarrativeMetrics(name=nar_name, token_count=1, total_volume_24h=token.volume_24h, heat_score=None, velocity=None, acceleration=None, stage="Categorized"))
 
                 # 4. SCORE & RANK
                 age_min = (time.time() - token.first_seen_ts) / 60.0

@@ -30,6 +30,7 @@ class RealSecurityEvaluation:
     freeze_auth_status: str # "REVOKED_SAFE", "ACTIVE_DANGEROUS", "UNKNOWN"
     holder_concentration_status: str # "SAFE_DISTRIBUTED", "DANGEROUS_CONCENTRATED", "UNKNOWN"
     lp_lock_status: str     # "LOCKED", "BURNED", "UNLOCKED_DANGEROUS", "UNKNOWN"
+    lp_locked_pct: Optional[float] = None
     top10_holder_pct: Optional[float] = None
     dev_holding_pct: Optional[float] = None
     rejection_reasons: List[str] = field(default_factory=list)
@@ -177,6 +178,7 @@ class RealSecurityEngine:
             freeze_auth_status=freeze_status,
             holder_concentration_status=holder_status,
             lp_lock_status=lp_status,
+            lp_locked_pct=lp_locked_pct,
             top10_holder_pct=top10_pct,
             dev_holding_pct=dev_holding_pct,
             rejection_reasons=reasons,
@@ -185,7 +187,7 @@ class RealSecurityEngine:
             provenance=verification.provenance
         )
 
-        # Persist to database
+        # Persist to database (Preserving NULL / None for UNKNOWN fields)
         try:
             self.db.upsert_security_report({
                 "mint": eval_result.mint,
@@ -193,9 +195,9 @@ class RealSecurityEngine:
                 "rug_probability": eval_result.rug_probability,
                 "mint_auth_revoked": 1 if mint_status == "REVOKED_SAFE" else 0,
                 "freeze_auth_revoked": 1 if freeze_status == "REVOKED_SAFE" else 0,
-                "lp_locked_pct": lp_locked_pct or 0.0,
-                "top10_holder_pct": top10_pct or 0.0,
-                "dev_holding_pct": dev_holding_pct or 0.0,
+                "lp_locked_pct": lp_locked_pct,
+                "top10_holder_pct": top10_pct,
+                "dev_holding_pct": dev_holding_pct,
                 "rejection_reasons": json.dumps(eval_result.rejection_reasons),
                 "status": eval_result.status,
                 "evaluated_at": eval_result.evaluated_at

@@ -13,12 +13,12 @@ from app.core.database import DatabaseManager
 @dataclass
 class DNASnapshot:
     timestamp: float
-    price: float
-    volume: float
+    price: Optional[float]
+    volume: Optional[float]
     liquidity: Optional[float]
-    holders: int
-    smart_money_flow: float
-    whale_netflow: float
+    holders: Optional[int]
+    smart_money_flow: float = 0.0
+    whale_netflow: float = 0.0
     regime: str = "R2_ACCUMULATION"
 
 
@@ -30,10 +30,10 @@ class TokenDNAEngine:
     def record_snapshot(
         self,
         mint: str,
-        price: float,
-        volume: float,
+        price: Optional[float],
+        volume: Optional[float] = None,
         liquidity: Optional[float] = None,
-        holders: int = 0,
+        holders: Optional[int] = None,
         smart_money_flow: float = 0.0,
         whale_netflow: float = 0.0,
         regime: str = "R2_ACCUMULATION",

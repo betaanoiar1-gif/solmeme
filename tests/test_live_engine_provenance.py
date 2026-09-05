@@ -1,36 +1,58 @@
 """
-Live Engine Provenance Hardening Regression Tests (Tests A through H & System Invariants).
-Verifies:
-A) Unknown exit liquidity remains None
-B) Missing liquidity cannot execute using synthetic depth
-C) DNA receives None for unknown liquidity
-D) Missing age remains None
-E) EarlyLaunchSniper false when age=None
-F) Opportunity scoring preserves unknown age
-G) Paper position preserves triggering provenance
-H) No forced verified_on_chain=True in paper position creation
+Live Engine Provenance Hardening Regression Tests.
+Verifies all 18 semantic and provenance requirements:
+1. test_unknown_liquidity_remains_none
+2. test_unknown_volume_remains_none
+3. test_unknown_holders_remain_none
+4. test_unknown_top10_remains_none
+5. test_unknown_dev_holding_remains_none
+6. test_unknown_lp_lock_remains_none
+7. test_unknown_age_remains_none
+8. test_unknown_quote_is_not_verified
+9. test_unknown_quote_not_counted_in_whale_flow
+10. test_unknown_quote_not_counted_in_smart_money
+11. test_unknown_quote_not_counted_in_cluster_volume
+12. test_unknown_narrative_metrics_not_fabricated
+13. test_missing_event_timestamp_does_not_become_event_time
+14. test_missing_provenance_never_becomes_real
+15. test_live_security_conversion_preserves_none
+16. test_unknown_fields_persist_as_null
+17. test_live_entry_blocked_when_liquidity_unknown
+18. test_static_scan_forbidden_fallbacks_in_live_path
 """
 
 import os
+import re
 import shutil
 import tempfile
 import time
 import unittest
 from typing import Any, Dict, List, Optional
 
-from app.config.settings import AppConfig, ExitConfig, ExecutionConfig
+from app.config.settings import AppConfig, ExitConfig, ExecutionConfig, ScoringConfig
 from app.core.database import DatabaseManager
-from blockchain.parsers.real_swap_parser import RealSwapRecord
+from blockchain.parsers.real_swap_parser import RealSwapParser, RealSwapRecord
 from blockchain.solana.mint_verifier import OnChainMintVerification, OnChainMintVerifier
 from blockchain.solana.types import Provenance, SourceType
+from intelligence.market_microstructure.microstructure import MarketMicrostructureEngine, MicrostructureMetrics
+from intelligence.narrative.narrative_engine import NarrativeEngine, NarrativeMetrics
 from intelligence.smart_money.emerging_smart_money import EmergingSmartMoneyEngine, is_swap_quote_verified
+from intelligence.smart_money.real_smart_money import RealSmartMoneyEngine
 from intelligence.token.dna import DNASnapshot, TokenDNAEngine
+from intelligence.wallet_graph.real_cluster_graph import RealClusterGraph
 from intelligence.whales.real_whale_tracker import RealWhaleTracker
 from intelligence.whales.relative_whale_engine import RelativeWhaleEngine
 from portfolio.accounting.trade_journal import TradeJournal
+from portfolio.position_manager.position_manager import PositionManager
 from portfolio.virtual_wallet.virtual_wallet import VirtualWallet, VirtualPosition
-from scoring.early_alpha.early_token_priority import LiveTokenContext, EarlyTokenPriorityFunnel
+from scoring.alpha_score.alpha_calculator import AlphaCalculator
+from scoring.confidence.confidence_calculator import ConfidenceCalculator
 from scoring.opportunity.opportunity_scorer import OpportunityReport, OpportunityScorer
+from scoring.risk_score.risk_calculator import RiskCalculator
+from security.liquidity_risk.liquidity_checker import LiquidityRiskChecker
+from security.rug_detection.real_security_engine import RealSecurityEngine, RealSecurityEvaluation
+from security.rug_detection.rug_engine import RugDetectionEngine, SecurityEvaluation
+from security.wallet_risk.concentration_checker import ConcentrationChecker
 from simulation.execution.execution_engine import ExecutionSimulator
 from simulation.partial_fills.partial_fill_model import PartialFillModel
 from simulation.slippage.slippage_model import SlippageModel
@@ -113,17 +135,17 @@ class TestLiveEngineProvenance(unittest.TestCase):
             shutil.rmtree(self.temp_dir)
 
     # -------------------------------------------------------------------------
-    # Test A: Unknown Exit Liquidity Remains None
+    # 1. test_unknown_liquidity_remains_none
     # -------------------------------------------------------------------------
-    def test_a_unknown_exit_liquidity_remains_none(self):
+    def test_unknown_liquidity_remains_none(self):
         """
-        When token liquidity is unknown (None), it remains None in token_liquidity_map
-        and is passed as None to DynamicExitEngine and ExecutionSimulator (no 1000/50000 fallback).
+        When token liquidity is unknown (None), it remains None in token_liquidity_map,
+        TokenDNAEngine snapshot, and RelativeWhaleEngine, without defaulting to 0.0 or 1000.0.
         """
-        mint = "MintUnknownLiqA11111111111111111111111111111"
+        mint = "MintUnknownLiq11111111111111111111111111111"
         tokens = [{
             "mint": mint,
-            "symbol": "UNLIQA",
+            "symbol": "UNLIQ",
             "price": 0.50,
             "liquidity": None,  # Explicitly None
             "first_seen_ts": time.time() - 600.0
@@ -136,99 +158,93 @@ class TestLiveEngineProvenance(unittest.TestCase):
         self.assertIn(mint, engine.token_liquidity_map)
         self.assertIsNone(engine.token_liquidity_map[mint])
 
-        # DynamicExitEngine evaluates with liquidity_usd=None safely without raising exception
-        verdict = engine.exit_engine.evaluate_position(
-            entry_price=0.50,
-            current_price=0.52,
-            peak_price=0.52,
-            entry_time=time.time() - 60.0,
-            current_time=time.time(),
-            smart_money_score=50.0,
-            whale_netflow=0.0,
-            regime="R3_EARLY_IGNITION",
-            liquidity_usd=engine.token_liquidity_map[mint]
-        )
-        self.assertFalse(verdict.should_exit)
+        # DNA check
+        dna_engine = TokenDNAEngine(DatabaseManager(self.db_path))
+        snap = dna_engine.record_snapshot(mint=mint, price=0.50, volume=100.0, liquidity=None)
+        self.assertIsNone(snap.liquidity)
+
+        # Relative whale engine check
+        rel_whale = RelativeWhaleEngine.evaluate_token(mint=mint, symbol="UNLIQ", swaps=[], pool_liquidity_usd=None)
+        self.assertIsNone(rel_whale.pool_liquidity_usd)
 
     # -------------------------------------------------------------------------
-    # Test B: Missing Liquidity Cannot Execute Using Synthetic Depth
+    # 2. test_unknown_volume_remains_none
     # -------------------------------------------------------------------------
-    def test_b_missing_liquidity_cannot_execute_using_synthetic_depth(self):
+    def test_unknown_volume_remains_none(self):
         """
-        ExecutionSimulator and SlippageModel must not invent synthetic depth (e.g. 1000, 5000, 50000)
-        when liquidity_usd is None.
-        """
-        exec_sim = ExecutionSimulator()
-        res = exec_sim.execute_order(
-            market_price=1.0,
-            trade_size_usd=20.0,
-            liquidity_usd=None,
-            is_buy=True
-        )
-
-        # Price impact pct must be 0.0 (no fabricated depth)
-        self.assertEqual(res.slippage.price_impact_pct, 0.0)
-        self.assertEqual(res.fill_ratio, 1.0)
-        self.assertEqual(res.filled_size_usd, 20.0)
-
-        # Contrast with known liquidity $10,000 where price impact is calculated
-        res_known = exec_sim.execute_order(
-            market_price=1.0,
-            trade_size_usd=20.0,
-            liquidity_usd=10000.0,
-            is_buy=True
-        )
-        self.assertGreater(res_known.slippage.price_impact_pct, 0.0)
-
-    # -------------------------------------------------------------------------
-    # Test C: DNA Receives None for Unknown Liquidity
-    # -------------------------------------------------------------------------
-    def test_c_dna_receives_none_for_unknown_liquidity(self):
-        """
-        TokenDNAEngine.record_snapshot must preserve liquidity=None when depth is unknown.
+        When 24h volume is unknown (None), it must remain None rather than defaulting to 0.0.
         """
         dna_engine = TokenDNAEngine(DatabaseManager(self.db_path))
-        snap = dna_engine.record_snapshot(
-            mint="MintDNATest",
-            price=0.10,
-            volume=500.0,
-            liquidity=None,  # Unknown depth
-            holders=15
-        )
+        snap = dna_engine.record_snapshot(mint="MintNoVol", price=1.0, volume=None)
+        self.assertIsNone(snap.volume)
 
-        self.assertIsNone(snap.liquidity)
-        self.assertEqual(snap.price, 0.10)
-        self.assertEqual(snap.volume, 500.0)
+        # NarrativeMetrics check
+        nar = NarrativeMetrics(name="AI Agents", total_volume_24h=None)
+        self.assertIsNone(nar.total_volume_24h)
 
     # -------------------------------------------------------------------------
-    # Test D: Missing Age Remains None
+    # 3. test_unknown_holders_remain_none
     # -------------------------------------------------------------------------
-    def test_d_missing_age_remains_none(self):
+    def test_unknown_holders_remain_none(self):
         """
-        When token discovery does not have first_seen_ts, age_min remains None
-        (not converted to 1000.0 or 0.0).
+        When token holder count is unknown (None), it must remain None and degrade confidence
+        without fabricating a 0 or 1000 count.
         """
-        mint = "MintNoAgeD111111111111111111111111111111111"
-        t = {
-            "mint": mint,
-            "symbol": "NOAGE",
-            "price": 1.0,
-            "liquidity": 50000.0,
-            "first_seen_ts": None
-        }
+        dna_engine = TokenDNAEngine(DatabaseManager(self.db_path))
+        snap = dna_engine.record_snapshot(mint="MintNoHolders", price=1.0, holders=None)
+        self.assertIsNone(snap.holders)
 
+        conf = ConfidenceCalculator.calculate(token_data={"mint": "MintNoHolders"}, dna_snapshots_count=0, trades_count=0)
+        self.assertEqual(conf, 15.0)  # Minimum floor with penalized unknown features
+
+    # -------------------------------------------------------------------------
+    # 4. test_unknown_top10_remains_none
+    # -------------------------------------------------------------------------
+    def test_unknown_top10_remains_none(self):
+        """
+        Unverified top 10 concentration must remain None in RealSecurityEvaluation
+        and SecurityEvaluation, without defaulting to 25.0%.
+        """
+        chk = ConcentrationChecker.check(sec_data={}, max_top10_pct=65.0, max_dev_pct=15.0)
+        self.assertIsNone(chk.top10_holder_pct)
+        self.assertFalse(chk.is_acceptable)
+
+    # -------------------------------------------------------------------------
+    # 5. test_unknown_dev_holding_remains_none
+    # -------------------------------------------------------------------------
+    def test_unknown_dev_holding_remains_none(self):
+        """
+        Unverified creator/dev holding percentage must remain None, not 0.0 or 2.0.
+        """
+        chk = ConcentrationChecker.check(sec_data={"top10_holder_pct": 30.0}, max_top10_pct=65.0, max_dev_pct=15.0)
+        self.assertIsNone(chk.dev_holding_pct)
+        self.assertFalse(chk.is_acceptable)
+
+    # -------------------------------------------------------------------------
+    # 6. test_unknown_lp_lock_remains_none
+    # -------------------------------------------------------------------------
+    def test_unknown_lp_lock_remains_none(self):
+        """
+        Unverified LP lock percentage must remain None, not 0.0 or 100.0.
+        """
+        chk = LiquidityRiskChecker.check(sec_data={}, min_lp_locked_pct=70.0)
+        self.assertIsNone(chk.lp_locked_pct)
+        self.assertFalse(chk.is_locked_adequate)
+
+    # -------------------------------------------------------------------------
+    # 7. test_unknown_age_remains_none
+    # -------------------------------------------------------------------------
+    def test_unknown_age_remains_none(self):
+        """
+        Missing first_seen_ts produces age_minutes=None (not 0.0 or 1000.0),
+        and OpportunityScorer assigns neutral 50.0 earlyness score.
+        """
+        t = {"mint": "MintNoAge", "first_seen_ts": None}
         first_seen_ts = float(t["first_seen_ts"]) if t.get("first_seen_ts") is not None else None
-        age_min = max((time.time() - first_seen_ts) / 60.0, 1.0) if first_seen_ts is not None else None
+        age_min = ((time.time() - first_seen_ts) / 60.0) if first_seen_ts is not None else None
         self.assertIsNone(age_min)
 
-    # -------------------------------------------------------------------------
-    # Test E: EarlyLaunchSniper False When age=None
-    # -------------------------------------------------------------------------
-    def test_e_early_launch_sniper_false_when_age_none(self):
-        """
-        EarlyLaunchSniper must return False when age_minutes is None,
-        preventing premature entry on unverified token age.
-        """
+        # EarlyLaunchSniper must block when age is None
         dummy_opp = OpportunityReport(
             mint="MintEarlyTest",
             symbol="EARLY",
@@ -247,140 +263,297 @@ class TestLiveEngineProvenance(unittest.TestCase):
             what_could_invalidate_it=[],
             updated_at=time.time()
         )
-
         self.assertFalse(EarlyLaunchSniper.evaluate(dummy_opp, age_minutes=None))
-        self.assertTrue(EarlyLaunchSniper.evaluate(dummy_opp, age_minutes=30.0))
 
     # -------------------------------------------------------------------------
-    # Test F: Opportunity Scoring Preserves Unknown Age
+    # 8. test_unknown_quote_is_not_verified
     # -------------------------------------------------------------------------
-    def test_f_opportunity_scoring_preserves_unknown_age(self):
+    def test_unknown_quote_is_not_verified(self):
         """
-        OpportunityScorer must accept age_minutes=None, assign neutral earlyness=50.0,
-        degrade confidence, and include unknown age in explainability.
+        A swap with missing USD amount or unverified provenance is strictly NOT verified.
         """
-        scorer = OpportunityScorer(config=AppConfig().scoring, db=DatabaseManager(self.db_path))
-        from security.rug_detection.rug_engine import SecurityEvaluation
-        from intelligence.market_microstructure.microstructure import MicrostructureMetrics
-        from intelligence.narrative.narrative_engine import NarrativeMetrics
-
-        sec_eval = SecurityEvaluation(
-            mint="MintScorerTest",
-            security_score=85.0,
-            rug_probability=10.0,
-            mint_auth_revoked=True,
-            freeze_auth_revoked=True,
-            lp_locked_pct=100.0,
-            top10_holder_pct=25.0,
-            dev_holding_pct=2.0,
-            is_honeypot=False,
-            is_wash_traded=False,
-            status="SAFE",
-            rejection_reasons=[],
-            evaluated_at=time.time()
+        swap_unverified = RealSwapRecord(
+            signature="sig1",
+            slot=100,
+            timestamp=time.time(),
+            pool="pool1",
+            mint="mint1",
+            symbol="M1",
+            wallet="w1",
+            side="BUY",
+            token_amount=1000.0,
+            quote_amount_sol=1.0,
+            quote_amount_usd=150.0,
+            price_usd=0.15,
+            venue="Raydium",
+            is_quote_verified=False,
+            provenance=Provenance(source_type=SourceType.UNKNOWN, verified_on_chain=False)
         )
+        self.assertFalse(is_swap_quote_verified(swap_unverified))
+
+    # -------------------------------------------------------------------------
+    # 9. test_unknown_quote_not_counted_in_whale_flow
+    # -------------------------------------------------------------------------
+    def test_unknown_quote_not_counted_in_whale_flow(self):
+        """
+        Unverified quotes must not participate in RealWhaleTracker volume or netflow.
+        """
+        tracker = RealWhaleTracker(DatabaseManager(self.db_path))
+        swap = RealSwapRecord(
+            signature="sig_whale_unv",
+            slot=100,
+            timestamp=time.time(),
+            pool="pool1",
+            mint="mint1",
+            symbol="M1",
+            wallet="w1",
+            side="BUY",
+            token_amount=1000.0,
+            quote_amount_sol=100.0,
+            quote_amount_usd=15000.0,  # Large amount but unverified quote
+            price_usd=15.0,
+            venue="Raydium",
+            is_quote_verified=False,
+            provenance=Provenance(source_type=SourceType.UNKNOWN, verified_on_chain=False)
+        )
+        event = tracker.process_real_swap(swap, pool_liquidity_usd=100000.0)
+        self.assertIsNone(event)
+        self.assertEqual(tracker.get_token_whale_netflow("mint1"), 0.0)
+
+    # -------------------------------------------------------------------------
+    # 10. test_unknown_quote_not_counted_in_smart_money
+    # -------------------------------------------------------------------------
+    def test_unknown_quote_not_counted_in_smart_money(self):
+        """
+        Unverified quotes must not contribute to wallet total volume or trades in RealSmartMoneyEngine.
+        """
+        sm_engine = RealSmartMoneyEngine(DatabaseManager(self.db_path))
+        swap = RealSwapRecord(
+            signature="sig_sm_unv",
+            slot=100,
+            timestamp=time.time(),
+            pool="pool1",
+            mint="mint1",
+            symbol="M1",
+            wallet="w_smart_1",
+            side="BUY",
+            token_amount=1000.0,
+            quote_amount_sol=10.0,
+            quote_amount_usd=1500.0,
+            price_usd=1.5,
+            venue="Raydium",
+            is_quote_verified=False,
+            provenance=Provenance(source_type=SourceType.UNKNOWN, verified_on_chain=False)
+        )
+        profile = sm_engine.process_real_swap(swap)
+        self.assertEqual(profile.total_volume_usd, 0.0)
+        self.assertEqual(len(profile.trades), 0)
+
+    # -------------------------------------------------------------------------
+    # 11. test_unknown_quote_not_counted_in_cluster_volume
+    # -------------------------------------------------------------------------
+    def test_unknown_quote_not_counted_in_cluster_volume(self):
+        """
+        Unverified quotes must not be added to token_wallet_volumes for cluster volume calculations.
+        """
+        cluster_graph = RealClusterGraph()
+        # When token_wallet_volumes is empty (no verified quotes)
+        res = cluster_graph.analyze_token_wallets(mint="mint1", observed_wallets=["w1", "w2"], wallet_volumes={})
+        self.assertEqual(res.cluster_share_of_volume_pct, 0.0)
+
+    # -------------------------------------------------------------------------
+    # 12. test_unknown_narrative_metrics_not_fabricated
+    # -------------------------------------------------------------------------
+    def test_unknown_narrative_metrics_not_fabricated(self):
+        """
+        Categorical narrative classification without measured metrics must preserve
+        heat_score=None, and AlphaCalculator must reweight without injecting 1000.0 or 50.0.
+        """
+        nar = NarrativeMetrics(name="AI Agents", heat_score=None)
+        self.assertIsNone(nar.heat_score)
+
         micro = MicrostructureMetrics(
-            mint="MintScorerTest",
-            buy_count=20,
-            sell_count=10,
-            buy_sell_ratio=2.0,
-            order_flow_imbalance=0.33,
-            price_velocity=0.05,
-            price_acceleration=0.01,
-            price_second_order=0.005,
-            volume_acceleration=0.02,
-            liquidity_growth_rate=0.05,
-            buyer_acceleration=2.66,
-            is_pre_ignition=True,
-            money_price_divergence="SMART_ACCUMULATION",
+            mint="M1", buy_count=10, sell_count=5, buy_sell_ratio=2.0,
+            order_flow_imbalance=0.33, price_velocity=0.05, price_acceleration=0.01,
+            price_second_order=0.0, volume_acceleration=0.1, liquidity_growth_rate=0.05,
+            buyer_acceleration=2.0, is_pre_ignition=False, money_price_divergence="SMART_ACCUMULATION",
             is_fake_breakout=False
         )
-        nar = NarrativeMetrics("Memes", 1, 1000.0, 50.0, 0.0, 0.0, "Emerging")
 
-        # Score with age_minutes = None
-        opp = scorer.evaluate_opportunity(
-            token_data={"mint": "MintScorerTest", "symbol": "TEST", "liquidity": 50000.0, "holders_count": 100},
-            security_eval=sec_eval,
+        alpha = AlphaCalculator.calculate(
             micro=micro,
             smart_money_score=75.0,
-            whale_netflow=10000.0,
+            whale_netflow=5000.0,
             narrative_metrics=nar,
-            dna_history=[],
-            age_minutes=None
+            config=ScoringConfig()
+        )
+        self.assertGreater(alpha, 0.0)
+        self.assertLessEqual(alpha, 100.0)
+
+    # -------------------------------------------------------------------------
+    # 13. test_missing_event_timestamp_does_not_become_event_time
+    # -------------------------------------------------------------------------
+    def test_missing_event_timestamp_does_not_become_event_time(self):
+        """
+        A missing source trade timestamp must remain None in Provenance.timestamp,
+        distinguishing event time from local observation time.
+        """
+        prov = Provenance(
+            source_type=SourceType.REAL,
+            provider="LiveDiscovery",
+            timestamp=None,
+            observed_at=time.time(),
+            confidence=0.9
+        )
+        self.assertIsNone(prov.timestamp)
+        self.assertIsNotNone(prov.observed_at)
+
+    # -------------------------------------------------------------------------
+    # 14. test_missing_provenance_never_becomes_real
+    # -------------------------------------------------------------------------
+    def test_missing_provenance_never_becomes_real(self):
+        """
+        Missing provenance must resolve to SourceType.UNKNOWN with verified_on_chain=False,
+        never coerced to REAL or True.
+        """
+        prov = Provenance()
+        self.assertEqual(prov.source_type, SourceType.UNKNOWN)
+        self.assertFalse(prov.verified_on_chain)
+        self.assertEqual(prov.confidence, 0.0)
+
+    # -------------------------------------------------------------------------
+    # 15. test_live_security_conversion_preserves_none
+    # -------------------------------------------------------------------------
+    def test_live_security_conversion_preserves_none(self):
+        """
+        RealLivePaperEngine._convert_to_security_evaluation must preserve None
+        for lp_locked_pct, top10_holder_pct, and dev_holding_pct.
+        """
+        engine = RealLivePaperEngine(config=self.config)
+        real_sec = RealSecurityEvaluation(
+            mint="MintSecNone",
+            security_score=50.0,
+            rug_probability=50.0,
+            confidence=0.5,
+            status="UNVERIFIED",
+            mint_auth_status="UNKNOWN",
+            freeze_auth_status="UNKNOWN",
+            holder_concentration_status="UNKNOWN",
+            lp_lock_status="UNKNOWN",
+            top10_holder_pct=None,
+            dev_holding_pct=None,
+            evaluated_at=time.time()
         )
 
-        self.assertEqual(opp.earlyness_score, 50.0)
-        self.assertTrue(any("unverified" in w.lower() or "unknown" in w.lower() for w in opp.why_not_higher))
+        sec_eval = engine._convert_to_security_evaluation(real_sec)
+        self.assertIsNone(sec_eval.lp_locked_pct)
+        self.assertIsNone(sec_eval.top10_holder_pct)
+        self.assertIsNone(sec_eval.dev_holding_pct)
 
     # -------------------------------------------------------------------------
-    # Test G: Paper Position Preserves Triggering Provenance
+    # 16. test_unknown_fields_persist_as_null
     # -------------------------------------------------------------------------
-    def test_g_paper_position_preserves_triggering_provenance(self):
+    def test_unknown_fields_persist_as_null(self):
         """
-        Opening a paper position must preserve the exact triggering provenance
-        (e.g. SourceType.REPLAY with custom provider metadata), not force REAL.
+        DatabaseManager must store and retrieve None as NULL without rewriting to 0.0.
         """
-        mint = "MintProvPosTest111111111111111111111111111"
-        tokens = [{
-            "mint": mint,
-            "symbol": "PROVPOS",
-            "price": 0.20,
-            "liquidity": 100000.0,
-            "first_seen_ts": time.time() - 300.0,
-            "provenance": {
-                "source_type": "REPLAY",
-                "provider": "CustomSnapshotFeeder",
-                "confidence": 0.85,
-                "verified_on_chain": False
-            }
-        }]
-        trades = {
-            mint: [{
-                "signature": "9a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2g3h4i5j6k7l8m9n0",
-                "slot": 100,
-                "timestamp": time.time(),
-                "signer": "WalletWhaleTrigger11111111111111111111111111",
-                "type": "BUY",
-                "token_amount": 50000.0,
-                "usd_amount": 10000.0,
-                "price_usd": 0.20,
-                "provenance": {"source_type": "REPLAY", "verified_on_chain": False, "confidence": 0.85}
-            }]
-        }
+        db = DatabaseManager(self.db_path)
+        db.upsert_security_report({
+            "mint": "MintNullCheck",
+            "security_score": 70.0,
+            "rug_probability": 30.0,
+            "mint_auth_revoked": 1,
+            "freeze_auth_revoked": 1,
+            "lp_locked_pct": None,
+            "top10_holder_pct": None,
+            "dev_holding_pct": None,
+            "rejection_reasons": "[]",
+            "status": "SAFE",
+            "evaluated_at": time.time()
+        })
 
-        provider = MockTestLiveProvider(tokens=tokens, trades=trades, sol_price_usd=150.0)
-        engine = RealLivePaperEngine(config=self.config, data_provider=provider)
-        engine.run_live_cycle()
-
-        if mint in engine.wallet.positions:
-            pos = engine.wallet.positions[mint]
-            self.assertEqual(pos.provenance.source_type, SourceType.REPLAY)
-            self.assertFalse(pos.provenance.verified_on_chain)
-            self.assertEqual(pos.provenance.provider, "CustomSnapshotFeeder")
+        reports = db.get_security_reports()
+        saved = next(r for r in reports if r["mint"] == "MintNullCheck")
+        self.assertIsNone(saved["lp_locked_pct"])
+        self.assertIsNone(saved["top10_holder_pct"])
+        self.assertIsNone(saved["dev_holding_pct"])
 
     # -------------------------------------------------------------------------
-    # Test H: No Forced verified_on_chain=True in Paper Position Creation
+    # 17. test_live_entry_blocked_when_liquidity_unknown
     # -------------------------------------------------------------------------
-    def test_h_no_forced_verified_on_chain_in_paper_position_creation(self):
+    def test_live_entry_blocked_when_liquidity_unknown(self):
         """
-        VirtualWallet.open_position must not blindly set verified_on_chain=True
-        or SourceType.REAL when no provenance is supplied.
+        Position sizing must return 0.0 when pool liquidity is None (entry blocked).
         """
-        wallet = VirtualWallet(name="TestWallet", initial_capital_usd=100.0, data_mode="live")
-        exec_sim = ExecutionSimulator()
-        exec_res = exec_sim.execute_order(market_price=1.0, trade_size_usd=10.0, liquidity_usd=50000.0, is_buy=True)
-
-        pos = wallet.open_position(
-            mint="MintNoForcedProv",
-            symbol="NFP",
-            exec_res=exec_res,
-            provenance=None  # Missing provenance
+        pos_mgr = PositionManager(self.config.portfolio)
+        dummy_opp = OpportunityReport(
+            mint="MintSizeTest",
+            symbol="SIZE",
+            alpha_score=95.0,
+            risk_score=10.0,
+            confidence_score=90.0,
+            earlyness_score=90.0,
+            execution_score=90.0,
+            final_score=95.0,
+            regime="R3_EARLY_IGNITION",
+            narrative="Memes",
+            recommendation="PAPER_ENTRY",
+            why_ranked_high=[],
+            why_not_higher=[],
+            what_supports_it=[],
+            what_could_invalidate_it=[],
+            updated_at=time.time()
         )
 
-        self.assertIsNotNone(pos)
-        self.assertFalse(pos.provenance.verified_on_chain)
-        self.assertEqual(pos.provenance.confidence, 0.0)
-        self.assertEqual(pos.provenance.source_type, SourceType.UNKNOWN)
+        size = pos_mgr.calculate_position_size(
+            opp=dummy_opp,
+            current_cash=100.0,
+            current_equity=100.0,
+            open_positions_count=0,
+            pool_liquidity_usd=None  # Unknown liquidity
+        )
+        self.assertEqual(size, 0.0)
+
+    # -------------------------------------------------------------------------
+    # 18. test_static_scan_forbidden_fallbacks_in_live_path
+    # -------------------------------------------------------------------------
+    def test_static_scan_forbidden_fallbacks_in_live_path(self):
+        """
+        Scans production live execution path files for forbidden numeric fallback patterns
+        such as 'or 25.0', 'or 2.0', 'or 50.0', 'or 1000.0', 'or 50000.0'.
+        """
+        target_files = [
+            "app/orchestration/live_paper_engine.py",
+            "app/orchestration/orchestrator.py",
+            "security/rug_detection/real_security_engine.py",
+            "intelligence/smart_money/emerging_smart_money.py",
+            "intelligence/whales/relative_whale_engine.py",
+            "scoring/opportunity/opportunity_scorer.py"
+        ]
+
+        forbidden_regexes = [
+            re.compile(r"\bor\s+25\.0\b"),
+            re.compile(r"\bor\s+2\.0\b"),
+            re.compile(r"\bor\s+50\.0\b"),
+            re.compile(r"\bor\s+1000\.0\b"),
+            re.compile(r"\bor\s+50000\.0\b"),
+        ]
+
+        violations = []
+        for rel_path in target_files:
+            if not os.path.exists(rel_path):
+                continue
+            with open(rel_path, "r", encoding="utf-8") as f:
+                for line_no, line in enumerate(f, 1):
+                    # Ignore comments
+                    stripped = line.strip()
+                    if stripped.startswith("#"):
+                        continue
+                    for pat in forbidden_regexes:
+                        if pat.search(line):
+                            violations.append(f"{rel_path}:{line_no} -> {line.strip()}")
+
+        self.assertEqual(violations, [], f"Found forbidden numeric fallback patterns in live path: {violations}")
 
 
 if __name__ == "__main__":

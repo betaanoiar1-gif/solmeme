@@ -78,7 +78,7 @@ class RealSmartMoneyEngine:
 
         profile = self.wallets[wallet_addr]
         profile.last_seen = swap.timestamp
-        if swap.quote_amount_usd is not None:
+        if swap.is_quote_verified and swap.quote_amount_usd is not None:
             profile.total_volume_usd += swap.quote_amount_usd
 
         if mint not in self.token_swaps:
@@ -87,7 +87,7 @@ class RealSmartMoneyEngine:
 
         # Earlyness calculation (did they buy in the first 30 min of token launch?)
         earlyness = 50.0
-        if token_first_seen and swap.side == "BUY":
+        if token_first_seen is not None and token_first_seen > 0 and swap.timestamp is not None and swap.side == "BUY":
             age_min = max((swap.timestamp - token_first_seen) / 60.0, 0.0)
             if age_min <= 15.0:
                 earlyness = 95.0
@@ -98,7 +98,7 @@ class RealSmartMoneyEngine:
             else:
                 earlyness = 40.0
 
-        if swap.side == "BUY" and swap.quote_amount_usd is not None and swap.price_usd is not None:
+        if swap.is_quote_verified and swap.side == "BUY" and swap.quote_amount_usd is not None and swap.price_usd is not None:
             # Record entry
             trade = WalletTradeRecord(
                 mint=mint,
@@ -107,7 +107,7 @@ class RealSmartMoneyEngine:
                 entry_usd=swap.quote_amount_usd
             )
             profile.trades.append(trade)
-        elif swap.side == "SELL" and swap.quote_amount_usd is not None and swap.price_usd is not None:
+        elif swap.is_quote_verified and swap.side == "SELL" and swap.quote_amount_usd is not None and swap.price_usd is not None:
             # Find open buy to match sell
             open_buys = [t for t in profile.trades if t.mint == mint and not t.is_closed]
             if open_buys:
@@ -188,12 +188,13 @@ class RealSmartMoneyEngine:
             weighted_scores.append(wallet_score)
 
             if wallet_score >= self.SMART_MONEY_THRESHOLD:
-                if s.side == "BUY":
-                    smart_buyers.add(s.wallet)
-                    smart_buy_vol += s.quote_amount_usd
-                else:
-                    smart_sellers.add(s.wallet)
-                    smart_sell_vol += s.quote_amount_usd
+                if s.is_quote_verified and s.quote_amount_usd is not None:
+                    if s.side == "BUY":
+                        smart_buyers.add(s.wallet)
+                        smart_buy_vol += s.quote_amount_usd
+                    else:
+                        smart_sellers.add(s.wallet)
+                        smart_sell_vol += s.quote_amount_usd
 
         netflow = smart_buy_vol - smart_sell_vol
         avg_score = (sum(weighted_scores) / len(weighted_scores)) if weighted_scores else 50.0

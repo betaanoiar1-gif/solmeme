@@ -1,8 +1,10 @@
 """
 Dynamic Position Sizing Engine.
 Sizes positions dynamically based on Alpha, Risk, Liquidity depth, and Portfolio Heat.
+Preserves UNKNOWN (None) semantics: if liquidity is None or <= 0, size is 0.0 (entry blocked).
 """
 
+from typing import Optional
 from app.config.settings import PortfolioConfig
 from scoring.opportunity.opportunity_scorer import OpportunityReport
 
@@ -17,13 +19,17 @@ class PositionManager:
         current_cash: float,
         current_equity: float,
         open_positions_count: int,
-        pool_liquidity_usd: float
+        pool_liquidity_usd: Optional[float] = None
     ) -> float:
         # Check capacity
         if open_positions_count >= self.config.max_open_positions:
             return 0.0
 
         if current_cash < self.config.min_position_size_usd:
+            return 0.0
+
+        # When pool liquidity is UNKNOWN or non-positive, block position sizing
+        if pool_liquidity_usd is None or pool_liquidity_usd <= 0:
             return 0.0
 
         # Base size: 15% of equity

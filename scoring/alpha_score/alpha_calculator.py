@@ -32,16 +32,31 @@ class AlphaCalculator:
         # 4. Momentum & Acceleration subscore (0-100)
         accel_score = min(max(50.0 + micro.price_acceleration * 200.0 + (30.0 if micro.is_pre_ignition else 0.0), 0.0), 100.0)
 
-        # 5. Narrative Heat subscore (0-100)
-        nar_score = narrative_metrics.heat_score
-
-        # Weighted blend
-        alpha = (
-            micro_score * config.weight_microstructure +
-            sm_score * config.weight_smart_money +
-            whale_score * config.weight_whale_radar +
-            accel_score * config.weight_momentum_acceleration +
-            nar_score * config.weight_narrative_heat
-        )
+        # 5. Narrative Heat subscore (0-100) — If UNKNOWN, exclude dimension and reweight
+        if narrative_metrics.heat_score is not None:
+            nar_score = narrative_metrics.heat_score
+            alpha = (
+                micro_score * config.weight_microstructure +
+                sm_score * config.weight_smart_money +
+                whale_score * config.weight_whale_radar +
+                accel_score * config.weight_momentum_acceleration +
+                nar_score * config.weight_narrative_heat
+            )
+        else:
+            remaining_weight = (
+                config.weight_microstructure +
+                config.weight_smart_money +
+                config.weight_whale_radar +
+                config.weight_momentum_acceleration
+            )
+            if remaining_weight > 0:
+                alpha = (
+                    (micro_score * config.weight_microstructure +
+                     sm_score * config.weight_smart_money +
+                     whale_score * config.weight_whale_radar +
+                     accel_score * config.weight_momentum_acceleration) / remaining_weight
+                )
+            else:
+                alpha = 50.0
 
         return round(min(max(alpha, 0.0), 100.0), 2)

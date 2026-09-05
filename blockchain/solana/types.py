@@ -18,14 +18,14 @@ class SourceType(str, Enum):
 
 @dataclass
 class Provenance:
-    source_type: SourceType = SourceType.REAL
-    provider: str = "solana_rpc"
-    timestamp: float = field(default_factory=time.time)
+    source_type: SourceType = SourceType.UNKNOWN
+    provider: str = "unknown"
+    timestamp: Optional[float] = None
     observed_at: float = field(default_factory=time.time)
     block_time: Optional[float] = None
     slot: Optional[int] = None
     signature: Optional[str] = None
-    confidence: float = 1.0
+    confidence: float = 0.0
     verified_on_chain: bool = False
 
     def to_dict(self) -> Dict[str, Any]:

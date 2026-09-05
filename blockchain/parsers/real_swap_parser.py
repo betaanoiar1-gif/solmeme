@@ -157,9 +157,9 @@ class RealSwapParser:
                 quote_usd = round(quote_sol * sol_price_usd, 4)
                 if token_amount > 0:
                     price_usd = quote_usd / token_amount
-                is_quote_verified = True
+                is_quote_verified = (source_type == SourceType.REAL)
 
-            is_whale = bool(quote_usd is not None and quote_usd >= 5000.0)
+            is_whale = bool(is_quote_verified and quote_usd is not None and quote_usd >= 5000.0)
 
             record = RealSwapRecord(
                 signature=signature,

@@ -51,13 +51,24 @@ class MarketMicrostructureEngine:
             p_prev1 = dna_history[-2].price
             p_prev2 = dna_history[-3].price
 
-            v_curr = (p_curr - p_prev1) / max(p_prev1, 1e-9)
-            v_prev = (p_prev1 - p_prev2) / max(p_prev2, 1e-9)
+            if p_curr is not None and p_prev1 is not None and p_prev1 > 0:
+                v_curr = (p_curr - p_prev1) / max(p_prev1, 1e-9)
+            else:
+                v_curr = 0.02
+
+            if p_prev1 is not None and p_prev2 is not None and p_prev2 > 0:
+                v_prev = (p_prev1 - p_prev2) / max(p_prev2, 1e-9)
+            else:
+                v_prev = 0.01
+
             accel = v_curr - v_prev
 
             if len(dna_history) >= 4:
                 p_prev3 = dna_history[-4].price
-                v_prev2 = (p_prev2 - p_prev3) / max(p_prev3, 1e-9)
+                if p_prev2 is not None and p_prev3 is not None and p_prev3 > 0:
+                    v_prev2 = (p_prev2 - p_prev3) / max(p_prev3, 1e-9)
+                else:
+                    v_prev2 = 0.005
                 accel_prev = v_prev - v_prev2
                 second_order = accel - accel_prev
             else:
@@ -65,11 +76,17 @@ class MarketMicrostructureEngine:
 
             vol_curr = dna_history[-1].volume
             vol_prev = dna_history[-2].volume
-            vol_accel = (vol_curr - vol_prev) / max(vol_prev, 1.0)
+            if vol_curr is not None and vol_prev is not None and vol_prev > 0:
+                vol_accel = (vol_curr - vol_prev) / max(vol_prev, 1.0)
+            else:
+                vol_accel = 0.0
 
             liq_curr = dna_history[-1].liquidity
             liq_prev = dna_history[-2].liquidity
-            liq_growth = (liq_curr - liq_prev) / max(liq_prev, 1.0)
+            if liq_curr is not None and liq_prev is not None and liq_prev > 0:
+                liq_growth = (liq_curr - liq_prev) / max(liq_prev, 1.0)
+            else:
+                liq_growth = 0.0
         else:
             v_curr = 0.02
             accel = 0.01

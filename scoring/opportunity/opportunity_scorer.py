@@ -42,6 +42,9 @@ class OpportunityReport:
     what_supports_it: List[str]
     what_could_invalidate_it: List[str]
     updated_at: float
+    known_features_count: int = 13
+    unknown_features_count: int = 0
+    confidence_adjustment: float = 0.0
 
 
 class OpportunityScorer:
@@ -77,14 +80,15 @@ class OpportunityScorer:
         risk = RiskCalculator.calculate(
             security_eval=security_eval,
             micro=micro,
-            liquidity_usd=liquidity if liquidity is not None else 0.0
+            liquidity_usd=liquidity
         )
 
-        confidence = ConfidenceCalculator.calculate(
+        raw_confidence = ConfidenceCalculator.calculate(
             token_data=token_data,
             dna_snapshots_count=len(dna_history),
             trades_count=micro.buy_count + micro.sell_count
         )
+        confidence = raw_confidence
 
         # 2. Earlyness Score (Preserves UNKNOWN age as neutral 50.0 and degrades confidence)
         if age_minutes is None:
@@ -111,6 +115,26 @@ class OpportunityScorer:
             execution_score = 60.0
         else:
             execution_score = 35.0
+
+        # Provenance & feature-level completeness tracking
+        features_known = {
+            "liquidity": liquidity is not None,
+            "age_minutes": age_minutes is not None,
+            "narrative_heat": narrative_metrics.heat_score is not None,
+            "holders_count": token_data.get("holders_count") is not None,
+            "volume_24h": token_data.get("volume_24h") is not None,
+            "lp_locked_pct": security_eval.lp_locked_pct is not None,
+            "top10_holder_pct": security_eval.top10_holder_pct is not None,
+            "dev_holding_pct": security_eval.dev_holding_pct is not None,
+            "smart_money": True,
+            "whale_netflow": True,
+            "microstructure": True,
+            "mint_auth_revoked": True,
+            "freeze_auth_revoked": True,
+        }
+        known_count = sum(1 for v in features_known.values() if v)
+        unknown_count = sum(1 for v in features_known.values() if not v)
+        confidence_adj = round(confidence - raw_confidence, 2)
 
         # 4. Regime classification
         regime = RegimeEngine.classify(
@@ -191,7 +215,10 @@ class OpportunityScorer:
             why_not_higher=why_not_higher,
             what_supports_it=supports,
             what_could_invalidate_it=invalidates,
-            updated_at=time.time()
+            updated_at=time.time(),
+            known_features_count=known_count,
+            unknown_features_count=unknown_count,
+            confidence_adjustment=confidence_adj
         )
 
         # Persist to database

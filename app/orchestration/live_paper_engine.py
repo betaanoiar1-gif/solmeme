@@ -235,10 +235,12 @@ class RealLivePaperEngine:
                 else:
                     quote_sol = None
 
+                tr_ts = float(tr["timestamp"]) if tr.get("timestamp") is not None else None
+
                 swap_rec = RealSwapRecord(
                     signature=tr["signature"],
                     slot=tr.get("slot", 0),
-                    timestamp=tr.get("timestamp", time.time()),
+                    timestamp=tr_ts or time.time(),
                     pool=t.get("pool_address", "UnknownPool"),
                     mint=mint,
                     symbol=symbol,
@@ -249,14 +251,14 @@ class RealLivePaperEngine:
                     quote_amount_usd=usd_amt,
                     price_usd=tr.get("price_usd"),
                     venue=tr.get("venue", "Raydium_AMM_V4"),
-                    is_whale=bool(usd_amt is not None and usd_amt >= 5000.0),
+                    is_whale=bool(is_quote_verified and usd_amt is not None and usd_amt >= 5000.0),
                     is_quote_verified=is_quote_verified,
                     provenance=Provenance(
                         source_type=tr_source_type,
                         provider=tr_provider,
                         signature=tr["signature"],
                         slot=tr.get("slot", 0),
-                        timestamp=tr.get("timestamp", time.time()),
+                        timestamp=tr_ts,
                         observed_at=tr_observed_at,
                         confidence=tr_confidence,
                         verified_on_chain=tr_verified_on_chain
@@ -267,7 +269,7 @@ class RealLivePaperEngine:
                 # Track wallet volumes (strictly verified quotes only)
                 w = swap_rec.wallet
                 observed_wallets.append(w)
-                if is_swap_quote_verified(swap_rec):
+                if is_swap_quote_verified(swap_rec) and swap_rec.quote_amount_usd is not None:
                     token_wallet_volumes[w] = token_wallet_volumes.get(w, 0.0) + swap_rec.quote_amount_usd
 
                 # 5. Real Whale & Smart Money Tracking (Consuming verified pool liquidity)
@@ -277,7 +279,7 @@ class RealLivePaperEngine:
 
                 # Token first seen (no manufactured start time)
                 first_seen_ts = float(t["first_seen_ts"]) if t.get("first_seen_ts") is not None else None
-                self.smart_money_engine.process_real_swap(swap_rec, token_first_seen=first_seen_ts if first_seen_ts else 0.0)
+                self.smart_money_engine.process_real_swap(swap_rec, token_first_seen=first_seen_ts)
 
             # Cluster analysis
             cluster_res = self.cluster_graph.analyze_token_wallets(mint, observed_wallets, token_wallet_volumes)
@@ -295,17 +297,22 @@ class RealLivePaperEngine:
                 self.state_machine.transition(mint, SniperStage.SX_KILL)
                 continue
 
-            # DNA Snapshot
+            # DNA Snapshot (Strict preservation of None for volume and holders)
             smart_signal = self.smart_money_engine.evaluate_token_smart_money(mint)
             whale_flow = self.whale_tracker.get_token_whale_netflow(mint)
             dna_hist = self.dna_engine.get_history(mint)
 
+            raw_vol = t.get("volume_24h")
+            vol_usd = float(raw_vol) if raw_vol is not None else None
+            raw_holders = t.get("holders_count")
+            holders_cnt = int(raw_holders) if raw_holders is not None else None
+
             self.dna_engine.record_snapshot(
                 mint=mint,
                 price=float(curr_p),
-                volume=float(t.get("volume_24h") or 0.0),
+                volume=vol_usd,
                 liquidity=liq_usd,
-                holders=int(t.get("holders_count") or 0),
+                holders=holders_cnt,
                 smart_money_flow=smart_signal.netflow_usd,
                 whale_netflow=whale_flow
             )
@@ -319,13 +326,21 @@ class RealLivePaperEngine:
                 whale_netflow=whale_flow
             )
 
-            # Narrative
+            # Narrative (Categorical classification without fabricated numeric metrics)
             nar_name = self.narrative_engine.classify_token_narrative(symbol, t.get("name", "Solana Token"))
-            nar_metrics = NarrativeMetrics(nar_name, 1, 1000.0, 50.0, 0.0, 0.0, "Emerging")
+            nar_metrics = NarrativeMetrics(
+                name=nar_name,
+                token_count=1,
+                total_volume_24h=vol_usd,
+                heat_score=None,
+                velocity=None,
+                acceleration=None,
+                stage="Categorized"
+            )
 
             # 7. Scorer & Opportunity (Age derived strictly from verified first_seen_ts)
             first_seen_ts = float(t["first_seen_ts"]) if t.get("first_seen_ts") is not None else None
-            age_min = max((time.time() - first_seen_ts) / 60.0, 1.0) if first_seen_ts is not None else None
+            age_min = ((time.time() - first_seen_ts) / 60.0) if first_seen_ts is not None else None
 
             opp_report = self.scorer.evaluate_opportunity(
                 token_data=t,
@@ -523,9 +538,9 @@ class RealLivePaperEngine:
             rug_probability=real_sec.rug_probability,
             mint_auth_revoked=(real_sec.mint_auth_status == "REVOKED_SAFE"),
             freeze_auth_revoked=(real_sec.freeze_auth_status == "REVOKED_SAFE"),
-            lp_locked_pct=100.0 if real_sec.lp_lock_status == "LOCKED" else 0.0,
-            top10_holder_pct=real_sec.top10_holder_pct or 25.0,
-            dev_holding_pct=real_sec.dev_holding_pct or 2.0,
+            lp_locked_pct=real_sec.lp_locked_pct,
+            top10_holder_pct=real_sec.top10_holder_pct,
+            dev_holding_pct=real_sec.dev_holding_pct,
             is_honeypot=(real_sec.freeze_auth_status == "ACTIVE_DANGEROUS"),
             is_wash_traded=False,
             status=real_sec.status,

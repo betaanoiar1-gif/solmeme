@@ -93,14 +93,19 @@ class TokenDiscoveryScanner:
         if isinstance(prov_dict, dict) and prov_dict:
             src_type_str = prov_dict.get("source_type", "REAL")
             src_type = SourceType(src_type_str) if src_type_str in SourceType._value2member_map_ else SourceType.REAL
+            prov_ts = prov_dict.get("timestamp")
+            prov_obs = prov_dict.get("observed_at")
+            prov_conf = prov_dict.get("confidence")
             provenance = Provenance(
                 source_type=src_type,
                 provider=prov_dict.get("provider", source),
-                timestamp=float(prov_dict.get("timestamp", time.time())),
-                observed_at=float(prov_dict.get("observed_at", time.time())),
-                confidence=float(prov_dict.get("confidence", 1.0)),
+                timestamp=float(prov_ts) if prov_ts is not None else None,
+                observed_at=float(prov_obs) if prov_obs is not None else time.time(),
+                confidence=float(prov_conf) if prov_conf is not None else 1.0,
                 verified_on_chain=bool(prov_dict.get("verified_on_chain", False))
             )
+        elif isinstance(prov_dict, Provenance):
+            provenance = prov_dict
         else:
             provenance = self.provider.create_provenance(confidence=0.9, verified_on_chain=True)
 

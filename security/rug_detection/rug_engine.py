@@ -25,14 +25,18 @@ class SecurityEvaluation:
     rug_probability: float  # 0 to 100 (higher = riskier)
     mint_auth_revoked: bool
     freeze_auth_revoked: bool
-    lp_locked_pct: float
-    top10_holder_pct: float
-    dev_holding_pct: float
-    is_honeypot: bool
-    is_wash_traded: bool
-    status: str  # "SAFE", "WARNING", "HARD_REJECT"
-    rejection_reasons: List[str]
-    evaluated_at: float
+    lp_locked_pct: Optional[float] = None
+    top10_holder_pct: Optional[float] = None
+    dev_holding_pct: Optional[float] = None
+    is_honeypot: bool = False
+    is_wash_traded: bool = False
+    status: str = "SAFE"  # "SAFE", "WARNING", "HARD_REJECT"
+    rejection_reasons: List[str] = None
+    evaluated_at: float = 0.0
+
+    def __post_init__(self):
+        if self.rejection_reasons is None:
+            self.rejection_reasons = []
 
 
 class RugDetectionEngine:
@@ -59,7 +63,7 @@ class RugDetectionEngine:
         liq_res = LiquidityRiskChecker.check(sec_data, min_lp_locked_pct=self.config.min_lp_locked_percent)
         if not liq_res.is_locked_adequate:
             reasons.extend(liq_res.reasons)
-            if liq_res.lp_locked_pct < 10.0:
+            if liq_res.lp_locked_pct is not None and liq_res.lp_locked_pct < 10.0:
                 is_hard_reject = True
 
         # 3. Holder concentration checks
@@ -70,7 +74,7 @@ class RugDetectionEngine:
         )
         if not conc_res.is_acceptable:
             reasons.extend(conc_res.reasons)
-            if conc_res.dev_holding_pct > 50.0 and self.config.hard_reject_extreme_concentration:
+            if conc_res.dev_holding_pct is not None and conc_res.dev_holding_pct > 50.0 and self.config.hard_reject_extreme_concentration:
                 is_hard_reject = True
 
         # 4. Honeypot & Wash Trading checks

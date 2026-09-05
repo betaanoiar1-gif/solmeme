@@ -13,12 +13,12 @@ from typing import Dict, List, Optional
 @dataclass
 class NarrativeMetrics:
     name: str
-    token_count: int
-    total_volume_24h: float
-    heat_score: float  # 0 to 100
-    velocity: float
-    acceleration: float
-    stage: str  # "Emerging Narrative", "Hot Narrative", "Exhausted Narrative"
+    token_count: Optional[int] = None
+    total_volume_24h: Optional[float] = None
+    heat_score: Optional[float] = None  # 0 to 100
+    velocity: Optional[float] = None
+    acceleration: Optional[float] = None
+    stage: str = "Unknown"  # "Emerging Narrative", "Hot Narrative", "Exhausted Narrative", "Unknown"
 
 
 class NarrativeEngine:
