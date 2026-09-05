@@ -1,1 +1,9 @@
 mint,symbol,timestamp,alpha_score,risk_score,final_score,confidence,known_features,unknown_features,security_status,liquidity,age,smart_money_score,whale_flow,microstructure_state,sniper_modes,recommendation,source_type
+2pw42Poei4ys5drzQXnr8ePXUuc8utM8r2S98urSpump,POINTLESS,2026-09-05 20:23:43,68.56,19.0,70.86,41.37,8,5,SAFE,27276.06,,50.0,0.0,R1_DORMANT,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",PAPER_ENTRY,REAL
+GLjhdCD826s4eds1HeFCicvZ7JRZ62u3SzGqkcq3f7CY,employim,2026-09-05 20:23:15,57.16,21.0,64.58,28.41,8,5,SAFE,15684.14,,50.0,0.0,R1_DORMANT,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",WAIT_FOR_RETEST,REAL
+7FqW1jsE5JvWf9kFpEAaBS5pE6VEuxd7BzUexhUxi2Fa,ALPACA,2026-09-05 20:22:47,52.45,21.0,61.57,26.99,8,5,SAFE,18323.81,,50.0,0.0,R1_DORMANT,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",REJECT,REAL
+6HwjR6eNd7xBzFX1p2jc5dbHzCyx5FoDVRiKUfJMpump,USEFUL,2026-09-05 20:24:13,55.71,23.0,60.63,24.0,7,6,SAFE,,,50.0,0.0,R0_DEAD,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",WATCH,REAL
+aq4FWcyDQHcEJWuhANot8afe5BMfmBQSnMpi3o7pump,pеrpscape,2026-09-05 20:25:13,49.69,24.0,57.86,26.72,8,5,SAFE,2860.92,,50.0,0.0,R1_DORMANT,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",REJECT,REAL
+6JV2jrkUK3rxf3oHwpD1BpinxkaJ5gBUoFQmi5czpump,TAXLESS,2026-09-05 20:24:43,46.94,24.0,57.45,27.5,8,5,SAFE,4172.22,,50.0,0.0,R1_DORMANT,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",REJECT,REAL
+89nKopjqgjZVJx9JmRZBW7CU6uweaMMdjscv5GMMpump,PONG,2026-09-05 20:25:42,50.25,23.0,57.28,24.0,7,6,SAFE,,,50.0,0.0,R0_DEAD,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",REJECT,REAL
+BLUPbQnwyjrKQZuXWZPJNWU3bUnLejyo3vzmCerCpump,underdog,2026-09-05 20:26:11,48.77,23.0,55.7,24.0,7,6,SAFE,,,50.0,0.0,R0_DEAD,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",REJECT,REAL
