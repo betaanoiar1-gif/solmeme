@@ -1,1 +1,1 @@
-signature,slot,timestamp,pool,mint,wallet,side,token_amount,quote_sol,quote_usd,price_usd,venue,is_whale,source_type
+signature,slot,timestamp,pool,mint,wallet,side,token_amount,quote_sol,quote_usd,price_usd,venue,is_whale,is_quote_verified,source_type

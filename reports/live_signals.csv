@@ -1,1 +1,1 @@
-mint,symbol,alpha_score,risk_score,confidence_score,earlyness_score,final_score,regime,recommendation,detected_at,source_type
+mint,symbol,timestamp,alpha_score,risk_score,final_score,confidence,known_features,unknown_features,security_status,liquidity,age,smart_money_score,whale_flow,microstructure_state,sniper_modes,recommendation,source_type

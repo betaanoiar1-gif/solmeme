@@ -2,19 +2,19 @@
 
 ## 1. Executive Summary & Runtime Telemetry
 - **System:** MEME ALPHA HUNTER (Solana Autonomous Intelligence & Sniper Engine)
-- **Runtime Environment:** Standalone / Cloud VPS / Google Colab
+- **Runtime Environment:** GitHub Actions / Cloud VPS / Standalone
 - **Execution Mode:** `DATA_MODE=LIVE`
 - **Git Branch:** `arena/01a07111-solmeme`
-- **Commit SHA:** `bbf21f5`
-- **Test Start Time:** 2026-09-05 18:54:30 UTC
-- **Test End Time:** 2026-09-05 18:54:36 UTC
-- **Total Duration:** 5.80 seconds (0.1 minutes)
-- **Total Completed Cycles:** 2
+- **Commit SHA:** `0f8f93a`
+- **Test Start Time:** 2026-09-05 19:05:05 UTC
+- **Test End Time:** 2026-09-05 19:05:14 UTC
+- **Total Duration:** 8.45 seconds (0.1 minutes)
+- **Total Completed Cycles:** 3
 - **REAL_DATA_ONLY:** `TRUE`
 - **Network Status:** `EGRESS_RESTRICTED (Sandbox Container Offline)`
-- **Total Real RPC Requests Attempted:** `15`
+- **Total Real RPC Requests Attempted:** `21`
 - **Successful Real RPC Requests:** `0`
-- **Failed Real RPC Requests:** `15`
+- **Failed Real RPC Requests:** `21`
 - **Current Real Tokens Discovered:** `0`
 - **On-Chain Verified Mints:** `0`
 - **Current Ingested Real Swaps:** `0`
@@ -78,17 +78,17 @@
 ============================================================
 FINAL LIVE VALIDATION
 ============================================================
-COMMIT: bbf21f5
+COMMIT: 0f8f93a
 MODE: LIVE
 NETWORK_CONNECTED: FALSE
-RPC_REQUESTS: 15
+RPC_REQUESTS: 21
 RPC_SUCCESS: 0
-RPC_FAILURE: 15
+RPC_FAILURE: 21
 RPC_AVG_LATENCY_MS: 0.0
-LIVE_TOKENS_DISCOVERED: 0
-ONCHAIN_VERIFIED_MINTS: 0
+LIVE_TOKENS: 0
+VERIFIED_MINTS: 0
 LIVE_SWAPS: 0
-STRICT_VERIFIED_QUOTES: 0
+VERIFIED_QUOTES: 0
 UNKNOWN_QUOTES: 0
 QUOTE_QUALITY: 1.0000
 TOKENS_WITH_LIVE_LIQUIDITY: 0
@@ -115,6 +115,7 @@ FORCED_REAL: 0
 FORCED_VERIFICATION: 0
 SYNTHETIC_ROWS: 0
 STATIC_MARKET_DATA: 0
+UNKNOWN_TO_NUMERIC_FALLBACKS: 0
 FINAL VERDICT: LIVE_PAPER_BLOCKED
 ============================================================
 ```
