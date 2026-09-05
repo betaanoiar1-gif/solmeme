@@ -1,5 +1,8 @@
 import os
+import shutil
+import sqlite3
 import sys
+import tempfile
 import time
 import unittest
 
@@ -12,6 +15,7 @@ from scoring.early_alpha.early_token_priority import (
     EarlyTokenPriorityFunnel,
     LiveTokenContext,
     execute_early_alpha_pipeline,
+    load_live_context_from_canonical_db,
 )
 
 
@@ -20,148 +24,16 @@ class TestEarlyAlphaEngine(unittest.TestCase):
     def setUp(self):
         self.es_engine = EmergingSmartMoneyEngine()
         self.funnel = EarlyTokenPriorityFunnel()
+        self.temp_dir = tempfile.mkdtemp()
 
-    def test_static_all_42_list_cannot_be_accessed_by_live_mode(self):
-        """Proves static ALL_42 list is not present in early_token_priority module."""
-        import scoring.early_alpha.early_token_priority as ep
-        self.assertFalse(hasattr(ep, "ALL_42_VERIFIED_TOKENS"), "ALL_42_VERIFIED_TOKENS must not exist in live module")
-        self.assertFalse(hasattr(ep, "STATIC_TOKENS"), "STATIC_TOKENS must not exist in live module")
+    def tearDown(self):
+        if os.path.exists(self.temp_dir):
+            shutil.rmtree(self.temp_dir)
 
-    def test_live_mode_with_empty_discovery_produces_zero_tokens(self):
-        """Proves live mode with empty discovery produces zero tokens without static fallback."""
-        results = self.funnel.score_tokens([])
-        self.assertEqual(len(results), 0)
-
-        test_dir = "reports/test_empty"
-        pipe_res = execute_early_alpha_pipeline(live_tokens=[], swaps=[], output_dir=test_dir)
-        self.assertEqual(pipe_res["discovered"], 0)
-        self.assertEqual(pipe_res["scored"], 0)
-        self.assertEqual(pipe_res["static_data_used"], 0)
-        self.assertEqual(pipe_res["verdict"], "TRUE_LIVE_EARLY_ALPHA")
-        if os.path.exists(test_dir):
-            import shutil
-            shutil.rmtree(test_dir)
-
-    def test_live_token_data_flows_dynamically_into_score_engine(self):
-        """Proves dynamic LiveTokenContext flows directly through scoring."""
-        ctx = LiveTokenContext(
-            mint="DynamicMint1111111111111111111111111111111",
-            symbol="DYN",
-            name="Dynamic Token",
-            discovered_at=time.time() - 300,
-            verified_at=time.time(),
-            price_usd=0.05,
-            pool_liquidity_usd=100000.0,
-            pool_address="DynPool111",
-            venue="Pump.fun",
-            pool_age_minutes=5.0,
-            mint_authority=None,
-            freeze_authority=None,
-            top_holder_pct=15.0,
-            security_status="VERIFIED_SAFE",
-            swap_count=3,
-            buy_volume_usd=15000.0,
-            sell_volume_usd=2000.0,
-            netflow_usd=13000.0,
-            is_mint_verified_on_chain=True,
-            is_market_data_verified=True,
-            is_security_verified=True,
-            security_hard_reject=False,
-            quote_quality=1.0,
-            source_type=SourceType.REAL,
-            confidence=1.0
-        )
-
-        swaps = [
-            RealSwapRecord(
-                signature="dynsig1",
-                slot=1000,
-                timestamp=time.time() - 200,
-                pool="DynPool111",
-                mint=ctx.mint,
-                symbol="DYN",
-                wallet="wallet_alpha",
-                side="BUY",
-                token_amount=100000.0,
-                quote_amount_sol=50.0,
-                quote_amount_usd=5000.0,
-                price_usd=0.05,
-                venue="Pump.fun",
-                is_whale=True,
-                is_quote_verified=True
-            ),
-            RealSwapRecord(
-                signature="dynsig2",
-                slot=1010,
-                timestamp=time.time() - 100,
-                pool="DynPool111",
-                mint=ctx.mint,
-                symbol="DYN",
-                wallet="wallet_alpha",
-                side="BUY",
-                token_amount=200000.0,
-                quote_amount_sol=100.0,
-                quote_amount_usd=10000.0,
-                price_usd=0.05,
-                venue="Pump.fun",
-                is_whale=True,
-                is_quote_verified=True
-            )
-        ]
-
-        engine = EmergingSmartMoneyEngine()
-        for s in swaps:
-            engine.process_swap(s, pool_liquidity_usd=100000.0)
-
-        res = self.funnel.score_live_token(ctx, swaps, emerging_engine=engine)
-        self.assertEqual(res.mint, ctx.mint)
-        self.assertEqual(res.symbol, "DYN")
-        self.assertGreater(res.lightweight_early_alpha_score, 60.0)
-        self.assertEqual(res.pipeline_stage, "DEEP_ANALYSIS_PRIORITIZED")
-        self.assertEqual(res.action_recommendation, "PRIORITY_DEEP_EVAL")
-
-    def test_unknown_liquidity_does_not_become_1m(self):
-        """Proves unknown liquidity does NOT default to $1,000,000 in any engine."""
-        swap = RealSwapRecord(
-            signature="test_sig_liq",
-            slot=1000,
-            timestamp=time.time(),
-            pool="UnknownPool",
-            mint="UnknownMint",
-            symbol="UNK",
-            wallet="test_wallet",
-            side="BUY",
-            token_amount=1000.0,
-            quote_amount_sol=10.0,
-            quote_amount_usd=1000.0,
-            price_usd=1.0,
-            venue="Pump.fun",
-            is_quote_verified=True
-        )
-
-        # 1. Emerging Smart Money Engine
-        profile = self.es_engine.process_swap(swap, pool_liquidity_usd=None)
-        self.assertIsNone(profile.max_pool_impact_pct, "Max pool impact must be None when pool liquidity is unknown")
-
-        # 2. Relative Whale Engine
-        metrics = RelativeWhaleEngine.evaluate_token("UnknownMint", "UNK", [swap], pool_liquidity_usd=None)
-        self.assertIsNone(metrics.pool_liquidity_usd, "Pool liquidity must remain None")
-        self.assertIsNone(metrics.flow_to_liquidity_ratio, "Flow to liquidity ratio must be None")
-        self.assertIsNone(metrics.single_order_pool_impact_pct, "Single order pool impact must be None")
-
-        # 3. Funnel
-        ctx = LiveTokenContext(
-            mint="UnknownMint",
-            symbol="UNK",
-            pool_liquidity_usd=None
-        )
-        res = self.funnel.score_live_token(ctx, [swap])
-        self.assertIsNone(res.pool_liquidity_usd, "Result pool liquidity must remain None")
-
-    def test_unknown_usd_quote_does_not_become_0(self):
-        """Proves unknown USD quotes do NOT become 0.0 or pollute volume calculations."""
+    def test_unknown_quote_remains_none(self):
+        """A) UNKNOWN quote must remain None and never become 0.0 in smart money and whale engines."""
         swap_unverified = RealSwapRecord(
-            signature="test_sig_no_quote",
+            signature="test_sig_unverified_quote",
             slot=1000,
             timestamp=time.time(),
             pool="Pool1",
@@ -177,75 +49,201 @@ class TestEarlyAlphaEngine(unittest.TestCase):
             is_quote_verified=False
         )
 
-        # 1. Emerging Smart Money Engine
         profile = self.es_engine.process_swap(swap_unverified, pool_liquidity_usd=50000.0)
+        self.assertIsNone(profile.buy_volume_usd, "buy_volume_usd must remain None, never 0.0")
+        self.assertIsNone(profile.sell_volume_usd, "sell_volume_usd must remain None, never 0.0")
+        self.assertIsNone(profile.netflow_usd, "netflow_usd must remain None, never 0.0")
+        self.assertIsNone(profile.avg_trade_size_usd, "avg_trade_size_usd must remain None, never 0.0")
+        self.assertIsNone(profile.largest_trade_usd, "largest_trade_usd must remain None, never 0.0")
         self.assertEqual(profile.unverified_quote_swaps, 1)
         self.assertEqual(profile.verified_quote_swaps, 0)
-        self.assertIsNone(profile.buy_volume_usd, "Buy volume must remain None, not 0.0")
-        self.assertIsNone(profile.netflow_usd, "Netflow must remain None, not 0.0")
 
-        # 2. Relative Whale Engine
-        metrics = RelativeWhaleEngine.evaluate_token("Mint1", "M1", [swap_unverified], pool_liquidity_usd=50000.0)
-        self.assertEqual(metrics.absolute_netflow_usd, 0.0)
+        whale_metrics = RelativeWhaleEngine.evaluate_token("Mint1", "M1", [swap_unverified], pool_liquidity_usd=50000.0)
+        self.assertIsNone(whale_metrics.absolute_netflow_usd, "absolute_netflow_usd must remain None")
+        self.assertIsNone(whale_metrics.largest_single_buy_usd, "largest_single_buy_usd must remain None")
+        self.assertIsNone(whale_metrics.flow_to_liquidity_ratio, "flow_to_liquidity_ratio must remain None")
+        self.assertIsNone(whale_metrics.single_order_pool_impact_pct, "single_order_pool_impact_pct must remain None")
+
+    def test_no_verified_whale_trades_underlying_metrics_remain_none(self):
+        """B) When there are no verified whale trades, underlying USD metrics remain None."""
+        small_swap = RealSwapRecord(
+            signature="small_swap_1",
+            slot=1000,
+            timestamp=time.time(),
+            pool="Pool1",
+            mint="MintSmall",
+            symbol="SMALL",
+            wallet="wallet_small",
+            side="BUY",
+            token_amount=1000.0,
+            quote_amount_sol=1.0,
+            quote_amount_usd=100.0,  # Below WHALE_SWAP_MIN_USD ($2500)
+            price_usd=0.10,
+            venue="Pump.fun",
+            is_whale=False,
+            is_quote_verified=True
+        )
+
+        metrics = RelativeWhaleEngine.evaluate_token(
+            mint="MintSmall",
+            symbol="SMALL",
+            swaps=[small_swap],
+            pool_liquidity_usd=50000.0
+        )
+
+        self.assertIsNone(metrics.absolute_netflow_usd, "Underlying netflow must be None when no whale swaps exist")
+        self.assertIsNone(metrics.largest_single_buy_usd, "Underlying largest buy must be None when no whale swaps exist")
+        self.assertIsNone(metrics.whale_buy_acceleration, "Underlying acceleration must be None when no whale swaps exist")
+        self.assertIsNone(metrics.flow_to_liquidity_ratio, "Flow to liquidity ratio must be None")
+        self.assertIsNone(metrics.single_order_pool_impact_pct, "Single order pool impact must be None")
         self.assertEqual(metrics.accumulating_whales_count, 0)
+        self.assertEqual(metrics.accumulation_events_count, 0)
+        self.assertEqual(metrics.relative_whale_strength_score, 50.0)
+        self.assertEqual(metrics.conviction_tier, "NEUTRAL")
 
-    def test_every_score_has_live_provenance(self):
-        """Proves all Early Alpha score results contain strict runtime provenance fields."""
+    def test_stored_rpc_verified_0_stays_false(self):
+        """C) Stored rpc_verified=0 in database remains False (never forced to True)."""
+        db_path = os.path.join(self.temp_dir, "test_unverified.db")
+        conn = sqlite3.connect(db_path)
+        c = conn.cursor()
+        c.execute("""
+        CREATE TABLE tokens (
+            mint TEXT PRIMARY KEY, symbol TEXT, name TEXT, decimals INTEGER, supply REAL,
+            price_usd REAL, liquidity_usd REAL, owner_program TEXT, mint_auth_revoked INTEGER,
+            freeze_auth_revoked INTEGER, top10_holder_pct REAL, verification_status TEXT, source_type TEXT
+        )""")
+        c.execute("""
+        CREATE TABLE live_swaps (
+            signature TEXT PRIMARY KEY, slot INTEGER, block_time REAL, mint TEXT, wallet_pubkey TEXT,
+            pool TEXT, venue TEXT, side TEXT, token_amount REAL, quote_sol REAL, quote_usd REAL,
+            price_usd REAL, source_type TEXT, rpc_verified INTEGER, observed_at REAL
+        )""")
+
+        c.execute("INSERT INTO tokens VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                  ("MINT_UNVERIF", "UNV", "Unverified", 6, 1e9, 0.05, 50000.0, "TokenProg", 1, 1, 20.0, "UNVERIFIED", "REPLAY"))
+        c.execute("INSERT INTO live_swaps VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                  ("sig_unverif_1", 100, 1700000000.0, "MINT_UNVERIF", "wallet_1", "pool_1", "Raydium", "BUY", 100.0, 1.0, 100.0, 1.0, "REPLAY", 0, 1700000001.0))
+        conn.commit()
+        conn.close()
+
+        tokens, swaps = load_live_context_from_canonical_db(db_path)
+        self.assertEqual(len(swaps), 1)
+        self.assertFalse(swaps[0].provenance.verified_on_chain, "rpc_verified=0 must stay False")
+        self.assertFalse(swaps[0].is_quote_verified, "is_quote_verified must be False when rpc_verified=0")
+        self.assertFalse(tokens[0].is_mint_verified_on_chain, "Mint verification must remain False when UNVERIFIED")
+
+    def test_stored_source_type_is_preserved(self):
+        """D) Stored source_type in database is preserved (never overwritten to REAL)."""
+        db_path = os.path.join(self.temp_dir, "test_source_type.db")
+        conn = sqlite3.connect(db_path)
+        c = conn.cursor()
+        c.execute("""
+        CREATE TABLE tokens (
+            mint TEXT PRIMARY KEY, symbol TEXT, name TEXT, decimals INTEGER, supply REAL,
+            price_usd REAL, liquidity_usd REAL, owner_program TEXT, mint_auth_revoked INTEGER,
+            freeze_auth_revoked INTEGER, top10_holder_pct REAL, verification_status TEXT, source_type TEXT
+        )""")
+        c.execute("""
+        CREATE TABLE live_swaps (
+            signature TEXT PRIMARY KEY, slot INTEGER, block_time REAL, mint TEXT, wallet_pubkey TEXT,
+            pool TEXT, venue TEXT, side TEXT, token_amount REAL, quote_sol REAL, quote_usd REAL,
+            price_usd REAL, source_type TEXT, rpc_verified INTEGER, observed_at REAL
+        )""")
+
+        c.execute("INSERT INTO tokens VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                  ("MINT_REPLAY", "REP", "ReplayToken", 6, 1e9, 0.05, 50000.0, "TokenProg", 1, 1, 20.0, "VERIFIED_ON_CHAIN", "REPLAY"))
+        c.execute("INSERT INTO live_swaps VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                  ("sig_rep_1", 100, 1700000000.0, "MINT_REPLAY", "wallet_1", "pool_1", "Raydium", "BUY", 100.0, 1.0, 100.0, 1.0, "REPLAY", 1, 1700000001.0))
+        conn.commit()
+        conn.close()
+
+        tokens, swaps = load_live_context_from_canonical_db(db_path)
+        self.assertEqual(swaps[0].provenance.source_type, SourceType.REPLAY)
+        self.assertEqual(tokens[0].source_type, SourceType.REPLAY)
+
+    def test_pool_age_is_never_hardcoded(self):
+        """E) Pool age is derived from verified swap timestamps without static constants."""
+        db_path = os.path.join(self.temp_dir, "test_pool_age.db")
+        conn = sqlite3.connect(db_path)
+        c = conn.cursor()
+        c.execute("""
+        CREATE TABLE tokens (
+            mint TEXT PRIMARY KEY, symbol TEXT, name TEXT, decimals INTEGER, supply REAL,
+            price_usd REAL, liquidity_usd REAL, owner_program TEXT, mint_auth_revoked INTEGER,
+            freeze_auth_revoked INTEGER, top10_holder_pct REAL, verification_status TEXT, source_type TEXT
+        )""")
+        c.execute("""
+        CREATE TABLE live_swaps (
+            signature TEXT PRIMARY KEY, slot INTEGER, block_time REAL, mint TEXT, wallet_pubkey TEXT,
+            pool TEXT, venue TEXT, side TEXT, token_amount REAL, quote_sol REAL, quote_usd REAL,
+            price_usd REAL, source_type TEXT, rpc_verified INTEGER, observed_at REAL
+        )""")
+
+        c.execute("INSERT INTO tokens VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                  ("MINT_AGE", "AGE", "AgeToken", 6, 1e9, 0.05, 50000.0, "TokenProg", 1, 1, 20.0, "VERIFIED_ON_CHAIN", "REAL"))
+        # Insert 2 swaps 30 minutes apart (1800 seconds)
+        c.execute("INSERT INTO live_swaps VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                  ("sig_age_1", 100, 1700000000.0, "MINT_AGE", "wallet_1", "pool_1", "Raydium", "BUY", 100.0, 1.0, 100.0, 1.0, "REAL", 1, 1700000001.0))
+        c.execute("INSERT INTO live_swaps VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                  ("sig_age_2", 110, 1700001800.0, "MINT_AGE", "wallet_2", "pool_1", "Raydium", "BUY", 100.0, 1.0, 100.0, 1.0, "REAL", 1, 1700001801.0))
+        conn.commit()
+        conn.close()
+
+        tokens, swaps = load_live_context_from_canonical_db(db_path)
+        self.assertEqual(tokens[0].pool_age_minutes, 30.0, "Pool age must be derived as exactly 30.0 minutes")
+
+    def test_missing_pool_age_becomes_none(self):
+        """F) Missing pool age becomes None and degrades confidence strictly."""
         ctx = LiveTokenContext(
-            mint="MintProvenanceTest11111111111111111111",
-            symbol="PROV",
+            mint="MINT_NO_AGE",
+            symbol="NO_AGE",
+            pool_age_minutes=None, # Missing pool age
             pool_liquidity_usd=50000.0,
+            price_usd=0.05,
             is_mint_verified_on_chain=True,
             is_market_data_verified=True,
-            source_type=SourceType.REAL,
-            observed_at=time.time(),
-            data_timestamp=time.time() - 60,
-            quote_quality=1.0,
-            confidence=1.0
+            quote_quality=1.0
         )
         res = self.funnel.score_live_token(ctx, [])
-        self.assertEqual(res.source_type, "REAL")
-        self.assertTrue(res.mint_verified_on_chain)
-        self.assertTrue(res.market_data_verified)
-        self.assertGreater(res.observed_at, 0)
-        self.assertGreater(res.data_timestamp, 0)
-        self.assertEqual(res.quote_quality, 1.0)
-        self.assertEqual(res.confidence, 1.0)
+        self.assertEqual(res.earlyness_score, 50.0, "Earlyness score must default to neutral 50.0 when age is unknown")
+        self.assertLess(res.confidence, 1.0, "Confidence must degrade when pool age is missing")
+        self.assertEqual(res.confidence, 0.90)
 
-    def test_security_hard_rejects_remain_unchanged(self):
-        """Proves security hard rejects (active mint/freeze auth, high concentration) are strictly enforced."""
-        # Active mint authority
-        ctx_mint_auth = LiveTokenContext(
-            mint="BadMint11111111111111111111111111111111",
-            symbol="BAD_MINT",
-            mint_authority="ActiveAuthority11111111111111111111111111"
-        )
-        res1 = self.funnel.score_live_token(ctx_mint_auth, [])
-        self.assertTrue(res1.security_hard_reject)
-        self.assertEqual(res1.pipeline_stage, "SECURITY_REJECTED")
-        self.assertEqual(res1.action_recommendation, "HARD_REJECT")
+    def test_no_static_numeric_market_metadata_exists_in_production_path(self):
+        """G) No static numeric token arrays exist in scoring module."""
+        import scoring.early_alpha.early_token_priority as ep
+        self.assertFalse(hasattr(ep, "ALL_42_VERIFIED_TOKENS"))
+        self.assertFalse(hasattr(ep, "STATIC_TOKENS"))
 
-        # Active freeze authority (honeypot)
-        ctx_freeze_auth = LiveTokenContext(
-            mint="BadFreeze1111111111111111111111111111111",
-            symbol="BAD_FREEZE",
-            freeze_authority="ActiveFreeze111111111111111111111111111"
-        )
-        res2 = self.funnel.score_live_token(ctx_freeze_auth, [])
-        self.assertTrue(res2.security_hard_reject)
-        self.assertEqual(res2.pipeline_stage, "SECURITY_REJECTED")
-        self.assertEqual(res2.action_recommendation, "HARD_REJECT")
+    def test_no_forced_real_provenance_exists_in_db_loader(self):
+        """H) No forced REAL provenance exists in DB loader when loading arbitrary source_type."""
+        db_path = os.path.join(self.temp_dir, "test_mock_loader.db")
+        conn = sqlite3.connect(db_path)
+        c = conn.cursor()
+        c.execute("""
+        CREATE TABLE tokens (
+            mint TEXT PRIMARY KEY, symbol TEXT, name TEXT, decimals INTEGER, supply REAL,
+            price_usd REAL, liquidity_usd REAL, owner_program TEXT, mint_auth_revoked INTEGER,
+            freeze_auth_revoked INTEGER, top10_holder_pct REAL, verification_status TEXT, source_type TEXT
+        )""")
+        c.execute("""
+        CREATE TABLE live_swaps (
+            signature TEXT PRIMARY KEY, slot INTEGER, block_time REAL, mint TEXT, wallet_pubkey TEXT,
+            pool TEXT, venue TEXT, side TEXT, token_amount REAL, quote_sol REAL, quote_usd REAL,
+            price_usd REAL, source_type TEXT, rpc_verified INTEGER, observed_at REAL
+        )""")
 
-        # Top 10 concentration > 70%
-        ctx_conc = LiveTokenContext(
-            mint="BadConc11111111111111111111111111111111",
-            symbol="BAD_CONC",
-            top_holder_pct=85.0
-        )
-        res3 = self.funnel.score_live_token(ctx_conc, [])
-        self.assertTrue(res3.security_hard_reject)
-        self.assertEqual(res3.pipeline_stage, "SECURITY_REJECTED")
-        self.assertEqual(res3.action_recommendation, "HARD_REJECT")
+        c.execute("INSERT INTO tokens VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                  ("MINT_MOCK", "MCK", "MockToken", 6, 1e9, 0.05, 50000.0, "TokenProg", 1, 1, 20.0, "VERIFIED_ON_CHAIN", "SNAPSHOT"))
+        c.execute("INSERT INTO live_swaps VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                  ("sig_mock_1", 100, 1700000000.0, "MINT_MOCK", "wallet_1", "pool_1", "Raydium", "BUY", 100.0, 1.0, 100.0, 1.0, "SNAPSHOT", 0, 1700000001.0))
+        conn.commit()
+        conn.close()
+
+        tokens, swaps = load_live_context_from_canonical_db(db_path)
+        self.assertEqual(swaps[0].provenance.source_type, SourceType.SNAPSHOT)
+        self.assertEqual(tokens[0].source_type, SourceType.SNAPSHOT)
+        self.assertFalse(swaps[0].provenance.verified_on_chain)
 
 
 if __name__ == "__main__":

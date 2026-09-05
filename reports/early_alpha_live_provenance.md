@@ -16,16 +16,16 @@
 
 ## 2. Live Runtime Provenance Breakdown
 
-| Mint | Symbol | Source | Observed At | On-Chain Verified | Swaps | Quote Quality | Alpha Score | Stage |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| `2qEHjDLD...` | **PNUT** | `REAL` | `2026-09-05 17:54:39` | **True** | 54 | 100.0% | **71.0** | `DEEP_ANALYSIS_PRIORITIZED` |
-| `9BB6NFEc...` | **FARTCOIN** | `REAL` | `2026-09-05 17:54:39` | **True** | 85 | 100.0% | **70.3** | `DEEP_ANALYSIS_PRIORITIZED` |
-| `6p6xgHyF...` | **TRUMP** | `REAL` | `2026-09-05 17:54:39` | **True** | 16 | 100.0% | **66.5** | `DEEP_ANALYSIS_PRIORITIZED` |
-| `DezXAZ8z...` | **BONK** | `REAL` | `2026-09-05 17:54:39` | **True** | 42 | 100.0% | **65.6** | `DEEP_ANALYSIS_PRIORITIZED` |
-| `EKpQGSJt...` | **WIF** | `REAL` | `2026-09-05 17:54:39` | **True** | 35 | 100.0% | **62.2** | `DEEP_ANALYSIS_PRIORITIZED` |
-| `Dfh5DzRg...` | **PIPPIN** | `REAL` | `2026-09-05 17:54:39` | **True** | 24 | 100.0% | **56.3** | `MONITORING_WATCHLIST` |
-| `CzLSujWB...` | **GOAT** | `REAL` | `2026-09-05 17:54:39` | **True** | 62 | 100.0% | **54.9** | `MONITORING_WATCHLIST` |
+| Mint | Symbol | Source | Observed At | On-Chain Verified | Swaps | Quote Quality | Alpha Score | Confidence | Stage |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `2qEHjDLD...` | **PNUT** | `REAL` | `2026-09-05 18:01:01` | **True** | 54 | 100.0% | **72.5** | **1.00** | `DEEP_ANALYSIS_PRIORITIZED` |
+| `9BB6NFEc...` | **FARTCOIN** | `REAL` | `2026-09-05 18:01:01` | **True** | 85 | 100.0% | **71.8** | **1.00** | `DEEP_ANALYSIS_PRIORITIZED` |
+| `6p6xgHyF...` | **TRUMP** | `REAL` | `2026-09-05 18:01:01` | **True** | 16 | 100.0% | **68.0** | **1.00** | `DEEP_ANALYSIS_PRIORITIZED` |
+| `DezXAZ8z...` | **BONK** | `REAL` | `2026-09-05 18:01:01` | **True** | 42 | 100.0% | **67.1** | **1.00** | `DEEP_ANALYSIS_PRIORITIZED` |
+| `EKpQGSJt...` | **WIF** | `REAL` | `2026-09-05 18:01:01` | **True** | 35 | 100.0% | **63.7** | **1.00** | `DEEP_ANALYSIS_PRIORITIZED` |
+| `Dfh5DzRg...` | **PIPPIN** | `REAL` | `2026-09-05 18:01:01` | **True** | 24 | 100.0% | **57.8** | **1.00** | `MONITORING_WATCHLIST` |
+| `CzLSujWB...` | **GOAT** | `REAL` | `2026-09-05 18:01:01` | **True** | 62 | 100.0% | **56.4** | **1.00** | `MONITORING_WATCHLIST` |
 
 ## 3. Final Verification Verdict
 
-**FINAL VERDICT: TRUE_LIVE_EARLY_ALPHA**
+**FINAL VERDICT: TRUE_LIVE_EARLY_ALPHA_INTEGRITY**

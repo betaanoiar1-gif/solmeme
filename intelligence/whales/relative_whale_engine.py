@@ -3,6 +3,7 @@ Relative Whale Strength Engine for Solana.
 Calculates continuous multi-factor whale conviction without relying on a rigid nominal $20,000 threshold.
 Zero fallback to default $1,000,000 pool liquidity.
 Zero conversion of unknown USD quotes to 0.0.
+Strict UNKNOWN (None) vs REAL ZERO (0.0) semantic integrity.
 """
 
 from dataclasses import dataclass, field
@@ -47,21 +48,20 @@ class RelativeWhaleEngine:
     ) -> RelativeWhaleMetrics:
         """
         Calculates continuous Relative Whale Strength for a token.
-        Requires verified quotes for volume computation.
-        Requires explicit verified pool liquidity.
+        When no verified whale swaps exist, underlying metrics remain None (UNKNOWN).
         """
         if not swaps:
             return RelativeWhaleMetrics(
                 mint=mint,
                 symbol=symbol,
                 pool_liquidity_usd=pool_liquidity_usd,
-                absolute_netflow_usd=0.0,
-                flow_to_liquidity_ratio=0.0 if pool_liquidity_usd else None,
-                largest_single_buy_usd=0.0,
-                single_order_pool_impact_pct=0.0 if pool_liquidity_usd else None,
+                absolute_netflow_usd=None,
+                flow_to_liquidity_ratio=None,
+                largest_single_buy_usd=None,
+                single_order_pool_impact_pct=None,
                 accumulating_whales_count=0,
                 accumulation_events_count=0,
-                whale_buy_acceleration=0.0,
+                whale_buy_acceleration=None,
                 relative_whale_strength_score=50.0,
                 conviction_tier="NEUTRAL",
                 quote_quality=1.0,
@@ -78,17 +78,17 @@ class RelativeWhaleEngine:
                 mint=mint,
                 symbol=symbol,
                 pool_liquidity_usd=pool_liquidity_usd,
-                absolute_netflow_usd=0.0,
-                flow_to_liquidity_ratio=0.0 if pool_liquidity_usd else None,
-                largest_single_buy_usd=0.0,
-                single_order_pool_impact_pct=0.0 if pool_liquidity_usd else None,
+                absolute_netflow_usd=None,
+                flow_to_liquidity_ratio=None,
+                largest_single_buy_usd=None,
+                single_order_pool_impact_pct=None,
                 accumulating_whales_count=0,
                 accumulation_events_count=0,
-                whale_buy_acceleration=0.0,
+                whale_buy_acceleration=None,
                 relative_whale_strength_score=50.0,
                 conviction_tier="NEUTRAL",
                 quote_quality=round(quote_quality, 4),
-                provenance=Provenance(source_type=SourceType.REAL, confidence=round(quote_quality, 2))
+                provenance=Provenance(source_type=SourceType.REAL, confidence=round(quote_quality * 0.7, 2))
             )
 
         whale_buys = [s for s in whale_swaps if s.side == "BUY"]
@@ -98,11 +98,11 @@ class RelativeWhaleEngine:
         sell_vol = sum(s.quote_amount_usd for s in whale_sells)
         netflow = buy_vol - sell_vol
 
-        largest_buy = max([s.quote_amount_usd for s in whale_buys]) if whale_buys else 0.0
+        largest_buy = max([s.quote_amount_usd for s in whale_buys]) if whale_buys else None
 
         if pool_liquidity_usd is not None and pool_liquidity_usd > 0:
             flow_to_liq = netflow / pool_liquidity_usd
-            single_order_impact_pct = (largest_buy / pool_liquidity_usd) * 100.0
+            single_order_impact_pct = ((largest_buy / pool_liquidity_usd) * 100.0) if largest_buy is not None else 0.0
             # 1. Flow / Liquidity ratio (30%) -> 1.0% of pool is 100 pts
             rel_flow_score = min(max(flow_to_liq * 100.0 * 50.0, 0.0), 100.0) if netflow > 0 else 0.0
             # 2. Single-order pool impact (25%) -> 0.5% single buy is 100 pts
@@ -123,14 +123,14 @@ class RelativeWhaleEngine:
             v2 = sum(s.quote_amount_usd for s in whale_buys[mid:])
             accel = (v2 - v1) / max(v1, 1.0)
         else:
-            accel = 0.0
+            accel = None
 
         # 3. Accumulation events / repeat buys (20%)
         events_score = min(accum_events * 25.0, 100.0)
         # 4. Number of distinct whale wallets (15%)
         wallets_score = min(len(accum_wallets) * 33.3, 100.0)
         # 5. Buy acceleration (10%)
-        accel_score = min(max((accel + 0.5) * 50.0, 0.0), 100.0)
+        accel_score = min(max(((accel if accel is not None else 0.0) + 0.5) * 50.0, 0.0), 100.0)
 
         composite_score = round(
             (rel_flow_score * 0.30) +
@@ -159,11 +159,11 @@ class RelativeWhaleEngine:
             pool_liquidity_usd=pool_liquidity_usd,
             absolute_netflow_usd=round(netflow, 2),
             flow_to_liquidity_ratio=round(flow_to_liq, 6) if flow_to_liq is not None else None,
-            largest_single_buy_usd=round(largest_buy, 2),
+            largest_single_buy_usd=round(largest_buy, 2) if largest_buy is not None else None,
             single_order_pool_impact_pct=round(single_order_impact_pct, 4) if single_order_impact_pct is not None else None,
             accumulating_whales_count=len(accum_wallets),
             accumulation_events_count=accum_events,
-            whale_buy_acceleration=round(accel, 2),
+            whale_buy_acceleration=round(accel, 2) if accel is not None else None,
             relative_whale_strength_score=composite_score,
             conviction_tier=tier,
             quote_quality=round(quote_quality, 4),

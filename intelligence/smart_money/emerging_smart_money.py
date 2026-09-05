@@ -5,6 +5,7 @@ strictly from observed within-run transaction telemetry (cold start).
 Does NOT use historical pre-seeded reputations.
 Zero fallback to default $1,000,000 pool liquidity.
 Zero conversion of unknown USD quotes to 0.0.
+Strict UNKNOWN (None) vs REAL ZERO (0.0) semantic integrity.
 """
 
 from dataclasses import dataclass, field
@@ -105,22 +106,24 @@ class EmergingSmartMoneyEngine:
             p.verified_quote_swaps += 1
             if swap.side == "BUY":
                 p.buy_count += 1
-                p.buy_volume_usd = (p.buy_volume_usd or 0.0) + usd
+                p.buy_volume_usd = (p.buy_volume_usd if p.buy_volume_usd is not None else 0.0) + usd
                 p.consecutive_buys += 1
             else:
                 p.sell_count += 1
-                p.sell_volume_usd = (p.sell_volume_usd or 0.0) + usd
+                p.sell_volume_usd = (p.sell_volume_usd if p.sell_volume_usd is not None else 0.0) + usd
                 p.consecutive_buys = 0
 
-            p.netflow_usd = (p.buy_volume_usd or 0.0) - (p.sell_volume_usd or 0.0)
-            total_vol = (p.buy_volume_usd or 0.0) + (p.sell_volume_usd or 0.0)
-            p.sell_ratio = (p.sell_volume_usd or 0.0) / max(total_vol, 1.0)
+            b_vol = p.buy_volume_usd if p.buy_volume_usd is not None else 0.0
+            s_vol = p.sell_volume_usd if p.sell_volume_usd is not None else 0.0
+            p.netflow_usd = b_vol - s_vol
+            total_vol = b_vol + s_vol
+            p.sell_ratio = s_vol / max(total_vol, 1.0)
             p.avg_trade_size_usd = total_vol / max(p.verified_quote_swaps, 1)
-            p.largest_trade_usd = max(p.largest_trade_usd or 0.0, usd)
+            p.largest_trade_usd = max(p.largest_trade_usd if p.largest_trade_usd is not None else 0.0, usd)
 
             if pool_liquidity_usd is not None and pool_liquidity_usd > 0:
                 impact = (usd / pool_liquidity_usd) * 100.0
-                p.max_pool_impact_pct = max(p.max_pool_impact_pct or 0.0, impact)
+                p.max_pool_impact_pct = max(p.max_pool_impact_pct if p.max_pool_impact_pct is not None else 0.0, impact)
             else:
                 # Pool liquidity is unknown: keep as None (UNKNOWN)
                 pass
@@ -177,10 +180,10 @@ class EmergingSmartMoneyEngine:
                 mint=mint,
                 symbol=symbol,
                 emerging_smart_score=50.0,
-                emerging_netflow_usd=0.0,
+                emerging_netflow_usd=None,
                 accumulating_wallets_count=0,
                 distributing_wallets_count=0,
-                total_emerging_volume_usd=0.0,
+                total_emerging_volume_usd=None,
                 quote_quality=1.0,
                 signal_label="NEUTRAL",
                 provenance=Provenance(source_type=SourceType.REAL, confidence=0.5)
