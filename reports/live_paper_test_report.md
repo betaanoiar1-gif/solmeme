@@ -6,21 +6,21 @@
 - **Execution Mode:** `DATA_MODE=LIVE`
 - **Git Branch:** `arena/01a07111-solmeme`
 - **Commit SHA:** `0f8f93a`
-- **Test Start Time:** 2026-09-05 20:12:42 UTC
-- **Test End Time:** 2026-09-05 20:26:13 UTC
-- **Total Duration:** 811.36 seconds (13.5 minutes)
-- **Total Completed Cycles:** 5
+- **Test Start Time:** 2026-09-05 20:34:53 UTC
+- **Test End Time:** 2026-09-05 20:47:13 UTC
+- **Total Duration:** 739.23 seconds (12.3 minutes)
+- **Total Completed Cycles:** 3
 - **REAL_DATA_ONLY:** `TRUE`
 - **Network Status:** `SOLANA_MAINNET_CONNECTED`
-- **Total Real RPC Requests Attempted:** `2653`
-- **Successful Real RPC Requests:** `357`
-- **Failed Real RPC Requests:** `2296`
-- **Current Real Tokens Discovered:** `9`
-- **On-Chain Verified Mints:** `9`
-- **Current Ingested Real Swaps:** `189`
-- **Current Whale Events Detected:** `0`
-- **Current Smart Money Events:** `189`
-- **Sniper Candidates:** `1`
+- **Total Real RPC Requests Attempted:** `2155`
+- **Successful Real RPC Requests:** `419`
+- **Failed Real RPC Requests:** `1736`
+- **Current Real Tokens Discovered:** `11`
+- **On-Chain Verified Mints:** `11`
+- **Current Ingested Real Swaps:** `250`
+- **Current Whale Events Detected:** `10`
+- **Current Smart Money Events:** `250`
+- **Sniper Candidates:** `0`
 - **Paper Entries:** `0`
 - **Paper Exits:** `0`
 - **Open Positions:** `0`
@@ -81,25 +81,25 @@ FINAL LIVE VALIDATION
 COMMIT: 0f8f93a
 MODE: LIVE
 NETWORK_CONNECTED: TRUE
-RPC_REQUESTS: 2653
-RPC_SUCCESS: 357
-RPC_FAILURE: 2296
-RPC_AVG_LATENCY_MS: 619.68
-LIVE_TOKENS: 9
-VERIFIED_MINTS: 9
-LIVE_SWAPS: 189
-VERIFIED_QUOTES: 0
-UNKNOWN_QUOTES: 189
-QUOTE_QUALITY: 0.0000
+RPC_REQUESTS: 2155
+RPC_SUCCESS: 419
+RPC_FAILURE: 1736
+RPC_AVG_LATENCY_MS: 62.04
+LIVE_TOKENS: 11
+VERIFIED_MINTS: 11
+LIVE_SWAPS: 250
+VERIFIED_QUOTES: 236
+UNKNOWN_QUOTES: 14
+QUOTE_QUALITY: 0.9440
 TOKENS_WITH_LIVE_LIQUIDITY: 6
-TOKENS_WITH_UNKNOWN_LIQUIDITY: 3
+TOKENS_WITH_UNKNOWN_LIQUIDITY: 5
 TOKENS_WITH_POOL_CREATION_TIME: 0
-TOKENS_WITH_UNKNOWN_AGE: 9
-EARLY_ALPHA_SCORED: 8
-DEEP_ANALYSIS_PRIORITIZED: 1
-WATCHLIST: 1
-SECURITY_REJECTED: 5
-SNIPER_CANDIDATES: 1
+TOKENS_WITH_UNKNOWN_AGE: 11
+EARLY_ALPHA_SCORED: 10
+DEEP_ANALYSIS_PRIORITIZED: 0
+WATCHLIST: 2
+SECURITY_REJECTED: 7
+SNIPER_CANDIDATES: 0
 PAPER_ENTRIES: 0
 PAPER_EXITS: 0
 OPEN_POSITIONS: 0
@@ -110,7 +110,7 @@ UNREALIZED_PNL: $+0.00
 FINAL_EQUITY: $100.00
 MAX_DRAWDOWN: 0.0%
 ACCOUNTING_DISCREPANCY: $0.000000
-PROVENANCE_CHECKS: 198
+PROVENANCE_CHECKS: 261
 FORCED_REAL: 0
 FORCED_VERIFICATION: 0
 SYNTHETIC_ROWS: 0

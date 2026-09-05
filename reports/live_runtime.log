@@ -9,16 +9,12 @@
 ================================================================================
 CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 ================================================================================
-2026-09-05 20:12:42 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
-#1      7           6           31        0         $100.00     INVARIANTS_SATISFIED
-2026-09-05 20:15:24 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #2 ---
-#2      7           7           23        0         $100.00     INVARIANTS_SATISFIED
-2026-09-05 20:18:09 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #3 ---
-#3      7           7           11        0         $100.00     INVARIANTS_SATISFIED
-2026-09-05 20:19:43 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #4 ---
-#4      8           8           26        0         $100.00     INVARIANTS_SATISFIED
-2026-09-05 20:22:25 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #5 ---
-#5      8           8           98        0         $100.00     INVARIANTS_SATISFIED
+2026-09-05 20:34:53 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
+#1      10          9           39        0         $100.00     INVARIANTS_SATISFIED
+2026-09-05 20:38:44 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #2 ---
+#2      10          10          130       4         $100.00     INVARIANTS_SATISFIED
+2026-09-05 20:43:28 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #3 ---
+#3      10          10          81        6         $100.00     INVARIANTS_SATISFIED
 
 ================================================================================
   ⚡ MEME ALPHA HUNTER — SOLANA INTELLIGENCE & PAPER TRADING PLATFORM ⚡
@@ -41,14 +37,14 @@ CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 --------------------------------------------------------------------------------
   SYMBOL     ALPHA    RISK     CONF     EARLY    FINAL    REGIME             DECISION    
   ----------------------------------------------------------------------------
-  POINTLESS  68.6     19.0     41.4     90.3     70.9     R1_DORMANT         PAPER_ENTRY 
-  employim   57.2     21.0     28.4     99.0     64.6     R1_DORMANT         WAIT_FOR_RETEST
-  ALPACA     52.5     21.0     27.0     94.5     61.6     R1_DORMANT         REJECT      
-  USEFUL     55.7     23.0     24.0     84.7     60.6     R0_DEAD            WATCH       
-  pеrpscape  49.7     24.0     26.7     83.2     57.9     R1_DORMANT         REJECT      
-  TAXLESS    46.9     24.0     27.5     88.0     57.5     R1_DORMANT         REJECT      
-  PONG       50.2     23.0     24.0     78.8     57.3     R0_DEAD            REJECT      
-  underdog   48.8     23.0     24.0     72.7     55.7     R0_DEAD            REJECT      
+  PUMPLOYEE  65.7     23.0     19.2     86.1     64.6     R0_DEAD            WAIT_FOR_RETEST
+  Useful     62.4     23.0     19.2     92.8     64.1     R0_DEAD            WATCH       
+  POINTLESS  55.2     19.0     37.2     78.6     62.5     R1_DORMANT         WATCH       
+  PUMPONS    54.2     23.0     14.4     93.5     59.8     R0_DEAD            REJECT      
+  ㅤ‮         51.2     19.0     38.0     68.7     59.3     R1_DORMANT         REJECT      
+  589        47.1     24.0     19.4     92.4     57.0     R1_DORMANT         REJECT      
+  hillsmith  48.5     23.0     16.8     85.1     56.4     R0_DEAD            REJECT      
+  ALPACA     44.3     21.0     26.7     82.5     56.0     R5_EXPANSION       REJECT      
 --------------------------------------------------------------------------------
 
 🩺 [SYSTEM HEALTH]
@@ -70,25 +66,25 @@ FINAL LIVE VALIDATION
 COMMIT: 0f8f93a
 MODE: LIVE
 NETWORK_CONNECTED: TRUE
-RPC_REQUESTS: 2653
-RPC_SUCCESS: 357
-RPC_FAILURE: 2296
-RPC_AVG_LATENCY_MS: 619.68
-LIVE_TOKENS: 9
-VERIFIED_MINTS: 9
-LIVE_SWAPS: 189
-VERIFIED_QUOTES: 0
-UNKNOWN_QUOTES: 189
-QUOTE_QUALITY: 0.0000
+RPC_REQUESTS: 2155
+RPC_SUCCESS: 419
+RPC_FAILURE: 1736
+RPC_AVG_LATENCY_MS: 62.04
+LIVE_TOKENS: 11
+VERIFIED_MINTS: 11
+LIVE_SWAPS: 250
+VERIFIED_QUOTES: 236
+UNKNOWN_QUOTES: 14
+QUOTE_QUALITY: 0.9440
 TOKENS_WITH_LIVE_LIQUIDITY: 6
-TOKENS_WITH_UNKNOWN_LIQUIDITY: 3
+TOKENS_WITH_UNKNOWN_LIQUIDITY: 5
 TOKENS_WITH_POOL_CREATION_TIME: 0
-TOKENS_WITH_UNKNOWN_AGE: 9
-EARLY_ALPHA_SCORED: 8
-DEEP_ANALYSIS_PRIORITIZED: 1
-WATCHLIST: 1
-SECURITY_REJECTED: 5
-SNIPER_CANDIDATES: 1
+TOKENS_WITH_UNKNOWN_AGE: 11
+EARLY_ALPHA_SCORED: 10
+DEEP_ANALYSIS_PRIORITIZED: 0
+WATCHLIST: 2
+SECURITY_REJECTED: 7
+SNIPER_CANDIDATES: 0
 PAPER_ENTRIES: 0
 PAPER_EXITS: 0
 OPEN_POSITIONS: 0
@@ -99,7 +95,7 @@ UNREALIZED_PNL: $+0.00
 FINAL_EQUITY: $100.00
 MAX_DRAWDOWN: 0.0%
 ACCOUNTING_DISCREPANCY: $0.000000
-PROVENANCE_CHECKS: 198
+PROVENANCE_CHECKS: 261
 FORCED_REAL: 0
 FORCED_VERIFICATION: 0
 SYNTHETIC_ROWS: 0
