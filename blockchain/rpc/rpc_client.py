@@ -139,9 +139,27 @@ class SolanaRPCClient:
             return float(res["value"]["uiAmount"])
         return None
 
-    def get_account_info(self, pubkey: str) -> Optional[Dict[str, Any]]:
-        res = self.call("getAccountInfo", [pubkey, {"encoding": "jsonParsed"}])
-        if res and "value" in res:
+    def get_account_info(self, pubkey: str, encoding: str = "jsonParsed") -> Optional[Dict[str, Any]]:
+        res = self.call("getAccountInfo", [pubkey, {"encoding": encoding}])
+        if res and isinstance(res, dict):
+            return res
+        return None
+
+    def get_health(self) -> Optional[str]:
+        res = self.call("getHealth")
+        return res if isinstance(res, str) else ("ok" if res is not None else None)
+
+    def get_signatures_for_address(self, address: str, limit: int = 25) -> Optional[List[Dict[str, Any]]]:
+        res = self.call("getSignaturesForAddress", [address, {"limit": limit}])
+        return res if isinstance(res, list) else None
+
+    def get_transaction(self, signature: str, encoding: str = "jsonParsed") -> Optional[Dict[str, Any]]:
+        res = self.call("getTransaction", [signature, {"encoding": encoding, "maxSupportedTransactionVersion": 0}])
+        return res if isinstance(res, dict) else None
+
+    def get_token_largest_accounts(self, mint: str) -> Optional[List[Dict[str, Any]]]:
+        res = self.call("getTokenLargestAccounts", [mint])
+        if res and isinstance(res, dict) and "value" in res:
             return res["value"]
         return None
 

@@ -21,6 +21,8 @@ class Provenance:
     timestamp: float = field(default_factory=time.time)
     observed_at: float = field(default_factory=time.time)
     block_time: Optional[float] = None
+    slot: Optional[int] = None
+    signature: Optional[str] = None
     confidence: float = 1.0
     verified_on_chain: bool = False
 
@@ -31,6 +33,8 @@ class Provenance:
             "timestamp": self.timestamp,
             "observed_at": self.observed_at,
             "block_time": self.block_time,
+            "slot": self.slot,
+            "signature": self.signature,
             "confidence": self.confidence,
             "verified_on_chain": self.verified_on_chain
         }
