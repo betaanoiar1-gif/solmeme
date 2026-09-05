@@ -12,7 +12,7 @@ permissions:
 jobs:
   validate-live:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -33,13 +33,13 @@ jobs:
         run: |
           python3 scripts/probe_network.py
 
-      - name: Run Solana Live Paper Trading Engine (30 Minutes)
+      - name: Run Solana Live Paper Trading Engine (60 Minutes)
         env:
           DATA_MODE: live
           REAL_DATA_ONLY: "true"
         run: |
           mkdir -p reports
-          python3 scripts/run_live_paper.py --mode live --duration-minutes 30 | tee reports/live_runtime.log
+          python3 scripts/run_live_paper.py --mode live --duration-minutes 60.0 | tee reports/live_runtime.log
 
       - name: Upload Report Artifacts
         uses: actions/upload-artifact@v4
@@ -53,5 +53,5 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add reports/
-          git commit -m "chore(live-audit): record 30-minute live solana mainnet validation artifacts" || echo "No changes to commit"
+          git commit -m "chore(live-audit): record 60-minute live solana mainnet validation artifacts" || echo "No changes to commit"
           git push origin arena/01a07111-solmeme || echo "Push failed"
