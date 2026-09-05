@@ -6,9 +6,9 @@
 - **System:** MEME ALPHA HUNTER (Solana Autonomous Intelligence & Sniper Engine)
 - **Execution Mode:** `DATA_MODE=live` (Live Public Solana RPC & DEX Provider)
 - **Evaluation Date:** 2026-09-05 (Timezone: Africa/Algiers)
-- **Test Start Time:** 2026-09-05 15:49:59 UTC
-- **Test End Time:** 2026-09-05 15:50:09 UTC
-- **Test Duration:** 9.87 seconds
+- **Test Start Time:** 2026-09-05 15:51:21 UTC
+- **Test End Time:** 2026-09-05 15:51:31 UTC
+- **Test Duration:** 9.69 seconds
 - **REAL_DATA_ONLY:** `TRUE` (Zero mock / zero snapshot fallback in live path)
 - **REAL_NETWORK_CONNECTED:** `False`
 - **Total Real RPC Requests:** `33`
@@ -93,10 +93,10 @@ High-frequency synthetic volatility cycles to stress-test sniper stage transitio
 ### C.1 Benchmark Summary
 - **Execution Mode:** `DATA_MODE=mock`
 - **Initial Capital:** $100.00 USD
-- **Ending Equity:** $106.88 USD
-- **Net Realized PnL:** $+5.95 USD
-- **Max Drawdown:** 0.76%
-- **Closed Trades:** 4
+- **Ending Equity:** $106.29 USD
+- **Net Realized PnL:** $+3.20 USD
+- **Max Drawdown:** 0.64%
+- **Closed Trades:** 3
 - **Sample Quality:** `SMOKE_TEST_ONLY (Statistically Insufficient)`
 
 ### C.2 Multi-Strategy Suite Comparison ($100 Base Each)
