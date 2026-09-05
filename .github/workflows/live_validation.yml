@@ -6,6 +6,9 @@ on:
       - arena/01a07111-solmeme
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   validate-live:
     runs-on: ubuntu-latest
@@ -37,6 +40,12 @@ jobs:
         run: |
           mkdir -p reports
           python3 scripts/run_live_paper.py --mode live --duration-minutes 30 | tee reports/live_runtime.log
+
+      - name: Upload Report Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: solana-live-reports
+          path: reports/
 
       - name: Commit and Push Results
         if: always()
