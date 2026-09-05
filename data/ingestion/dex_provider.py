@@ -1,5 +1,5 @@
 """
-Public DEX Data Provider (DexScreener, Jupiter, Raydium APIs).
+Public DEX Data Provider (DexScreener, Jupiter, Raydium APIs) with health metrics.
 """
 
 import json
@@ -9,28 +9,39 @@ from typing import Any, Dict, List, Optional
 import urllib.error
 import urllib.request
 
+from blockchain.solana.types import SourceType
 from data.ingestion.provider_base import BaseDataProvider
 
 logger = logging.getLogger("meme_alpha_hunter.dex_provider")
 
 
 class DexPublicProvider(BaseDataProvider):
-    def __init__(self, timeout: float = 0.5):
+    def __init__(self, timeout: float = 2.0, max_retries: int = 2):
+        super().__init__(source_type=SourceType.REAL, provider_name="DexScreenerPublic")
         self.timeout = timeout
+        self.max_retries = max_retries
         self.headers = {"User-Agent": "MemeAlphaHunter/1.0"}
-        self._network_available = True
+        self.total_requests = 0
+        self.successful_requests = 0
+        self.failed_requests = 0
+        self.last_error_time = 0.0
 
     def _get_json(self, url: str) -> Optional[Dict[str, Any]]:
-        if not self._network_available:
-            return None
-        try:
-            req = urllib.request.Request(url, headers=self.headers)
-            with urllib.request.urlopen(req, timeout=self.timeout) as response:
-                return json.loads(response.read().decode("utf-8"))
-        except Exception as e:
-            logger.debug(f"HTTP fetch failed for {url}: {e}")
-            self._network_available = False
-            return None
+        self.total_requests += 1
+        for attempt in range(self.max_retries):
+            try:
+                req = urllib.request.Request(url, headers=self.headers)
+                with urllib.request.urlopen(req, timeout=self.timeout) as response:
+                    data = json.loads(response.read().decode("utf-8"))
+                    self.successful_requests += 1
+                    return data
+            except Exception as e:
+                self.failed_requests += 1
+                self.last_error_time = time.time()
+                logger.debug(f"HTTP fetch attempt {attempt+1} failed for {url}: {e}")
+                time.sleep(0.1 * (2 ** attempt))
+
+        return None
 
     def get_token_metadata(self, mint: str) -> Optional[Dict[str, Any]]:
         data = self.get_token_market_data(mint)
@@ -40,7 +51,8 @@ class DexPublicProvider(BaseDataProvider):
                 "symbol": data.get("symbol", "UNKNOWN"),
                 "name": data.get("name", "Unknown Token"),
                 "decimals": 9,
-                "creator": data.get("creator", "")
+                "creator": data.get("creator", ""),
+                "provenance": self.create_provenance(confidence=0.9).to_dict()
             }
         return None
 
@@ -64,7 +76,11 @@ class DexPublicProvider(BaseDataProvider):
                 "pool_address": pair.get("pairAddress", ""),
                 "dex": pair.get("dexId", "raydium"),
                 "pair_created_at": pair.get("pairCreatedAt", time.time() * 1000) / 1000.0,
-                "source": "DexScreener"
+                "chain": "solana",
+                "source": "DexScreener",
+                "first_seen_ts": time.time(),
+                "updated_at": time.time(),
+                "provenance": self.create_provenance(confidence=0.95, verified_on_chain=True).to_dict()
             }
         return None
 
@@ -79,12 +95,15 @@ class DexPublicProvider(BaseDataProvider):
                         "mint": item.get("tokenAddress"),
                         "symbol": item.get("symbol", ""),
                         "name": item.get("description", "")[:20],
-                        "source": "DexScreenerProfiles"
+                        "chain": "solana",
+                        "source": "DexScreenerProfiles",
+                        "first_seen_ts": time.time(),
+                        "updated_at": time.time(),
+                        "provenance": self.create_provenance(confidence=0.85).to_dict()
                     })
         return tokens
 
     def get_token_security_data(self, mint: str) -> Optional[Dict[str, Any]]:
-        # DexScreener doesn't expose mint authorities directly
         return None
 
     def get_recent_trades(self, mint: str, limit: int = 50) -> List[Dict[str, Any]]:

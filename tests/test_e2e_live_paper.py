@@ -12,6 +12,7 @@ from data.ingestion.mock_feeder import MarketFeeder
 class TestE2ELivePaper(unittest.TestCase):
     def setUp(self):
         self.config = AppConfig()
+        self.config.data_mode = "mock"
         self.config.db_path = ":memory:"
         self.feeder = MarketFeeder()
         self.orchestrator = MemeAlphaHunterOrchestrator(self.config, data_provider=self.feeder)

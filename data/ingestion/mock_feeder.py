@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 import random
 import time
 from typing import Any, Dict, List, Optional
+from blockchain.solana.types import SourceType
 from data.ingestion.provider_base import BaseDataProvider
 
 
@@ -109,7 +110,7 @@ SOLANA_REAL_SEED_TOKENS: List[TokenSeed] = [
         age_minutes=25_000.0
     ),
     TokenSeed(
-        mint="CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuBg9Rpump",
+        mint="CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuBpump",
         symbol="GOAT",
         name="Goatseus Maximus",
         price=0.0195,
@@ -270,7 +271,7 @@ SOLANA_REAL_SEED_TOKENS: List[TokenSeed] = [
         age_minutes=45_000.0
     ),
     TokenSeed(
-        mint="AlphaPreIgniteMeme99999999999999999999999999",
+        mint="ALPHAPre1gniteMemeToken111111111111111111111",
         symbol="PREIGNITE",
         name="Pre-Ignition Alpha",
         price=0.00045,
@@ -293,7 +294,7 @@ SOLANA_REAL_SEED_TOKENS: List[TokenSeed] = [
         age_minutes=28.0
     ),
     TokenSeed(
-        mint="EarlyLaunchFastSurge888888888888888888888888",
+        mint="FASTSurgeLaunchPumpToken11111111111111111111",
         symbol="FASTSURGE",
         name="Fast Surge Pump",
         price=0.00012,
@@ -341,7 +342,7 @@ SOLANA_REAL_SEED_TOKENS: List[TokenSeed] = [
         age_minutes=45.0
     ),
     TokenSeed(
-        mint="WashTradeClusterFake22222222222222222222222",
+        mint="WashTradeC1usterFake22222222222222222222222",
         symbol="WASHFAKE",
         name="Wash Fake Pump",
         price=0.002,
@@ -366,7 +367,7 @@ SOLANA_REAL_SEED_TOKENS: List[TokenSeed] = [
         age_minutes=50.0
     ),
     TokenSeed(
-        mint="UltraLowLiquidityTrap3333333333333333333333",
+        mint="ThinMintTrapLowLiq11111111111111111111111111",
         symbol="THINLIQ",
         name="Thin Liquidity Trap",
         price=0.0000001,
@@ -393,11 +394,12 @@ SOLANA_REAL_SEED_TOKENS: List[TokenSeed] = [
 
 class MarketFeeder(BaseDataProvider):
     """
-    Unified market feeder providing real-world Solana tokens,
-    live price updates, on-chain whale activity, and rug checks.
+    Simulated market feeder providing realistic Solana tokens and dynamic market generation.
+    Strictly marked with SourceType.MOCK provenance.
     """
 
     def __init__(self, seeds: Optional[List[TokenSeed]] = None):
+        super().__init__(source_type=SourceType.MOCK, provider_name="MarketFeederMock")
         self.tokens: Dict[str, TokenSeed] = {s.mint: s for s in (seeds or SOLANA_REAL_SEED_TOKENS)}
         self._price_state: Dict[str, float] = {s.mint: s.price for s in self.tokens.values()}
         self._volume_state: Dict[str, float] = {s.mint: s.volume_24h for s in self.tokens.values()}
@@ -414,7 +416,8 @@ class MarketFeeder(BaseDataProvider):
             "decimals": 9,
             "creator": t.creator,
             "supply": 1_000_000_000.0,
-            "narrative": t.narrative
+            "narrative": t.narrative,
+            "provenance": self.create_provenance(confidence=1.0).to_dict()
         }
 
     def get_token_market_data(self, mint: str) -> Optional[Dict[str, Any]]:
@@ -439,12 +442,13 @@ class MarketFeeder(BaseDataProvider):
             "creator": t.creator,
             "pool_address": t.pool_address,
             "chain": "solana",
-            "source": "SolanaDexProvider",
+            "source": "MarketFeederMock",
             "first_seen_ts": time.time() - (t.age_minutes * 60.0),
             "updated_at": time.time(),
             "smart_money_score": t.smart_money_score,
             "whale_netflow": t.whale_netflow,
-            "narrative": t.narrative
+            "narrative": t.narrative,
+            "provenance": self.create_provenance(confidence=1.0).to_dict()
         }
 
     def scan_recent_tokens(self, limit: int = 50) -> List[Dict[str, Any]]:

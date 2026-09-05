@@ -1,16 +1,17 @@
 """
-Token Discovery Scanner.
-Scans new and active Solana meme tokens, filters basic criteria,
-and builds historical records.
+Token Discovery Scanner with strict Solana Base58 address validation and provenance.
 """
 
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
+import json
 import logging
 import time
 from typing import Any, Dict, List, Optional
 
 from app.config.settings import DiscoveryConfig
 from app.core.database import DatabaseManager
+from blockchain.solana.address_validator import SolanaAddressValidator
+from blockchain.solana.types import Provenance, SourceType
 from data.ingestion.provider_base import BaseDataProvider
 
 logger = logging.getLogger("meme_alpha_hunter.discovery")
@@ -37,6 +38,7 @@ class DiscoveredToken:
     updated_at: float
     is_qualified: bool = False
     rejection_reason: Optional[str] = None
+    provenance: Provenance = field(default_factory=Provenance)
 
 
 class TokenDiscoveryScanner:
@@ -47,13 +49,18 @@ class TokenDiscoveryScanner:
         self.discovered_cache: Dict[str, DiscoveredToken] = {}
 
     def scan(self, limit: int = 50) -> List[DiscoveredToken]:
-        """Scan data provider and register newly found tokens."""
+        """Scan data provider, validate Solana mints, and register newly found tokens."""
         raw_tokens = self.provider.scan_recent_tokens(limit=limit)
         results = []
 
         for item in raw_tokens:
             mint = item.get("mint")
             if not mint:
+                continue
+
+            # Strict Solana Mint Address Validation
+            if not SolanaAddressValidator.validate_token_mint(mint):
+                logger.warning(f"REJECTED INVALID SYNTHETIC MINT: {mint}")
                 continue
 
             market_data = self.provider.get_token_market_data(mint) or item
@@ -80,6 +87,22 @@ class TokenDiscoveryScanner:
         source = data.get("source", "DexScanner")
         first_seen_ts = float(data.get("first_seen_ts", time.time()))
         updated_at = time.time()
+
+        # Provenance handling
+        prov_dict = data.get("provenance", {})
+        if isinstance(prov_dict, dict) and prov_dict:
+            src_type_str = prov_dict.get("source_type", "REAL")
+            src_type = SourceType(src_type_str) if src_type_str in SourceType._value2member_map_ else SourceType.REAL
+            provenance = Provenance(
+                source_type=src_type,
+                provider=prov_dict.get("provider", source),
+                timestamp=float(prov_dict.get("timestamp", time.time())),
+                observed_at=float(prov_dict.get("observed_at", time.time())),
+                confidence=float(prov_dict.get("confidence", 1.0)),
+                verified_on_chain=bool(prov_dict.get("verified_on_chain", False))
+            )
+        else:
+            provenance = self.provider.create_provenance(confidence=0.9, verified_on_chain=True)
 
         # Filtering logic
         is_qualified = True
@@ -117,14 +140,17 @@ class TokenDiscoveryScanner:
             first_seen_ts=first_seen_ts,
             updated_at=updated_at,
             is_qualified=is_qualified,
-            rejection_reason=rejection_reason
+            rejection_reason=rejection_reason,
+            provenance=provenance
         )
 
         self.discovered_cache[mint] = token_obj
 
         # Persist to database
         try:
-            self.db.upsert_token(asdict(token_obj))
+            db_dict = asdict(token_obj)
+            db_dict["provenance"] = json.dumps(provenance.to_dict())
+            self.db.upsert_token(db_dict)
         except Exception as e:
             logger.error(f"Failed to persist token {mint}: {e}")
 

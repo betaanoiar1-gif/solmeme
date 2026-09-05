@@ -1,28 +1,30 @@
 """
-Monte Carlo Simulation Engine.
-Runs 1,000+ resampled path simulations to assess ruin risk, drawdown distributions,
-and confidence intervals.
+Monte Carlo Simulation Engine with sample size validation.
 """
 
 from dataclasses import dataclass
 import random
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 
 @dataclass
 class MonteCarloResult:
     iterations: int
     starting_capital: float
+    status: str  # "VALID_SAMPLE", "INSUFFICIENT_SAMPLE"
+    trades_sample_size: int
     median_ending_equity: float
     equity_p10: float
     equity_p90: float
     median_max_drawdown_pct: float
     max_drawdown_p95: float
-    ruin_probability_pct: float  # Prob of losing > 50% capital
-    risk_of_loss_pct: float  # Prob of ending equity < starting capital
+    ruin_probability_pct: float
+    risk_of_loss_pct: float
 
 
 class MonteCarloEngine:
+    MIN_TRADES_REQUIRED = 8
+
     @classmethod
     def simulate(
         cls,
@@ -31,10 +33,14 @@ class MonteCarloEngine:
         iterations: int = 1000,
         horizon_trades: int = 50
     ) -> MonteCarloResult:
-        if not trades_pnl or len(trades_pnl) < 2:
+        sample_size = len(trades_pnl)
+
+        if sample_size < cls.MIN_TRADES_REQUIRED:
             return MonteCarloResult(
                 iterations=iterations,
                 starting_capital=starting_capital,
+                status=f"INSUFFICIENT_SAMPLE ({sample_size}/{cls.MIN_TRADES_REQUIRED} trades min)",
+                trades_sample_size=sample_size,
                 median_ending_equity=starting_capital,
                 equity_p10=starting_capital,
                 equity_p90=starting_capital,
@@ -64,7 +70,6 @@ class MonteCarloEngine:
                     max_dd = dd
 
                 if equity <= (starting_capital * 0.5):
-                    # Ruin hit
                     break
 
             ending_equities.append(equity)
@@ -86,6 +91,8 @@ class MonteCarloEngine:
         return MonteCarloResult(
             iterations=iterations,
             starting_capital=starting_capital,
+            status="VALID_SAMPLE",
+            trades_sample_size=sample_size,
             median_ending_equity=round(ending_equities[p50_idx], 2),
             equity_p10=round(ending_equities[p10_idx], 2),
             equity_p90=round(ending_equities[p90_idx], 2),

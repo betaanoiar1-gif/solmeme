@@ -1,11 +1,10 @@
 """
-PnL and Returns Accounting Engine.
-Calculates realized, unrealized, net returns, Sharpe, Sortino, and Profit Factor.
+PnL and Returns Accounting Engine with statistical sample validation.
 """
 
 from dataclasses import dataclass
 import math
-from typing import List
+from typing import List, Optional
 
 
 @dataclass
@@ -18,7 +17,9 @@ class PerformanceMetrics:
     total_fees_usd: float
     total_slippage_usd: float
     net_pnl_usd: float
-    profit_factor: float
+    profit_factor: Optional[float]
+    profit_factor_label: str
+    sample_quality_status: str  # "SMOKE_TEST", "EARLY_PAPER_OBSERVATION", "STATISTICALLY_INSUFFICIENT", "MEANINGFUL_PAPER_SAMPLE"
     average_trade_pnl_usd: float
     average_win_usd: float
     average_loss_usd: float
@@ -46,8 +47,10 @@ class PnLCalculator:
                 realized_pnl_usd=0.0,
                 total_fees_usd=total_fees,
                 total_slippage_usd=total_slippage,
-                net_pnl_usd=-total_fees - total_slippage,
-                profit_factor=0.0,
+                net_pnl_usd=0.0,
+                profit_factor=None,
+                profit_factor_label="N/A (No Trades)",
+                sample_quality_status="NO_TRADES_RECORDED",
                 average_trade_pnl_usd=0.0,
                 average_win_usd=0.0,
                 average_loss_usd=0.0,
@@ -68,10 +71,28 @@ class PnLCalculator:
 
         gross_profit = sum(wins)
         gross_loss = abs(sum(losses))
-        profit_factor = (gross_profit / gross_loss) if gross_loss > 0 else (99.0 if gross_profit > 0 else 0.0)
+
+        # Honest Profit Factor calculation
+        if gross_loss > 0:
+            profit_factor = round(gross_profit / gross_loss, 2)
+            profit_factor_label = f"{profit_factor:.2f}"
+        elif gross_profit > 0:
+            profit_factor = None
+            profit_factor_label = "Undefined (0 Losses / Sample Insufficient)"
+        else:
+            profit_factor = 0.0
+            profit_factor_label = "0.00"
+
+        # Sample Quality Status
+        if total_trades < 5:
+            sample_quality = "SMOKE_TEST_ONLY (Statistically Insufficient)"
+        elif total_trades < 20:
+            sample_quality = "EARLY_PAPER_OBSERVATION (Small Sample)"
+        else:
+            sample_quality = "MEANINGFUL_PAPER_SAMPLE"
 
         realized_pnl = sum(trades_pnl)
-        net_pnl = realized_pnl  # Already net of trade execution fees if calculated at trade level
+        net_pnl = realized_pnl
 
         avg_win = (sum(wins) / win_count) if win_count > 0 else 0.0
         avg_loss = (sum(losses) / loss_count) if loss_count > 0 else 0.0
@@ -81,7 +102,6 @@ class PnLCalculator:
         loss_prob = loss_count / total_trades
         expectancy = (win_prob * avg_win) + (loss_prob * avg_loss)
 
-        # Sharpe / Sortino approximation
         mean_r = avg_trade
         std_r = math.sqrt(sum((p - mean_r) ** 2 for p in trades_pnl) / max(total_trades - 1, 1)) if total_trades > 1 else 1.0
         downside_std = math.sqrt(sum((p) ** 2 for p in losses) / max(loss_count, 1)) if loss_count > 0 else 1.0
@@ -98,7 +118,9 @@ class PnLCalculator:
             total_fees_usd=round(total_fees, 2),
             total_slippage_usd=round(total_slippage, 2),
             net_pnl_usd=round(net_pnl, 2),
-            profit_factor=round(profit_factor, 2),
+            profit_factor=profit_factor,
+            profit_factor_label=profit_factor_label,
+            sample_quality_status=sample_quality,
             average_trade_pnl_usd=round(avg_trade, 2),
             average_win_usd=round(avg_win, 2),
             average_loss_usd=round(avg_loss, 2),

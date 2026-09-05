@@ -462,6 +462,15 @@ class DatabaseManager:
             if not self._is_memory:
                 conn.close()
 
+    def fetch_all(self, query: str, params: tuple = ()) -> List[Dict[str, Any]]:
+        conn = self._get_connection()
+        try:
+            rows = conn.execute(query, params).fetchall()
+            return [dict(r) for r in rows]
+        finally:
+            if not self._is_memory:
+                conn.close()
+
     def get_security_reports(self) -> List[Dict[str, Any]]:
         conn = self._get_connection()
         try:

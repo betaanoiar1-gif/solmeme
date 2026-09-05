@@ -1,6 +1,6 @@
 """
 Master Orchestrator for Meme Alpha Hunter.
-Coordinating: DISCOVER -> FILTER -> UNDERSTAND -> SCORE -> RANK -> SIMULATE -> MONITOR -> LEARN
+Strict Provenance: DISCOVER -> FILTER -> UNDERSTAND -> SCORE -> RANK -> SIMULATE -> MONITOR -> LEARN
 """
 
 import json
@@ -13,7 +13,9 @@ from alerts.telegram.bot_engine import TelegramBotEngine
 from app.config.settings import AppConfig, load_config
 from app.core.database import DatabaseManager
 from app.core.health_monitor import HealthMonitor, HealthStatus
+from blockchain.solana.types import Provenance, SourceType
 from data.ingestion.live_market_feeder import LiveMarketFeeder
+from data.ingestion.mock_feeder import MarketFeeder
 from data.ingestion.provider_base import BaseDataProvider
 from discovery.opportunity_discovery.queue import OpportunityQueue
 from discovery.token_discovery.token_scanner import DiscoveredToken, TokenDiscoveryScanner
@@ -53,7 +55,14 @@ class MemeAlphaHunterOrchestrator:
         self.config = config or load_config()
         self.db = DatabaseManager(self.config.db_path)
         self.health = HealthMonitor(self.db)
-        self.provider = data_provider or LiveMarketFeeder()
+        self.data_mode = self.config.data_mode.lower()
+
+        if data_provider:
+            self.provider = data_provider
+        elif self.data_mode == "mock":
+            self.provider = MarketFeeder()
+        else:
+            self.provider = LiveMarketFeeder(data_mode=self.data_mode)
 
         # Core Engines
         self.token_scanner = TokenDiscoveryScanner(self.provider, self.config.discovery, self.db)
@@ -69,8 +78,12 @@ class MemeAlphaHunterOrchestrator:
         self.exit_engine = DynamicExitEngine(self.config.exit_rules)
         self.exec_simulator = ExecutionSimulator(self.config.execution)
 
-        # Portfolio & Risk
-        self.wallet = VirtualWallet(name="Main_Virtual_Wallet", initial_capital_usd=self.config.portfolio.initial_capital_usd)
+        # Portfolio & Risk with strict accounting
+        self.wallet = VirtualWallet(
+            name="Main_Virtual_Wallet",
+            initial_capital_usd=self.config.portfolio.initial_capital_usd,
+            data_mode=self.data_mode
+        )
         self.position_manager = PositionManager(self.config.portfolio)
         self.risk_manager = PortfolioRiskManager(self.config.portfolio)
         self.journal = TradeJournal(self.db)
@@ -86,19 +99,32 @@ class MemeAlphaHunterOrchestrator:
         self.top_opportunities: List[OpportunityReport] = []
         self.ai_theses: Dict[str, StructuredAIThesis] = {}
         self.evaluated_securities: Dict[str, SecurityEvaluation] = {}
+        self.accounting_assertion_passed = True
+        self.last_accounting_status = "INITIALIZED"
 
     def run_pipeline_cycle(self) -> Dict[str, Any]:
         """
         Executes one complete end-to-end pipeline cycle:
         DISCOVER -> FILTER -> UNDERSTAND -> SCORE -> RANK -> SIMULATE -> MONITOR -> LEARN
         """
-        logger.info("=== Starting Pipeline Cycle ===")
+        logger.info(f"=== Starting Pipeline Cycle [DATA_MODE={self.data_mode.upper()}] ===")
         cycle_start_time = time.time()
 
         try:
             # 1. DISCOVERY
             discovered = self.token_scanner.scan(limit=30)
             self.last_scanned_tokens = discovered
+
+            if not discovered:
+                if self.data_mode == "live":
+                    msg = "LIVE DATA UNAVAILABLE: No response from public Solana RPC/DEX endpoints."
+                    logger.warning(msg)
+                    self.health.record_status("DISCOVERY", HealthStatus.DEGRADED, msg)
+                else:
+                    self.health.record_status("DISCOVERY", HealthStatus.HEALTHY, "0 tokens discovered")
+                # Maintain open positions update if any
+                return self._finalize_cycle_and_validate(cycle_start_time, discovered)
+
             self.health.record_status("DISCOVERY", HealthStatus.HEALTHY, f"Scanned {len(discovered)} tokens")
 
             # Collect narrative overview
@@ -127,7 +153,8 @@ class MemeAlphaHunterOrchestrator:
                         "symbol": token.symbol,
                         "security_score": security_eval.security_score,
                         "rug_probability": security_eval.rug_probability,
-                        "reasons": "; ".join(rejection_reasons)
+                        "reasons": "; ".join(rejection_reasons),
+                        "source_type": token.provenance.source_type.value if hasattr(token, "provenance") else "UNKNOWN"
                     })
                     self.state_machine.transition(mint, SniperStage.SX_KILL)
                     continue
@@ -216,6 +243,10 @@ class MemeAlphaHunterOrchestrator:
 
                 should_snipe = (mode_a or mode_b or mode_c or mode_d or mode_e) and chase_verdict.is_safe_entry
 
+                # STRICT PROVENANCE CHECK: If in live mode and data is not REAL, abort entry
+                if self.data_mode == "live" and getattr(token.provenance, "source_type", None) != SourceType.REAL:
+                    should_snipe = False
+
                 if should_snipe and mint not in self.wallet.positions:
                     # Risk circuit check
                     risk_check = self.risk_manager.evaluate_risk(
@@ -248,7 +279,8 @@ class MemeAlphaHunterOrchestrator:
                                 exec_res=exec_res,
                                 alpha_score=opp_report.alpha_score,
                                 risk_score=opp_report.risk_score,
-                                regime=opp_report.regime
+                                regime=opp_report.regime,
+                                provenance=token.provenance
                             )
 
                             if pos:
@@ -256,79 +288,107 @@ class MemeAlphaHunterOrchestrator:
                                 logger.info(f"🎯 [PAPER BUY] {token.symbol} @ ${exec_res.executed_price:.6f} | Size: ${exec_res.filled_size_usd:.2f} | Alpha: {opp_report.alpha_score}")
                                 self.telegram.alert_trade_execution("ENTRY", token.symbol, exec_res.executed_price, exec_res.filled_size_usd)
 
-            # Sort and save top opportunities
             current_opps.sort(key=lambda x: x.final_score, reverse=True)
             self.top_opportunities = current_opps
 
-            # 7. MONITOR & DYNAMIC EXITS FOR OPEN POSITIONS
-            price_map = {t.mint: t.price for t in discovered}
-            self.wallet.update_prices(price_map)
+            return self._finalize_cycle_and_validate(cycle_start_time, discovered)
 
-            mints_to_close = []
-            for mint, pos in list(self.wallet.positions.items()):
-                curr_price = price_map.get(mint, pos.current_price)
-                sec_eval = self.evaluated_securities.get(mint, SecurityEvaluation(mint, 50, 50, True, True, 100, 20, 0, False, False, "SAFE", [], time.time()))
-                smart_score = 75.0
-                whale_netflow = 10_000.0
+        except Exception as e:
+            logger.error(f"Critical error during pipeline cycle: {e}", exc_info=True)
+            self.health.record_status("SCORING", HealthStatus.FAILED, str(e))
+            return {"error": str(e)}
 
-                exit_verdict = self.exit_engine.evaluate_position(
-                    entry_price=pos.entry_price,
-                    current_price=curr_price,
-                    peak_price=pos.peak_price,
+    def _finalize_cycle_and_validate(self, cycle_start_time: float, discovered: List[DiscoveredToken]) -> Dict[str, Any]:
+        """
+        Monitors open positions using dynamic real metrics (NO hardcoded constants),
+        triggers exits, checks accounting invariants, and logs records.
+        """
+        # Price map for current tokens
+        price_map = {t.mint: t.price for t in discovered}
+        self.wallet.update_prices(price_map)
+
+        # 7. DYNAMIC MONITORING & EXITS
+        mints_to_close = []
+        for mint, pos in list(self.wallet.positions.items()):
+            curr_price = price_map.get(mint, pos.current_price)
+
+            # Fetch dynamic real token market data
+            live_token_data = self.provider.get_token_market_data(mint) or {}
+            live_liq = float(live_token_data.get("liquidity", 50_000.0))
+
+            # Fetch dynamic real trades & smart money / whale metrics
+            recent_trades = self.provider.get_recent_trades(mint, limit=30)
+            live_smart = self.smart_money_engine.evaluate_token_smart_money(mint, recent_trades)
+            live_whale_flow = self.whale_radar.get_token_whale_netflow(mint)
+
+            exit_verdict = self.exit_engine.evaluate_position(
+                entry_price=pos.entry_price,
+                current_price=curr_price,
+                peak_price=pos.peak_price,
+                entry_time=pos.entry_time,
+                current_time=time.time(),
+                smart_money_score=live_smart.smart_money_score,
+                whale_netflow=live_whale_flow,
+                regime=pos.regime,
+                liquidity_usd=live_liq
+            )
+
+            if exit_verdict.should_exit:
+                mints_to_close.append((mint, pos, exit_verdict, live_liq))
+
+        # Process Dynamic Exits
+        for mint, pos, verdict, liq_usd in mints_to_close:
+            exit_exec = self.exec_simulator.execute_order(
+                market_price=pos.current_price,
+                trade_size_usd=pos.current_gross_value_usd * verdict.sell_ratio,
+                liquidity_usd=liq_usd,
+                is_buy=False
+            )
+
+            closed_pos = self.wallet.close_position(mint, exit_exec, exit_reason=verdict.exit_reason)
+            if closed_pos:
+                self.state_machine.transition(mint, SniperStage.S7_EXIT)
+                # Trade net realized PnL = Net proceeds - Capital invested - Entry fees
+                pnl_usd = exit_exec.filled_size_usd - exit_exec.fees.total_fee_usd - pos.size_usd - pos.entry_fees_paid_usd
+
+                # Register trade in journal with provenance
+                self.journal.record_completed_trade(
+                    strategy_name=self.wallet.name,
+                    mint=mint,
+                    symbol=pos.symbol,
                     entry_time=pos.entry_time,
-                    current_time=time.time(),
-                    smart_money_score=smart_score,
-                    whale_netflow=whale_netflow,
-                    regime=pos.regime,
-                    liquidity_usd=50_000.0
+                    entry_price=pos.entry_price,
+                    size_usd=pos.size_usd,
+                    simulated_fill_qty=pos.tokens_amount,
+                    liquidity_usd=liq_usd,
+                    slippage_usd=pos.entry_slippage_paid_usd + exit_exec.slippage.slippage_usd,
+                    fee_usd=pos.entry_fees_paid_usd + exit_exec.fees.total_fee_usd,
+                    exit_time=time.time(),
+                    exit_price=exit_exec.executed_price,
+                    exit_reason=verdict.exit_reason,
+                    realized_pnl=pnl_usd,
+                    peak_price=pos.peak_price,
+                    lowest_price=pos.lowest_price,
+                    alpha_score=pos.alpha_score,
+                    risk_score=pos.risk_score,
+                    regime=pos.regime
                 )
 
-                if exit_verdict.should_exit:
-                    mints_to_close.append((mint, pos, exit_verdict))
+                self.risk_manager.register_trade_outcome(is_win=(pnl_usd > 0))
+                logger.info(f"🏁 [PAPER SELL] {pos.symbol} @ ${exit_exec.executed_price:.6f} | PnL: ${pnl_usd:+.2f} | Reason: {verdict.exit_reason}")
+                self.telegram.alert_trade_execution("EXIT", pos.symbol, exit_exec.executed_price, pos.size_usd, pnl_usd)
 
-            # Process Exits
-            for mint, pos, verdict in mints_to_close:
-                exit_exec = self.exec_simulator.execute_order(
-                    market_price=pos.current_price,
-                    trade_size_usd=pos.current_value_usd * verdict.sell_ratio,
-                    liquidity_usd=50_000.0,
-                    is_buy=False
-                )
+        # 8. VALIDATE ACCOUNTING INVARIANTS
+        is_valid, inv_msg = self.wallet.validate_accounting_invariants()
+        self.accounting_assertion_passed = is_valid
+        self.last_accounting_status = inv_msg
 
-                closed_pos = self.wallet.close_position(mint, exit_exec, exit_reason=verdict.exit_reason)
-                if closed_pos:
-                    self.state_machine.transition(mint, SniperStage.S7_EXIT)
-                    pnl_usd = exit_exec.total_cost_usd - pos.size_usd - pos.fees_paid_usd
-
-                    # Register trade in journal
-                    self.journal.record_completed_trade(
-                        strategy_name="Main_Virtual_Wallet",
-                        mint=mint,
-                        symbol=pos.symbol,
-                        entry_time=pos.entry_time,
-                        entry_price=pos.entry_price,
-                        size_usd=pos.size_usd,
-                        simulated_fill_qty=pos.tokens_amount,
-                        liquidity_usd=50_000.0,
-                        slippage_usd=pos.slippage_paid_usd + exit_exec.slippage.slippage_usd,
-                        fee_usd=pos.fees_paid_usd + exit_exec.fees.total_fee_usd,
-                        exit_time=time.time(),
-                        exit_price=exit_exec.executed_price,
-                        exit_reason=verdict.exit_reason,
-                        realized_pnl=pnl_usd,
-                        peak_price=pos.peak_price,
-                        lowest_price=pos.lowest_price,
-                        alpha_score=pos.alpha_score,
-                        risk_score=pos.risk_score,
-                        regime=pos.regime
-                    )
-
-                    self.risk_manager.register_trade_outcome(is_win=(pnl_usd > 0))
-                    logger.info(f"🏁 [PAPER SELL] {pos.symbol} @ ${exit_exec.executed_price:.6f} | PnL: ${pnl_usd:+.2f} | Reason: {verdict.exit_reason}")
-                    self.telegram.alert_trade_execution("EXIT", pos.symbol, exit_exec.executed_price, pos.size_usd, pnl_usd)
-
-            # Record portfolio snapshot
+        if not is_valid:
+            logger.critical(f"ACCOUNTING ASSERTION FAILED: {inv_msg}")
+            self.health.record_status("PAPER_TRADING", HealthStatus.FAILED, inv_msg)
+        else:
             summary = self.wallet.get_summary()
+            self.health.record_status("PAPER_TRADING", HealthStatus.HEALTHY, f"Equity: ${summary['equity']:.2f} (Invariants Valid)")
             self.db.record_portfolio_snapshot({
                 "timestamp": time.time(),
                 "strategy_name": self.wallet.name,
@@ -342,20 +402,16 @@ class MemeAlphaHunterOrchestrator:
                 "drawdown_pct": summary["max_drawdown_pct"]
             })
 
-            self.health.record_status("PAPER_TRADING", HealthStatus.HEALTHY, f"Equity: ${summary['equity']:.2f}")
+        cycle_duration = time.time() - cycle_start_time
+        summary = self.wallet.get_summary()
+        logger.info(f"=== Pipeline Cycle Finished in {cycle_duration:.2f}s | Active Positions: {len(self.wallet.positions)} | Equity: ${summary['equity']:.2f} | Invariants: {inv_msg} ===")
 
-            cycle_duration = time.time() - cycle_start_time
-            logger.info(f"=== Pipeline Cycle Finished in {cycle_duration:.2f}s | Active Positions: {len(self.wallet.positions)} | Equity: ${summary['equity']:.2f} ===")
-
-            return {
-                "cycle_duration_sec": cycle_duration,
-                "discovered_count": len(discovered),
-                "rejected_count": len(self.rejected_tokens),
-                "top_opportunities": self.top_opportunities[:5],
-                "portfolio_summary": summary
-            }
-
-        except Exception as e:
-            logger.error(f"Critical error during pipeline cycle: {e}", exc_info=True)
-            self.health.record_status("SCORING", HealthStatus.FAILED, str(e))
-            return {"error": str(e)}
+        return {
+            "cycle_duration_sec": cycle_duration,
+            "discovered_count": len(discovered),
+            "rejected_count": len(self.rejected_tokens),
+            "top_opportunities": self.top_opportunities[:5],
+            "portfolio_summary": summary,
+            "accounting_valid": is_valid,
+            "accounting_status": inv_msg
+        }

@@ -1,14 +1,16 @@
 """
-Solana RPC Provider implementation.
+Solana RPC Provider implementation with provenance.
 """
 
 from typing import Any, Dict, List, Optional
 from blockchain.rpc.rpc_client import SolanaRPCClient
+from blockchain.solana.types import SourceType
 from data.ingestion.provider_base import BaseDataProvider
 
 
 class SolanaRPCProvider(BaseDataProvider):
     def __init__(self, rpc_client: Optional[SolanaRPCClient] = None):
+        super().__init__(source_type=SourceType.REAL, provider_name="SolanaRPC")
         self.rpc = rpc_client or SolanaRPCClient()
 
     def get_token_metadata(self, mint: str) -> Optional[Dict[str, Any]]:
@@ -19,7 +21,8 @@ class SolanaRPCProvider(BaseDataProvider):
                 "symbol": "SOL-TOKEN",
                 "name": "Solana Token",
                 "decimals": 9,
-                "creator": "unknown_creator"
+                "creator": "unknown_creator",
+                "provenance": self.create_provenance(confidence=1.0, verified_on_chain=True).to_dict()
             }
         return None
 
@@ -39,7 +42,8 @@ class SolanaRPCProvider(BaseDataProvider):
                 "mint_authority": parsed.get("mintAuthority"),
                 "freeze_authority": parsed.get("freezeAuthority"),
                 "is_initialized": parsed.get("isInitialized", True),
-                "decimals": parsed.get("decimals", 9)
+                "decimals": parsed.get("decimals", 9),
+                "provenance": self.create_provenance(confidence=1.0, verified_on_chain=True).to_dict()
             }
         return None
 

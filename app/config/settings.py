@@ -144,6 +144,9 @@ class AppConfig:
     portfolio: PortfolioConfig = field(default_factory=PortfolioConfig)
     exit_rules: ExitConfig = field(default_factory=ExitConfig)
     telegram: TelegramConfig = field(default_factory=TelegramConfig)
+    data_mode: str = "live"  # "live", "mock", "replay"
+    strict_provenance: bool = True
+    fail_on_mock_contamination: bool = True
     db_path: str = "data/meme_hunter.db"
     log_level: str = "INFO"
     environment: str = "paper_trading"
@@ -154,6 +157,8 @@ def load_config() -> AppConfig:
     config = AppConfig()
 
     # Environment variable overrides
+    if os.getenv("DATA_MODE"):
+        config.data_mode = os.getenv("DATA_MODE").lower()
     if os.getenv("SOLANA_RPC_URL"):
         config.network.rpc_endpoints = [os.getenv("SOLANA_RPC_URL")] + config.network.rpc_endpoints
     if os.getenv("INITIAL_CAPITAL"):

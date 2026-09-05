@@ -1,13 +1,26 @@
 """
-Base abstract data provider interface.
-Ensures zero hard-coupling to any single commercial API.
+Base abstract data provider interface with strict provenance.
 """
 
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional
+from blockchain.solana.types import Provenance, SourceType
 
 
 class BaseDataProvider(ABC):
+    def __init__(self, source_type: SourceType = SourceType.REAL, provider_name: str = "generic_provider"):
+        self.source_type = source_type
+        self.provider_name = provider_name
+
+    def create_provenance(self, confidence: float = 1.0, verified_on_chain: bool = False, block_time: Optional[float] = None) -> Provenance:
+        return Provenance(
+            source_type=self.source_type,
+            provider=self.provider_name,
+            confidence=confidence,
+            verified_on_chain=verified_on_chain,
+            block_time=block_time
+        )
+
     @abstractmethod
     def get_token_metadata(self, mint: str) -> Optional[Dict[str, Any]]:
         """Fetch token metadata (symbol, name, supply, decimals, creator)."""
