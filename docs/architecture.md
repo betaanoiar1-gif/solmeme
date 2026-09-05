@@ -1,20 +1,6 @@
-# ⚡ MEME ALPHA HUNTER — SOLANA INTELLIGENCE & PAPER TRADING PLATFORM
+# MEME ALPHA HUNTER — SYSTEM ARCHITECTURE
 
-A production-grade, fully autonomous intelligence, whale tracking, sniper, and paper trading system designed for **Solana Memecoin Markets**.
-
----
-
-## 📖 1. Project Overview
-
-**Meme Alpha Hunter** is an autonomous quantitative intelligence and execution engine that discovers early Solana memecoins, analyzes on-chain microstructure and wallet behavior, filters out honeypots and rug pulls, scores multi-factor opportunities, and simulates trades inside a **$100.00 USD Virtual Wallet** with realistic fee, slippage, latency, and liquidity impact models.
-
-```text
-DISCOVER ➔ FILTER ➔ UNDERSTAND ➔ SCORE ➔ RANK ➔ SIMULATE ➔ MONITOR ➔ LEARN
-```
-
----
-
-## 🏛️ 2. System Architecture
+## 1. High-Level Pipeline Architecture
 
 ```text
 +---------------------------------------------------------------------------------------------------+
@@ -99,160 +85,15 @@ DISCOVER ➔ FILTER ➔ UNDERSTAND ➔ SCORE ➔ RANK ➔ SIMULATE ➔ MONITOR �
 +---------------------------------------------------------------------------------------------------+
 ```
 
----
+## 2. Market Regime Lifecycle ($R_0 \to R_9$)
 
-## 🌟 3. Key Features
-
-1. **Free-First Architecture:** Operates with public Solana RPCs, public DEX APIs (DexScreener, Raydium, Jupiter), and embedded SQLite without paid services.
-2. **Comprehensive Rug & Security Engine:** Evaluates mint authority, freeze authority, LP lock/burn %, holder concentration, and dev allocation. Automatically issues `HARD REJECT` for malicious tokens.
-3. **Whale Radar & Smart Money Tracking:** Classifies high-capital transactions (`WHALE_BUY`, `WHALE_SELL`, `WHALE_ACCUMULATION`, `WHALE_DISTRIBUTION`) and calculates `SMART_MONEY_NETFLOW`.
-4. **Wallet Cluster Graph:** Identifies shared funding trees and discounts coordinated insider entries.
-5. **Microstructure & Acceleration Engine:** Computes 1st & 2nd order accelerations for price, volume, liquidity, and buyer flow to detect `PRE-IGNITION` setups before parabolic breakouts.
-6. **5 Dedicated Sniper Modes:** Early Launch, Smart Money Follow, Whale Radar, Momentum Pre-Ignition, and Hybrid Multi-Factor.
-7. **Chase Detector:** Separates *Token Quality* from *Entry Quality* to prevent FOMO buying at parabolic peaks.
-8. **Virtual Wallet ($100 Starting Capital):** Full simulation of positions, realized/unrealized PnL, DEX LP fees (0.25%), Solana priority fees, AMM constant-product slippage, partial fills, and network latency (250ms–10s).
-9. **Granular Trade Journal:** Automatically logs MAE (Maximum Adverse Excursion), MFE (Maximum Favorable Excursion), trade durations, entry/exit reasons, and fees.
-10. **Monte Carlo Risk Analysis:** 1,000+ path simulations evaluating drawdown distributions, ruin probability, and confidence intervals.
-11. **Interactive CLI & Dashboard:** Real-time terminal UI rendering portfolio equity, open positions, top alpha opportunities, and system health status.
-12. **Telegram Bot Integration Architecture:** Ready for dispatching real-time notifications and handling commands (`/top`, `/whales`, `/snipers`, `/portfolio`, `/trades`, `/health`).
-13. **Google Colab Notebooks:** Ready-to-run Jupyter notebooks for setup, discovery, live paper simulation, and backtesting.
-
----
-
-## 🚀 4. Installation & Setup
-
-```bash
-# Clone the repository
-git clone https://github.com/betaanoiar1-gif/solmeme.git
-cd solmeme
-
-# Install Python dependencies (Python 3.10+)
-pip install -r requirements.txt
-```
-
----
-
-## ⚙️ 5. Configuration
-
-Copy the example environment configuration:
-
-```bash
-cp .env.example .env
-```
-
-Key configuration parameters (all configurable in `app/config/settings.py` or `.env`):
-- `INITIAL_CAPITAL`: Initial paper trading capital (Default: `$100.00` USD)
-- `SOLANA_RPC_URL`: Optional custom RPC endpoint
-- `min_liquidity_usd`: Minimum liquidity required (Default: `$1,000.00`)
-- `max_top10_holders_percent`: Concentration limit (Default: `65.0%`)
-- `max_position_size_usd`: Maximum position size per trade (Default: `$25.00`)
-
----
-
-## 💻 6. Running the System
-
-### A. Run Market Scanner
-```bash
-python3 main.py scan
-# Or: python3 scripts/run_scanner.py
-```
-
-### B. Run Live Paper Trading Engine
-```bash
-python3 main.py live-paper --cycles 5 --interval 1.0
-# Or: python3 scripts/run_live_paper.py
-```
-
-### C. Run Whale Radar Monitor
-```bash
-python3 scripts/run_whale_monitor.py
-```
-
-### D. Run Dedicated Sniper Engine
-```bash
-python3 scripts/run_sniper.py
-```
-
-### E. Run Multi-Strategy Backtest & Monte Carlo
-```bash
-python3 scripts/run_backtest.py
-```
-
-### F. Run Point-in-Time Replay Mode
-```bash
-python3 scripts/run_replay.py
-```
-
-### G. Run Full Live Paper Test & Generate All Reports
-```bash
-python3 scripts/export_reports.py
-```
-
----
-
-## 🧪 7. Running Tests
-
-Execute the comprehensive test suite (Unit, Integration, E2E, Regression, Resilience):
-
-```bash
-python3 -m unittest discover -s tests -p "test_*.py"
-```
-
----
-
-## 📊 8. Live Paper Test Results & Evidence
-
-The platform was executed in live paper trading on Solana meme coin markets with `$100.00 USD` initial capital.
-
-### Summary Metrics:
-- **Starting Capital:** `$100.00 USD`
-- **Ending Equity:** `$106.69 USD`
-- **Realized PnL:** `+$3.37 USD`
-- **Win Rate:** `100.0%` (2 winning trades closed, 4 profitable open positions held)
-- **Profit Factor:** `99.00`
-- **Max Drawdown:** `1.1%`
-- **Total Fees Deducted:** `-$0.34 USD`
-- **Total Slippage Deducted:** `-$0.41 USD`
-- **Average Simulated Latency:** `512 ms`
-
-Full details, trade logs, and rejected token reasons are available in `reports/live_paper_test_report.md` and `reports/` CSV datasets:
-- `reports/top_candidates.csv`
-- `reports/trades.csv`
-- `reports/portfolio_history.csv`
-- `reports/rejected_tokens.csv`
-- `reports/whale_events.csv`
-- `reports/signal_log.csv`
-
----
-
-## 📓 9. Google Colab Support
-
-The `colab/` folder contains interactive notebooks:
-- `colab/01_setup.ipynb`: Environment verification & DB connection.
-- `colab/02_discovery.ipynb`: Token discovery, security audits & whale radar.
-- `colab/03_live_paper.ipynb`: Automated live paper trading simulation.
-- `colab/04_backtest.ipynb`: Multi-strategy backtesting & Monte Carlo simulation.
-
----
-
-## ⚠️ 10. Risk Disclaimer & Limitations
-
-1. **Paper Trading Only:** This system is configured strictly as a simulation and quantitative research environment. No private keys or live funds are used.
-2. **Meme Coin Volatility:** Solana memecoins carry extreme downside tail risk and rapid liquidity shifts.
-3. **Data Rate Limits:** When using free public RPC endpoints, aggressive rate limiting may occur. Using a dedicated private RPC (Helius/QuickNode) is recommended for production scale.
-
----
-
-## 🗺️ 11. Roadmap
-
-- [x] Multi-source Discovery Engine (Solana RPC, DexScreener, Raydium, Pump.fun)
-- [x] Composite Rug Pull & Authority Security Engine
-- [x] Whale Radar & Smart Money Scoring
-- [x] Microstructure & Pre-Ignition Acceleration Engine
-- [x] Multi-Mode Sniper Engine with Anti-Sniper Defense
-- [x] Virtual Wallet ($100 initial capital) with AMM Slippage & Fee Simulation
-- [x] Dynamic Exits (Multi-tier Take Profit, Trailing Stops, Dump Exits)
-- [x] Monte Carlo 1,000+ Path Simulations
-- [x] 100% Test Suite Coverage
-- [ ] Direct Telegram Interactive Webhook Bot
-- [ ] On-chain LightGBM / XGBoost Model Training Pipeline
+1. **`R0_DEAD`**: Zero volume, inactive pool.
+2. **`R1_DORMANT`**: Low volume, flat liquidity.
+3. **`R2_ACCUMULATION`**: Stealth Smart Money buying, price stable, low retail chatter.
+4. **`R3_EARLY_IGNITION`**: Buyer acceleration surging, expanding liquidity, pre-ignition signature.
+5. **`R4_CONFIRMED_IGNITION`**: Volume breakout confirmed, order flow imbalance > +0.30.
+6. **`R5_EXPANSION`**: Broad retail inflow, higher highs, deepening liquidity.
+7. **`R6_PARABOLIC`**: Extreme price slope, high velocity (> +30%).
+8. **`R7_EUPHORIA`**: Retail chasing tops, Smart Money begins stealth distribution.
+9. **`R8_DISTRIBUTION`**: Whale net selling, smart money netflow negative.
+10. **`R9_COLLAPSE`**: Liquidity drain, panic selling, fake breakout breakdown.
