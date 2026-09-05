@@ -18,6 +18,7 @@ class EndpointHealth:
     url: str
     total_requests: int = 0
     successful_requests: int = 0
+    failed_requests: int = 0
     consecutive_errors: int = 0
     last_error_time: float = 0.0
     cooldown_until: float = 0.0
@@ -71,6 +72,7 @@ class SolanaRPCClient:
         now = time.time()
         ep = self.health[url]
         ep.total_requests += 1
+        ep.failed_requests += 1
         ep.consecutive_errors += 1
         ep.last_error_time = now
         # Exponential cooldown: 5s, 15s, 45s up to 120s
@@ -176,7 +178,9 @@ class SolanaRPCClient:
             url: {
                 "total_requests": h.total_requests,
                 "successful_requests": h.successful_requests,
+                "failed_requests": h.failed_requests,
                 "consecutive_errors": h.consecutive_errors,
+                "avg_latency_ms": h.avg_latency_ms,
                 "is_active": h.is_active,
                 "in_cooldown": h.cooldown_until > time.time()
             }

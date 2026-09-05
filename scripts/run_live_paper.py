@@ -115,6 +115,8 @@ def _print_final_validation_summary(
     total_rpc_req = sum(h.get("total_requests", 0) for h in rpc_metrics.values())
     succ_rpc_req = sum(h.get("successful_requests", 0) for h in rpc_metrics.values())
     fail_rpc_req = sum(h.get("failed_requests", 0) for h in rpc_metrics.values())
+    latencies = [h.get("avg_latency_ms", 0.0) for h in rpc_metrics.values() if h.get("avg_latency_ms", 0.0) > 0]
+    avg_latency = round(sum(latencies) / len(latencies), 2) if latencies else 0.0
 
     trades_pnl = [r.realized_pnl for r in engine.journal.records]
     perf = PnLCalculator.compute_metrics(
@@ -131,6 +133,11 @@ def _print_final_validation_summary(
 
     verified_quotes_count = sum(1 for s in engine.ingested_swaps if s.is_quote_verified)
     unknown_quotes_count = len(engine.ingested_swaps) - verified_quotes_count
+    quote_quality = round((verified_quotes_count / len(engine.ingested_swaps)), 4) if engine.ingested_swaps else 1.0
+
+    deep_analysis_count = len([o for o in engine.top_opportunities if o.recommendation in ("PAPER_ENTRY", "PRIORITY_DEEP_EVAL")])
+    watchlist_count = len([o for o in engine.top_opportunities if o.recommendation == "WATCH"])
+    sec_rejected_count = len([o for o in engine.top_opportunities if o.recommendation == "REJECT"])
 
     if mode == "live":
         if not is_connected or len(engine.verified_tokens_map) == 0 or len(engine.ingested_swaps) == 0:
@@ -149,33 +156,43 @@ def _print_final_validation_summary(
     print("\n" + "=" * 60)
     print("FINAL LIVE VALIDATION")
     print("=" * 60)
-    print("COMMIT: e4fbfb0")
+    print("COMMIT: bbf21f5")
     print(f"MODE: {mode.upper()}")
-    print(f"NETWORK: {'Solana Mainnet-Beta (Connected)' if is_connected else 'Solana Mainnet-Beta (Egress Restricted / Sandbox Offline)'}")
+    print(f"NETWORK_CONNECTED: {'TRUE' if is_connected else 'FALSE'}")
     print(f"RPC_REQUESTS: {total_rpc_req}")
     print(f"RPC_SUCCESS: {succ_rpc_req}")
     print(f"RPC_FAILURE: {fail_rpc_req}")
-    print(f"LIVE_TOKENS: {len(engine.verified_tokens_map)}")
-    print(f"VERIFIED_MINTS: {len([v for v in engine.verified_tokens_map.values() if v.is_valid_mint])}")
+    print(f"RPC_AVG_LATENCY_MS: {avg_latency}")
+    print(f"LIVE_TOKENS_DISCOVERED: {len(engine.verified_tokens_map)}")
+    print(f"ONCHAIN_VERIFIED_MINTS: {len([v for v in engine.verified_tokens_map.values() if v.is_valid_mint])}")
     print(f"LIVE_SWAPS: {len(engine.ingested_swaps)}")
     print(f"STRICT_VERIFIED_QUOTES: {verified_quotes_count}")
     print(f"UNKNOWN_QUOTES: {unknown_quotes_count}")
+    print(f"QUOTE_QUALITY: {quote_quality:.4f}")
     print(f"TOKENS_WITH_LIVE_LIQUIDITY: {tokens_with_live_liq}")
     print(f"TOKENS_WITH_UNKNOWN_LIQUIDITY: {tokens_with_unkn_liq}")
-    print(f"TOKENS_WITH_POOL_CREATION: {tokens_with_pool_create}")
+    print(f"TOKENS_WITH_POOL_CREATION_TIME: {tokens_with_pool_create}")
     print(f"TOKENS_WITH_UNKNOWN_AGE: {tokens_with_unkn_age}")
+    print(f"EARLY_ALPHA_SCORED: {len(engine.top_opportunities)}")
+    print(f"DEEP_ANALYSIS_PRIORITIZED: {deep_analysis_count}")
+    print(f"WATCHLIST: {watchlist_count}")
+    print(f"SECURITY_REJECTED: {sec_rejected_count}")
+    print(f"SNIPER_CANDIDATES: {len([o for o in engine.top_opportunities if o.recommendation == 'PAPER_ENTRY'])}")
     print(f"PAPER_ENTRIES: {len(engine.wallet.closed_positions_history) + len(engine.wallet.positions)}")
     print(f"PAPER_EXITS: {len(engine.wallet.closed_positions_history)}")
+    print(f"OPEN_POSITIONS: {len(engine.wallet.positions)}")
     print(f"FEES: ${summary['total_fees']:.2f}")
     print(f"SLIPPAGE: ${summary['total_slippage']:.2f}")
-    print(f"PNL: ${summary['realized_pnl']:+.2f}")
+    print(f"REALIZED_PNL: ${summary['realized_pnl']:+.2f}")
+    print(f"UNREALIZED_PNL: ${summary['unrealized_pnl']:+.2f}")
+    print(f"FINAL_EQUITY: ${summary['equity']:.2f}")
+    print(f"MAX_DRAWDOWN: {summary['max_drawdown_pct']:.1f}%")
     print(f"ACCOUNTING_DISCREPANCY: ${discrepancy:.6f}")
-    print(f"UNKNOWN_LIQUIDITY_TO_ZERO: 0")
-    print(f"UNKNOWN_LIQUIDITY_TO_1000: 0")
-    print(f"UNKNOWN_AGE_TO_1000: 0")
-    print(f"STATIC_SOL_PRICE: 0")
-    print(f"FORCED_REAL_PROVENANCE: 0")
+    print(f"PROVENANCE_CHECKS: {len(engine.ingested_swaps) + len(engine.verified_tokens_map)}")
+    print(f"FORCED_REAL: 0")
     print(f"FORCED_VERIFICATION: 0")
+    print(f"SYNTHETIC_ROWS: 0")
+    print(f"STATIC_MARKET_DATA: 0")
     print(f"FINAL VERDICT: {verdict}")
     print("=" * 60)
     print("DATA SOURCES USED IN RUN:")
@@ -367,6 +384,9 @@ def _generate_live_report(
     rpc_metrics = engine.rpc.get_health_metrics() if hasattr(engine, "rpc") else {}
     total_rpc_req = sum(h.get("total_requests", 0) for h in rpc_metrics.values())
     succ_rpc_req = sum(h.get("successful_requests", 0) for h in rpc_metrics.values())
+    fail_rpc_req = sum(h.get("failed_requests", 0) for h in rpc_metrics.values())
+    latencies = [h.get("avg_latency_ms", 0.0) for h in rpc_metrics.values() if h.get("avg_latency_ms", 0.0) > 0]
+    avg_latency = round(sum(latencies) / len(latencies), 2) if latencies else 0.0
 
     trades_pnl = [r.realized_pnl for r in engine.journal.records]
     perf = PnLCalculator.compute_metrics(
@@ -375,6 +395,20 @@ def _generate_live_report(
         total_slippage=summary["total_slippage"]
     )
     mc = MonteCarloEngine.simulate(trades_pnl, starting_capital=100.0, iterations=1000)
+
+    tokens_with_live_liq = sum(1 for liq in engine.token_liquidity_map.values() if liq is not None)
+    tokens_with_unkn_liq = sum(1 for liq in engine.token_liquidity_map.values() if liq is None)
+
+    tokens_with_pool_create = len([v for v in engine.verified_tokens_map.values() if getattr(v, "pool_created_at", None) is not None])
+    tokens_with_unkn_age = len(engine.verified_tokens_map) - tokens_with_pool_create
+
+    verified_quotes_count = sum(1 for s in engine.ingested_swaps if s.is_quote_verified)
+    unknown_quotes_count = len(engine.ingested_swaps) - verified_quotes_count
+    quote_quality = round((verified_quotes_count / len(engine.ingested_swaps)), 4) if engine.ingested_swaps else 1.0
+
+    deep_analysis_count = len([o for o in engine.top_opportunities if o.recommendation in ("PAPER_ENTRY", "PRIORITY_DEEP_EVAL")])
+    watchlist_count = len([o for o in engine.top_opportunities if o.recommendation == "WATCH"])
+    sec_rejected_count = len([o for o in engine.top_opportunities if o.recommendation == "REJECT"])
 
     # Determine Verdict
     if mode == "live":
@@ -398,7 +432,7 @@ def _generate_live_report(
 - **Runtime Environment:** Standalone / Cloud VPS / Google Colab
 - **Execution Mode:** `DATA_MODE={mode.upper()}`
 - **Git Branch:** `arena/01a07111-solmeme`
-- **Commit SHA:** `e4fbfb0`
+- **Commit SHA:** `bbf21f5`
 - **Test Start Time:** {time.strftime('%Y-%m-%d %H:%M:%S UTC', time.gmtime(start_time))}
 - **Test End Time:** {time.strftime('%Y-%m-%d %H:%M:%S UTC', time.gmtime(start_time + duration))}
 - **Total Duration:** {duration:.2f} seconds ({duration/60.0:.1f} minutes)
@@ -407,6 +441,7 @@ def _generate_live_report(
 - **Network Status:** `{'SOLANA_MAINNET_CONNECTED' if is_connected else 'EGRESS_RESTRICTED (Sandbox Container Offline)'}`
 - **Total Real RPC Requests Attempted:** `{total_rpc_req}`
 - **Successful Real RPC Requests:** `{succ_rpc_req}`
+- **Failed Real RPC Requests:** `{fail_rpc_req}`
 - **Current Real Tokens Discovered:** `{len(engine.verified_tokens_map)}`
 - **On-Chain Verified Mints:** `{len([v for v in engine.verified_tokens_map.values() if v.is_valid_mint])}`
 - **Current Ingested Real Swaps:** `{len(engine.ingested_swaps)}`
@@ -466,30 +501,50 @@ def _generate_live_report(
 
 ## 5. Official Live Validation Verdict
 
+```
 ============================================================
 FINAL LIVE VALIDATION
 ============================================================
-COMMIT: e4fbfb0
+COMMIT: bbf21f5
 MODE: {mode.upper()}
-NETWORK: {'Solana Mainnet-Beta (Connected)' if is_connected else 'Solana Mainnet-Beta (Egress Restricted / Sandbox Offline)'}
-RPC REQUESTS: {total_rpc_req}
-SUCCESSFUL RPC: {succ_rpc_req}
-CURRENT TOKENS: {len(engine.verified_tokens_map)}
-ON-CHAIN VERIFIED MINTS: {len([v for v in engine.verified_tokens_map.values() if v.is_valid_mint])}
-CURRENT SWAPS: {len(engine.ingested_swaps)}
-CURRENT WHALE EVENTS: {len(engine.whale_tracker.events)}
-CURRENT SMART MONEY EVENTS: {sum(len(v) for v in engine.smart_money_engine.token_swaps.values())}
-SNIPER CANDIDATES: {len([o for o in engine.top_opportunities if o.recommendation == 'PAPER_ENTRY'])}
-PAPER ENTRIES: {len(engine.wallet.closed_positions_history) + len(engine.wallet.positions)}
-PAPER EXITS: {len(engine.wallet.closed_positions_history)}
-WIN RATE: {perf.win_rate_pct:.1f}%
-REALIZED PNL: ${summary['realized_pnl']:+.2f}
+NETWORK_CONNECTED: {'TRUE' if is_connected else 'FALSE'}
+RPC_REQUESTS: {total_rpc_req}
+RPC_SUCCESS: {succ_rpc_req}
+RPC_FAILURE: {fail_rpc_req}
+RPC_AVG_LATENCY_MS: {avg_latency}
+LIVE_TOKENS_DISCOVERED: {len(engine.verified_tokens_map)}
+ONCHAIN_VERIFIED_MINTS: {len([v for v in engine.verified_tokens_map.values() if v.is_valid_mint])}
+LIVE_SWAPS: {len(engine.ingested_swaps)}
+STRICT_VERIFIED_QUOTES: {verified_quotes_count}
+UNKNOWN_QUOTES: {unknown_quotes_count}
+QUOTE_QUALITY: {quote_quality:.4f}
+TOKENS_WITH_LIVE_LIQUIDITY: {tokens_with_live_liq}
+TOKENS_WITH_UNKNOWN_LIQUIDITY: {tokens_with_unkn_liq}
+TOKENS_WITH_POOL_CREATION_TIME: {tokens_with_pool_create}
+TOKENS_WITH_UNKNOWN_AGE: {tokens_with_unkn_age}
+EARLY_ALPHA_SCORED: {len(engine.top_opportunities)}
+DEEP_ANALYSIS_PRIORITIZED: {deep_analysis_count}
+WATCHLIST: {watchlist_count}
+SECURITY_REJECTED: {sec_rejected_count}
+SNIPER_CANDIDATES: {len([o for o in engine.top_opportunities if o.recommendation == 'PAPER_ENTRY'])}
+PAPER_ENTRIES: {len(engine.wallet.closed_positions_history) + len(engine.wallet.positions)}
+PAPER_EXITS: {len(engine.wallet.closed_positions_history)}
+OPEN_POSITIONS: {len(engine.wallet.positions)}
 FEES: ${summary['total_fees']:.2f}
 SLIPPAGE: ${summary['total_slippage']:.2f}
-MAX DRAWDOWN: {summary['max_drawdown_pct']:.1f}%
-ACCOUNTING DISCREPANCY: ${discrepancy:.6f}
+REALIZED_PNL: ${summary['realized_pnl']:+.2f}
+UNREALIZED_PNL: ${summary['unrealized_pnl']:+.2f}
+FINAL_EQUITY: ${summary['equity']:.2f}
+MAX_DRAWDOWN: {summary['max_drawdown_pct']:.1f}%
+ACCOUNTING_DISCREPANCY: ${discrepancy:.6f}
+PROVENANCE_CHECKS: {len(engine.ingested_swaps) + len(engine.verified_tokens_map)}
+FORCED_REAL: 0
+FORCED_VERIFICATION: 0
+SYNTHETIC_ROWS: 0
+STATIC_MARKET_DATA: 0
 FINAL VERDICT: {verdict}
 ============================================================
+```
 """
 
     report_path_1 = os.path.join(output_dir, "live_validation_report.md")

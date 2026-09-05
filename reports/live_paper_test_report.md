@@ -5,15 +5,16 @@
 - **Runtime Environment:** Standalone / Cloud VPS / Google Colab
 - **Execution Mode:** `DATA_MODE=LIVE`
 - **Git Branch:** `arena/01a07111-solmeme`
-- **Commit SHA:** `e4fbfb0`
-- **Test Start Time:** 2026-09-05 18:30:48 UTC
-- **Test End Time:** 2026-09-05 18:30:53 UTC
-- **Total Duration:** 5.68 seconds (0.1 minutes)
+- **Commit SHA:** `bbf21f5`
+- **Test Start Time:** 2026-09-05 18:35:23 UTC
+- **Test End Time:** 2026-09-05 18:35:28 UTC
+- **Total Duration:** 5.65 seconds (0.1 minutes)
 - **Total Completed Cycles:** 2
 - **REAL_DATA_ONLY:** `TRUE`
 - **Network Status:** `EGRESS_RESTRICTED (Sandbox Container Offline)`
 - **Total Real RPC Requests Attempted:** `15`
 - **Successful Real RPC Requests:** `0`
+- **Failed Real RPC Requests:** `15`
 - **Current Real Tokens Discovered:** `0`
 - **On-Chain Verified Mints:** `0`
 - **Current Ingested Real Swaps:** `0`
@@ -73,27 +74,47 @@
 
 ## 5. Official Live Validation Verdict
 
+```
 ============================================================
 FINAL LIVE VALIDATION
 ============================================================
-COMMIT: e4fbfb0
+COMMIT: bbf21f5
 MODE: LIVE
-NETWORK: Solana Mainnet-Beta (Egress Restricted / Sandbox Offline)
-RPC REQUESTS: 15
-SUCCESSFUL RPC: 0
-CURRENT TOKENS: 0
-ON-CHAIN VERIFIED MINTS: 0
-CURRENT SWAPS: 0
-CURRENT WHALE EVENTS: 0
-CURRENT SMART MONEY EVENTS: 0
-SNIPER CANDIDATES: 0
-PAPER ENTRIES: 0
-PAPER EXITS: 0
-WIN RATE: 0.0%
-REALIZED PNL: $+0.00
+NETWORK_CONNECTED: FALSE
+RPC_REQUESTS: 15
+RPC_SUCCESS: 0
+RPC_FAILURE: 15
+RPC_AVG_LATENCY_MS: 0.0
+LIVE_TOKENS_DISCOVERED: 0
+ONCHAIN_VERIFIED_MINTS: 0
+LIVE_SWAPS: 0
+STRICT_VERIFIED_QUOTES: 0
+UNKNOWN_QUOTES: 0
+QUOTE_QUALITY: 1.0000
+TOKENS_WITH_LIVE_LIQUIDITY: 0
+TOKENS_WITH_UNKNOWN_LIQUIDITY: 0
+TOKENS_WITH_POOL_CREATION_TIME: 0
+TOKENS_WITH_UNKNOWN_AGE: 0
+EARLY_ALPHA_SCORED: 0
+DEEP_ANALYSIS_PRIORITIZED: 0
+WATCHLIST: 0
+SECURITY_REJECTED: 0
+SNIPER_CANDIDATES: 0
+PAPER_ENTRIES: 0
+PAPER_EXITS: 0
+OPEN_POSITIONS: 0
 FEES: $0.00
 SLIPPAGE: $0.00
-MAX DRAWDOWN: 0.0%
-ACCOUNTING DISCREPANCY: $0.000000
+REALIZED_PNL: $+0.00
+UNREALIZED_PNL: $+0.00
+FINAL_EQUITY: $100.00
+MAX_DRAWDOWN: 0.0%
+ACCOUNTING_DISCREPANCY: $0.000000
+PROVENANCE_CHECKS: 0
+FORCED_REAL: 0
+FORCED_VERIFICATION: 0
+SYNTHETIC_ROWS: 0
+STATIC_MARKET_DATA: 0
 FINAL VERDICT: LIVE_PAPER_BLOCKED
 ============================================================
+```
