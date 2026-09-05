@@ -4,6 +4,7 @@ Calculates continuous multi-factor whale conviction without relying on a rigid n
 Zero fallback to default $1,000,000 pool liquidity.
 Zero conversion of unknown USD quotes to 0.0.
 Strict UNKNOWN (None) vs REAL ZERO (0.0) semantic integrity.
+Strictly verified quotes only participate in whale analytics.
 """
 
 from dataclasses import dataclass, field
@@ -15,6 +16,20 @@ from blockchain.parsers.real_swap_parser import RealSwapRecord
 from blockchain.solana.types import Provenance, SourceType
 
 logger = logging.getLogger("meme_alpha_hunter.relative_whale")
+
+
+def is_swap_quote_verified(swap: RealSwapRecord) -> bool:
+    """
+    Strictly verifies whether a swap has a verified quote on-chain.
+    """
+    if swap.quote_amount_usd is None:
+        return False
+    if not getattr(swap, "is_quote_verified", False):
+        return False
+    prov = getattr(swap, "provenance", None)
+    if prov is None or not getattr(prov, "verified_on_chain", False):
+        return False
+    return True
 
 
 @dataclass
@@ -49,6 +64,7 @@ class RelativeWhaleEngine:
         """
         Calculates continuous Relative Whale Strength for a token.
         When no verified whale swaps exist, underlying metrics remain None (UNKNOWN).
+        Only strictly verified quotes participate in whale calculations.
         """
         if not swaps:
             return RelativeWhaleMetrics(
@@ -68,10 +84,10 @@ class RelativeWhaleEngine:
                 provenance=Provenance(source_type=SourceType.REAL, confidence=0.5)
             )
 
-        verified_swaps = [s for s in swaps if s.quote_amount_usd is not None]
-        quote_quality = len(verified_swaps) / max(len(swaps), 1)
+        strictly_verified_swaps = [s for s in swaps if is_swap_quote_verified(s)]
+        quote_quality = len(strictly_verified_swaps) / max(len(swaps), 1)
 
-        whale_swaps = [s for s in verified_swaps if s.quote_amount_usd >= cls.WHALE_SWAP_MIN_USD]
+        whale_swaps = [s for s in strictly_verified_swaps if s.quote_amount_usd >= cls.WHALE_SWAP_MIN_USD]
 
         if not whale_swaps:
             return RelativeWhaleMetrics(

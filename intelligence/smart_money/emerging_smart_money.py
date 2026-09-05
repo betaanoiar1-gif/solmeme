@@ -6,6 +6,7 @@ Does NOT use historical pre-seeded reputations.
 Zero fallback to default $1,000,000 pool liquidity.
 Zero conversion of unknown USD quotes to 0.0.
 Strict UNKNOWN (None) vs REAL ZERO (0.0) semantic integrity.
+Strictly verified quotes only participate in USD analytics.
 """
 
 from dataclasses import dataclass, field
@@ -17,6 +18,20 @@ from blockchain.parsers.real_swap_parser import RealSwapRecord
 from blockchain.solana.types import Provenance, SourceType
 
 logger = logging.getLogger("meme_alpha_hunter.emerging_smart_money")
+
+
+def is_swap_quote_verified(swap: RealSwapRecord) -> bool:
+    """
+    Strictly verifies whether a swap has a verified quote on-chain.
+    """
+    if swap.quote_amount_usd is None:
+        return False
+    if not getattr(swap, "is_quote_verified", False):
+        return False
+    prov = getattr(swap, "provenance", None)
+    if prov is None or not getattr(prov, "verified_on_chain", False):
+        return False
+    return True
 
 
 @dataclass
@@ -56,7 +71,7 @@ class TokenEmergingSmartMoneySignal:
     accumulating_wallets_count: int
     distributing_wallets_count: int
     total_emerging_volume_usd: Optional[float]
-    quote_quality: float  # 0.0 to 1.0 (ratio of verified quote swaps)
+    quote_quality: float  # 0.0 to 1.0 (ratio of strictly verified quote swaps)
     signal_label: str  # "HIGH_CONVICTION_ACCUMULATION", "MODERATE_ACCUMULATION", "NEUTRAL", "DISTRIBUTION"
     provenance: Provenance = field(default_factory=Provenance)
 
@@ -71,7 +86,7 @@ class EmergingSmartMoneyEngine:
     def process_swap(self, swap: RealSwapRecord, pool_liquidity_usd: Optional[float] = None) -> EmergingWalletProfile:
         """
         Updates emerging wallet profile dynamically from a real swap.
-        Does NOT convert unknown quotes to 0.0.
+        Unverified quotes (even if numeric) MUST NOT participate in verified USD analytics.
         Does NOT substitute default $1,000,000 for pool liquidity.
         """
         w = swap.wallet
@@ -90,10 +105,10 @@ class EmergingSmartMoneyEngine:
         p.tokens_traded.add(mint)
         p.pools_traded.add(swap.pool)
 
-        usd = swap.quote_amount_usd
+        is_verified = is_swap_quote_verified(swap)
 
-        if usd is None:
-            # Quote is unknown: do NOT contribute to volume stats as 0.0
+        if not is_verified:
+            # Quote is unverified: do NOT contribute to volume stats
             p.unverified_quote_swaps += 1
             p.unknown_quotes_count += 1
             if swap.side == "BUY":
@@ -104,6 +119,8 @@ class EmergingSmartMoneyEngine:
                 p.consecutive_buys = 0
         else:
             p.verified_quote_swaps += 1
+            usd = float(swap.quote_amount_usd)
+
             if swap.side == "BUY":
                 p.buy_count += 1
                 p.buy_volume_usd = (p.buy_volume_usd if p.buy_volume_usd is not None else 0.0) + usd
@@ -172,7 +189,7 @@ class EmergingSmartMoneyEngine:
 
     def evaluate_token_signal(self, mint: str, symbol: str = "UNKNOWN") -> TokenEmergingSmartMoneySignal:
         """
-        Calculates aggregate Token Emerging Smart Money Signal.
+        Calculates aggregate Token Emerging Smart Money Signal using strictly verified quote swaps.
         """
         swaps = self.token_swaps.get(mint, [])
         if not swaps:
@@ -189,8 +206,8 @@ class EmergingSmartMoneyEngine:
                 provenance=Provenance(source_type=SourceType.REAL, confidence=0.5)
             )
 
-        verified_swaps = [s for s in swaps if s.quote_amount_usd is not None]
-        quote_quality = len(verified_swaps) / max(len(swaps), 1)
+        strictly_verified_swaps = [s for s in swaps if is_swap_quote_verified(s)]
+        quote_quality = len(strictly_verified_swaps) / max(len(swaps), 1)
 
         accumulators = set()
         distributors = set()
@@ -203,9 +220,9 @@ class EmergingSmartMoneyEngine:
             p = self.wallets.get(s.wallet)
             if p and p.is_emerging_smart_money:
                 emerging_scores.append(p.emerging_smart_money_score)
-                if s.quote_amount_usd is not None:
+                if is_swap_quote_verified(s):
                     has_verified_emerging_trades = True
-                    usd = s.quote_amount_usd
+                    usd = float(s.quote_amount_usd)
                     if s.side == "BUY":
                         accumulators.add(s.wallet)
                         emerging_buy_vol += usd
