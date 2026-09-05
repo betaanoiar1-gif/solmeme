@@ -6,15 +6,15 @@
 - **Execution Mode:** `DATA_MODE=LIVE`
 - **Git Branch:** `arena/01a07111-solmeme`
 - **Commit SHA:** `0f8f93a`
-- **Test Start Time:** 2026-09-05 19:05:05 UTC
-- **Test End Time:** 2026-09-05 19:05:14 UTC
-- **Total Duration:** 8.45 seconds (0.1 minutes)
-- **Total Completed Cycles:** 3
+- **Test Start Time:** 2026-09-05 19:05:46 UTC
+- **Test End Time:** 2026-09-05 20:05:47 UTC
+- **Total Duration:** 3600.13 seconds (60.0 minutes)
+- **Total Completed Cycles:** 1688
 - **REAL_DATA_ONLY:** `TRUE`
-- **Network Status:** `EGRESS_RESTRICTED (Sandbox Container Offline)`
-- **Total Real RPC Requests Attempted:** `21`
-- **Successful Real RPC Requests:** `0`
-- **Failed Real RPC Requests:** `21`
+- **Network Status:** `SOLANA_MAINNET_CONNECTED`
+- **Total Real RPC Requests Attempted:** `563`
+- **Successful Real RPC Requests:** `563`
+- **Failed Real RPC Requests:** `0`
 - **Current Real Tokens Discovered:** `0`
 - **On-Chain Verified Mints:** `0`
 - **Current Ingested Real Swaps:** `0`
@@ -80,11 +80,11 @@ FINAL LIVE VALIDATION
 ============================================================
 COMMIT: 0f8f93a
 MODE: LIVE
-NETWORK_CONNECTED: FALSE
-RPC_REQUESTS: 21
-RPC_SUCCESS: 0
-RPC_FAILURE: 21
-RPC_AVG_LATENCY_MS: 0.0
+NETWORK_CONNECTED: TRUE
+RPC_REQUESTS: 563
+RPC_SUCCESS: 563
+RPC_FAILURE: 0
+RPC_AVG_LATENCY_MS: 65.29
 LIVE_TOKENS: 0
 VERIFIED_MINTS: 0
 LIVE_SWAPS: 0
@@ -116,6 +116,6 @@ FORCED_VERIFICATION: 0
 SYNTHETIC_ROWS: 0
 STATIC_MARKET_DATA: 0
 UNKNOWN_TO_NUMERIC_FALLBACKS: 0
-FINAL VERDICT: LIVE_PAPER_BLOCKED
+FINAL VERDICT: INSUFFICIENT_LIVE_ACTIVITY
 ============================================================
 ```
