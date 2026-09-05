@@ -3,6 +3,7 @@ Dedicated Real Solana Live Paper Trading Engine.
 Coordinates on-chain mint verification, real swap ingestion, whale radar,
 smart money reputation tracking, sniper evaluation, virtual execution,
 and mathematical accounting invariants.
+Zero mock/snapshot contamination in live mode.
 """
 
 from dataclasses import dataclass, field
@@ -72,9 +73,9 @@ class LivePaperCycleResult:
 
 
 class RealLivePaperEngine:
-    def __init__(self, config: Optional[AppConfig] = None, data_provider: Optional[RealSolanaLiveProvider] = None):
+    def __init__(self, config: Optional[AppConfig] = None, data_provider: Optional[Any] = None):
         self.config = config or AppConfig()
-        self.config.data_mode = "live"
+        self.data_mode = self.config.data_mode.lower()
         self.db = DatabaseManager(self.config.db_path)
         self.health = HealthMonitor(self.db)
 
@@ -98,7 +99,7 @@ class RealLivePaperEngine:
         self.wallet = VirtualWallet(
             name="Real_Live_Paper_Wallet",
             initial_capital_usd=100.0,
-            data_mode="live"
+            data_mode=self.data_mode
         )
         self.position_manager = PositionManager(self.config.portfolio)
         self.risk_manager = PortfolioRiskManager(self.config.portfolio)
@@ -113,11 +114,11 @@ class RealLivePaperEngine:
         """
         Executes one verified real Solana live cycle:
         1. Probes Solana RPC health.
-        2. Scans real token mints.
+        2. Scans real token mints from live endpoints.
         3. Validates mints on-chain (Base58 + getAccountInfo jsonParsed + owner SPL Token + decimals).
         4. Ingests real parsed swaps from Raydium / Pump.fun / Meteora.
         5. Updates dynamic whale radar and smart money reputation.
-        6. Evaluates real security and rug checks.
+        6. Evaluates real security and rug checks (unverified = UNKNOWN).
         7. Computes microstructures, alpha, risk, and opportunity scores.
         8. Evaluates sniper modes on real signals.
         9. Executes simulated paper entries and exits.
@@ -145,12 +146,28 @@ class RealLivePaperEngine:
             if not mint:
                 continue
 
-            curr_p = float(t.get("price", 0.001))
-            price_map[mint] = curr_p
+            curr_p = t.get("price")
+            if curr_p is None or curr_p <= 0:
+                continue  # Price unavailable; cannot trade
+
+            price_map[mint] = float(curr_p)
             symbol = t.get("symbol", "UNKNOWN")
+            liq_usd = float(t.get("liquidity") or 0.0)
 
             # 3. On-chain Mint Verification
-            verification = self.mint_verifier.verify_mint(mint)
+            if self.data_mode in ("replay", "snapshot"):
+                cached_acc = self.provider.get_token_metadata(mint)
+                if cached_acc:
+                    verification = self.mint_verifier.verify_from_account_data(
+                        mint,
+                        {"owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA", "data": {"parsed": {"type": "mint", "info": {"decimals": cached_acc.get("decimals", 9), "supply": str(cached_acc.get("supply", 1000000)), "mintAuthority": cached_acc.get("mint_authority"), "freezeAuthority": cached_acc.get("freeze_authority"), "isInitialized": True}}}},
+                        source_type=SourceType.REPLAY
+                    )
+                else:
+                    verification = self.mint_verifier.verify_mint(mint)
+            else:
+                verification = self.mint_verifier.verify_mint(mint)
+
             if verification.is_valid_mint:
                 verified_count += 1
                 self.verified_tokens_map[mint] = verification
@@ -172,11 +189,12 @@ class RealLivePaperEngine:
                     wallet=tr["signer"],
                     side=tr["type"],
                     token_amount=tr["token_amount"],
-                    quote_amount_sol=tr["usd_amount"] / 101.80,
-                    quote_amount_usd=tr["usd_amount"],
-                    price_usd=tr["price_usd"],
-                    venue=tr.get("venue", "Raydium_V4"),
+                    quote_amount_sol=tr.get("usd_amount", 0.0) / 101.80 if tr.get("usd_amount") else None,
+                    quote_amount_usd=tr.get("usd_amount"),
+                    price_usd=tr.get("price_usd"),
+                    venue=tr.get("venue", "Raydium_AMM_V4"),
                     is_whale=bool(tr.get("is_whale", False)),
+                    is_quote_verified=bool(tr.get("usd_amount") is not None),
                     provenance=Provenance(source_type=SourceType.REAL, signature=tr["signature"], verified_on_chain=True)
                 )
                 self.ingested_swaps.append(swap_rec)
@@ -184,14 +202,15 @@ class RealLivePaperEngine:
                 # Track wallet volumes
                 w = swap_rec.wallet
                 observed_wallets.append(w)
-                token_wallet_volumes[w] = token_wallet_volumes.get(w, 0.0) + swap_rec.quote_amount_usd
+                if swap_rec.quote_amount_usd:
+                    token_wallet_volumes[w] = token_wallet_volumes.get(w, 0.0) + swap_rec.quote_amount_usd
 
                 # 5. Real Whale & Smart Money Tracking
-                w_event = self.whale_tracker.process_real_swap(swap_rec, pool_liquidity_usd=float(t.get("liquidity", 50000.0)))
+                w_event = self.whale_tracker.process_real_swap(swap_rec, pool_liquidity_usd=liq_usd)
                 if w_event:
                     whales_count += 1
 
-                self.smart_money_engine.process_real_swap(swap_rec, token_first_seen=float(t.get("first_seen_ts", time.time())))
+                self.smart_money_engine.process_real_swap(swap_rec, token_first_seen=float(t.get("first_seen_ts") or time.time()))
 
             # Cluster analysis
             cluster_res = self.cluster_graph.analyze_token_wallets(mint, observed_wallets, token_wallet_volumes)
@@ -200,8 +219,8 @@ class RealLivePaperEngine:
             sec_eval = self.security_engine.evaluate_token(
                 mint=mint,
                 verification=verification,
-                lp_locked_pct=float(t.get("lp_locked_pct", 100.0)),
-                dev_holding_pct=float(t.get("dev_holding_pct", 2.0)),
+                lp_locked_pct=float(t.get("lp_locked_pct")) if t.get("lp_locked_pct") is not None else None,
+                dev_holding_pct=float(t.get("dev_holding_pct")) if t.get("dev_holding_pct") is not None else None,
                 cluster_risk_multiplier=cluster_res.risk_multiplier
             )
 
@@ -216,10 +235,10 @@ class RealLivePaperEngine:
 
             self.dna_engine.record_snapshot(
                 mint=mint,
-                price=curr_p,
-                volume=float(t.get("volume_24h", 10000.0)),
-                liquidity=float(t.get("liquidity", 50000.0)),
-                holders=int(t.get("holders_count", 100)),
+                price=float(curr_p),
+                volume=float(t.get("volume_24h") or 0.0),
+                liquidity=liq_usd,
+                holders=int(t.get("holders_count") or 0),
                 smart_money_flow=smart_signal.netflow_usd,
                 whale_netflow=whale_flow
             )
@@ -238,7 +257,8 @@ class RealLivePaperEngine:
             nar_metrics = NarrativeMetrics(nar_name, 1, 1000.0, 50.0, 0.0, 0.0, "Emerging")
 
             # 7. Scorer & Opportunity
-            age_min = max((time.time() - float(t.get("first_seen_ts", time.time()))) / 60.0, 1.0)
+            first_seen = float(t.get("first_seen_ts") or time.time())
+            age_min = max((time.time() - first_seen) / 60.0, 1.0)
             opp_report = self.scorer.evaluate_opportunity(
                 token_data=t,
                 security_eval=self._convert_to_security_evaluation(sec_eval),
@@ -267,7 +287,7 @@ class RealLivePaperEngine:
 
             should_snipe = (mode_a or mode_b or mode_c or mode_d or mode_e) and chase_verdict.is_safe_entry
 
-            if should_snipe and mint not in self.wallet.positions:
+            if should_snipe and mint not in self.wallet.positions and liq_usd >= self.config.discovery.min_liquidity_usd:
                 risk_check = self.risk_manager.evaluate_risk(
                     current_equity=self.wallet.equity_usd,
                     current_cash=self.wallet.cash_usd,
@@ -280,15 +300,15 @@ class RealLivePaperEngine:
                         current_cash=self.wallet.cash_usd,
                         current_equity=self.wallet.equity_usd,
                         open_positions_count=len(self.wallet.positions),
-                        pool_liquidity_usd=float(t.get("liquidity", 50000.0))
+                        pool_liquidity_usd=liq_usd
                     )
 
                     if target_size > 0.0:
                         # 9. Real Paper Entry
                         exec_res = self.exec_simulator.execute_order(
-                            market_price=curr_p,
+                            market_price=float(curr_p),
                             trade_size_usd=target_size,
-                            liquidity_usd=float(t.get("liquidity", 50000.0)),
+                            liquidity_usd=liq_usd,
                             is_buy=True
                         )
 

@@ -12,6 +12,7 @@ class SourceType(str, Enum):
     REAL = "REAL"
     MOCK = "MOCK"
     REPLAY = "REPLAY"
+    SNAPSHOT = "SNAPSHOT"
 
 
 @dataclass

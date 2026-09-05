@@ -1,7 +1,7 @@
 """
 Command Line Interface for Meme Alpha Hunter.
 Supports Real Live Solana Execution, On-Chain Verification, Paper Trading,
-Intelligence Dashboards, and Multi-Strategy Backtesting.
+Snapshot Replay Engine, and Multi-Strategy Backtesting.
 """
 
 import argparse
@@ -13,6 +13,9 @@ from app.core.logging_setup import setup_logger
 from app.orchestration.live_paper_engine import RealLivePaperEngine
 from app.orchestration.orchestrator import MemeAlphaHunterOrchestrator
 from dashboard.cli_dashboard import TerminalDashboard
+from data.ingestion.mock_feeder import MarketFeeder
+from data.ingestion.real_live_provider import RealSolanaLiveProvider
+from data.replay.snapshot_provider import SnapshotProvider
 
 
 def main():
@@ -21,11 +24,11 @@ def main():
 
     # Command: scan
     scan_parser = subparsers.add_parser("scan", help="Scan Solana token market for new and active meme coins")
-    scan_parser.add_argument("--mode", choices=["live", "mock"], default="live", help="Data source mode")
+    scan_parser.add_argument("--mode", choices=["live", "replay", "mock"], default="live", help="Data source mode")
 
     # Command: live-paper
-    paper_parser = subparsers.add_parser("live-paper", help="Run real live paper trading engine")
-    paper_parser.add_argument("--mode", choices=["live", "mock", "real-onchain"], default="live", help="Execution mode")
+    paper_parser = subparsers.add_parser("live-paper", help="Run paper trading engine")
+    paper_parser.add_argument("--mode", choices=["live", "replay", "snapshot", "mock"], default="live", help="Execution mode (live, replay, mock)")
     paper_parser.add_argument("--cycles", type=int, default=5, help="Number of pipeline cycles to execute")
     paper_parser.add_argument("--interval", type=float, default=1.0, help="Interval between cycles in seconds")
 
@@ -50,9 +53,20 @@ def main():
 
     if args.command == "live-paper":
         TerminalDashboard.render_header()
-        print(f"🚀 [REAL LIVE PAPER ENGINE] Initializing mode: {args.mode.upper()} ({args.cycles} cycles)...\n")
+        mode_str = args.mode.lower()
+        print(f"🚀 [PAPER TRADING ENGINE] Mode: {mode_str.upper()} ({args.cycles} cycles)...\n")
 
-        live_engine = RealLivePaperEngine(config)
+        if mode_str in ("replay", "snapshot"):
+            provider = SnapshotProvider()
+            config.data_mode = "replay"
+        elif mode_str == "mock":
+            provider = MarketFeeder()
+            config.data_mode = "mock"
+        else:
+            provider = RealSolanaLiveProvider()
+            config.data_mode = "live"
+
+        live_engine = RealLivePaperEngine(config, data_provider=provider)
 
         for c in range(1, args.cycles + 1):
             res = live_engine.run_live_cycle()

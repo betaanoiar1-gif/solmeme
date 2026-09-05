@@ -38,10 +38,10 @@ class OnChainTokenLifecycle:
     first_liquidity_seen: float # Block timestamp of initial LP deposit
     first_swap_seen: Optional[float] = None # Block timestamp of first trade
     last_seen: float = field(default_factory=time.time)
-    initial_liquidity_usd: float = 0.0
-    current_liquidity_usd: float = 0.0
-    initial_price_usd: float = 0.0
-    current_price_usd: float = 0.0
+    initial_liquidity_usd: Optional[float] = None
+    current_liquidity_usd: Optional[float] = None
+    initial_price_usd: Optional[float] = None
+    current_price_usd: Optional[float] = None
     total_swaps_count: int = 0
     buyers_count: int = 0
     sellers_count: int = 0
@@ -156,10 +156,10 @@ class OnChainPoolDetector:
             first_liquidity_seen=block_time,
             first_swap_seen=block_time,
             last_seen=block_time,
-            initial_liquidity_usd=10_000.0,
-            current_liquidity_usd=10_000.0,
-            initial_price_usd=0.001,
-            current_price_usd=0.001,
+            initial_liquidity_usd=None,
+            current_liquidity_usd=None,
+            initial_price_usd=None,
+            current_price_usd=None,
             total_swaps_count=1,
             buyers_count=1,
             sellers_count=0,

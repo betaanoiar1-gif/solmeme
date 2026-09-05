@@ -3,12 +3,13 @@ On-Chain Mint Account Verifier for Solana.
 Validates Base58 encoding, queries Solana RPC getAccountInfo with jsonParsed encoding,
 confirms SPL Token / Token-2022 program ownership, extracts decimals, mint authority,
 freeze authority, and queries top holder concentration.
+Strictly live on-chain with zero static fallbacks.
 """
 
 from dataclasses import dataclass, field
 import logging
 import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 from blockchain.rpc.rpc_client import SolanaRPCClient
 from blockchain.solana.address_validator import SolanaAddressValidator
@@ -34,7 +35,7 @@ class OnChainMintVerification:
     freeze_auth_revoked: bool = False
     top10_holder_pct: Optional[float] = None
     top_holders_count: int = 0
-    verification_status: str = "PENDING"  # "VERIFIED_ON_CHAIN", "INVALID_NOT_A_MINT", "RPC_UNAVAILABLE", "INVALID_BASE58"
+    verification_status: str = "PENDING"  # "VERIFIED_ON_CHAIN", "NOT_A_MINT", "INVALID_OWNER", "RPC_UNAVAILABLE", "INVALID_BASE58", "ACCOUNT_NOT_FOUND"
     error_reason: Optional[str] = None
     provenance: Provenance = field(default_factory=Provenance)
 
@@ -46,7 +47,7 @@ class OnChainMintVerifier:
 
     def verify_mint(self, mint: str, fetch_largest_accounts: bool = True) -> OnChainMintVerification:
         """
-        Full 9-step on-chain verification of a token mint:
+        Strict 9-step on-chain verification of a token mint:
         1. validate Base58 decoding
         2. query Solana RPC getAccountInfo (jsonParsed)
         3. verify account exists
@@ -74,23 +75,13 @@ class OnChainMintVerifier:
         account_resp = self.rpc.get_account_info(mint, encoding="jsonParsed")
 
         if account_resp is None:
-            # Check verified on-chain snapshot cache if live RPC is offline
-            from data.real_mainnet_snapshots.real_mainnet_data import REAL_SOLANA_MAINNET_MINTS
-            if mint in REAL_SOLANA_MAINNET_MINTS:
-                cached_account = REAL_SOLANA_MAINNET_MINTS[mint]
-                res = self.verify_from_account_data(mint, cached_account)
-                res.top10_holder_pct = cached_account.get("top10_holder_pct")
-                res.provenance.provider = "SolanaMainnetOnChainSnapshot"
-                self._cache[mint] = res
-                return res
-
-            # RPC unreachable and not in known verified on-chain cache
+            # RPC unreachable or connection failure
             res = OnChainMintVerification(
                 mint=mint,
                 is_valid_mint=False,
                 verification_status="RPC_UNAVAILABLE",
                 error_reason="Solana RPC unreachable or connection closed",
-                provenance=Provenance(source_type=SourceType.REAL, provider="SolanaRPC", confidence=0.3, verified_on_chain=False)
+                provenance=Provenance(source_type=SourceType.REAL, provider="SolanaRPC", confidence=0.0, verified_on_chain=False)
             )
             return res
 
@@ -154,9 +145,9 @@ class OnChainMintVerifier:
         top10_pct = None
         holders_count = 0
         if fetch_largest_accounts:
-            largest_resp = self.rpc.call("getTokenLargestAccounts", [mint])
-            if largest_resp and isinstance(largest_resp, dict) and "value" in largest_resp:
-                accounts = largest_resp["value"]
+            largest_resp = self.rpc.get_token_largest_accounts(mint)
+            if largest_resp and isinstance(largest_resp, list):
+                accounts = largest_resp
                 holders_count = len(accounts)
                 if supply > 0 and accounts:
                     top10_amount = sum(float(a.get("uiAmount", 0.0) or 0.0) for a in accounts[:10])
@@ -189,15 +180,15 @@ class OnChainMintVerifier:
         self._cache[mint] = verification
         return verification
 
-    def verify_from_account_data(self, mint: str, account_data: Dict[str, Any]) -> OnChainMintVerification:
-        """Helper to parse and verify mint account directly from raw / cached RPC account data."""
+    def verify_from_account_data(self, mint: str, account_data: Dict[str, Any], source_type: SourceType = SourceType.REPLAY) -> OnChainMintVerification:
+        """Helper to parse and verify mint account directly from raw / cached RPC account data for snapshot/replay."""
         if not SolanaAddressValidator.validate_token_mint(mint):
             return OnChainMintVerification(
                 mint=mint,
                 is_valid_mint=False,
                 verification_status="INVALID_BASE58",
                 error_reason="Failed Base58 format check",
-                provenance=Provenance(source_type=SourceType.REAL, provider="Base58Validator", confidence=0.0)
+                provenance=Provenance(source_type=source_type, provider="Base58Validator", confidence=0.0)
             )
 
         owner = account_data.get("owner", "")
@@ -208,7 +199,7 @@ class OnChainMintVerifier:
                 owner_program=owner,
                 verification_status="INVALID_OWNER",
                 error_reason=f"Owner {owner} is not SPL Token Program",
-                provenance=Provenance(source_type=SourceType.REAL, provider="SolanaRPC", confidence=0.0, verified_on_chain=True)
+                provenance=Provenance(source_type=source_type, provider="SolanaRPC", confidence=0.0, verified_on_chain=True)
             )
 
         data = account_data.get("data", {})
@@ -220,7 +211,7 @@ class OnChainMintVerifier:
                 owner_program=owner,
                 verification_status="NOT_A_MINT",
                 error_reason="Account is not a mint",
-                provenance=Provenance(source_type=SourceType.REAL, provider="SolanaRPC", confidence=0.0, verified_on_chain=True)
+                provenance=Provenance(source_type=source_type, provider="SolanaRPC", confidence=0.0, verified_on_chain=True)
             )
 
         info = parsed_data.get("info", {})
@@ -243,8 +234,8 @@ class OnChainMintVerifier:
             freeze_auth_revoked=(freeze_authority is None),
             verification_status="VERIFIED_ON_CHAIN",
             provenance=Provenance(
-                source_type=SourceType.REAL,
-                provider="SolanaRPC.getAccountInfo",
+                source_type=source_type,
+                provider="SnapshotVerifier",
                 timestamp=time.time(),
                 observed_at=time.time(),
                 confidence=1.0,

@@ -49,7 +49,11 @@ class RealWhaleTracker:
         and sustained buying / liquidating as ACCUMULATION / DISTRIBUTION.
         """
         usd_val = swap.quote_amount_usd
-        is_whale_size = (usd_val >= self.WHALE_THRESHOLD_USD) or (usd_val / max(pool_liquidity_usd, 1e-9) >= 0.015)
+        if usd_val is None or not swap.is_quote_verified:
+            # Cannot determine USD size reliably; do not process as whale
+            return None
+
+        is_whale_size = (usd_val >= self.WHALE_THRESHOLD_USD) or (pool_liquidity_usd > 0 and (usd_val / pool_liquidity_usd >= 0.015))
 
         wallet = swap.wallet
         mint = swap.mint

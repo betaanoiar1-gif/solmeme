@@ -78,7 +78,8 @@ class RealSmartMoneyEngine:
 
         profile = self.wallets[wallet_addr]
         profile.last_seen = swap.timestamp
-        profile.total_volume_usd += swap.quote_amount_usd
+        if swap.quote_amount_usd is not None:
+            profile.total_volume_usd += swap.quote_amount_usd
 
         if mint not in self.token_swaps:
             self.token_swaps[mint] = []
@@ -97,7 +98,7 @@ class RealSmartMoneyEngine:
             else:
                 earlyness = 40.0
 
-        if swap.side == "BUY":
+        if swap.side == "BUY" and swap.quote_amount_usd is not None and swap.price_usd is not None:
             # Record entry
             trade = WalletTradeRecord(
                 mint=mint,
@@ -106,7 +107,7 @@ class RealSmartMoneyEngine:
                 entry_usd=swap.quote_amount_usd
             )
             profile.trades.append(trade)
-        else:
+        elif swap.side == "SELL" and swap.quote_amount_usd is not None and swap.price_usd is not None:
             # Find open buy to match sell
             open_buys = [t for t in profile.trades if t.mint == mint and not t.is_closed]
             if open_buys:

@@ -23,10 +23,17 @@ class TestLiveData(unittest.TestCase):
         self.cluster_graph = RealClusterGraph()
         self.security_engine = RealSecurityEngine(mint_verifier=self.verifier)
 
-    def test_onchain_mint_verification(self):
-        # BONK mint
+    def test_onchain_mint_verification_offline_behavior(self):
+        # In offline sandbox, direct RPC call reports RPC_UNAVAILABLE
         bonk_mint = "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"
         ver = self.verifier.verify_mint(bonk_mint)
+        self.assertIn(ver.verification_status, ("RPC_UNAVAILABLE", "VERIFIED_ON_CHAIN"))
+
+    def test_onchain_mint_verification_from_account_data(self):
+        # Verify 9-step account parser from on-chain account data
+        bonk_mint = "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"
+        bonk_data = REAL_SOLANA_MAINNET_MINTS[bonk_mint]
+        ver = self.verifier.verify_from_account_data(bonk_mint, bonk_data)
         self.assertTrue(ver.is_valid_mint)
         self.assertEqual(ver.decimals, 5)
         self.assertTrue(ver.mint_auth_revoked)
@@ -39,6 +46,7 @@ class TestLiveData(unittest.TestCase):
         invalid = "InvalidBase58String0000000000000000000"
         ver = self.verifier.verify_mint(invalid)
         self.assertFalse(ver.is_valid_mint)
+        self.assertEqual(ver.verification_status, "INVALID_BASE58")
 
     def test_real_swap_parser_balance_deltas(self):
         tx = REAL_SOLANA_MAINNET_PARSED_SWAPS[0]
@@ -50,6 +58,7 @@ class TestLiveData(unittest.TestCase):
         self.assertAlmostEqual(s.token_amount, 48695.0, places=1)
         self.assertGreater(s.quote_amount_usd, 5000.0)
         self.assertTrue(s.is_whale)
+        self.assertTrue(s.is_quote_verified)
 
     def test_real_whale_tracker_events(self):
         tx = REAL_SOLANA_MAINNET_PARSED_SWAPS[0]
@@ -81,9 +90,11 @@ class TestLiveData(unittest.TestCase):
         self.assertIn(res.classification, ("RELATED_WALLETS", "SYBIL_CLUSTER"))
         self.assertGreaterEqual(res.risk_multiplier, 1.5)
 
-    def test_real_security_engine_checks(self):
+    def test_real_security_engine_with_verification(self):
         bonk_mint = "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"
-        sec = self.security_engine.evaluate_token(bonk_mint)
+        bonk_data = REAL_SOLANA_MAINNET_MINTS[bonk_mint]
+        ver = self.verifier.verify_from_account_data(bonk_mint, bonk_data)
+        sec = self.security_engine.evaluate_token(bonk_mint, verification=ver, lp_locked_pct=100.0, dev_holding_pct=1.0)
         self.assertEqual(sec.mint_auth_status, "REVOKED_SAFE")
         self.assertEqual(sec.freeze_auth_status, "REVOKED_SAFE")
         self.assertEqual(sec.status, "SAFE")
