@@ -1,0 +1,8 @@
+mint,symbol,liquidity_usd,total_swaps,buy_count,sell_count,total_volume_usd,netflow_usd,buy_sell_imbalance,unique_buyers,repeat_buyer_ratio,largest_single_buy_usd,largest_buy_pct_pool,whale_netflow_usd,whale_accum_events,volume_acceleration,price_velocity,earlyness_score,raw_early_signal_score
+6p6xgHyF7AeQHyVaKVUz8V8bEkP1wX2MSo1111111111,TRUMP,14200000.0,16,16,0,49760.04,49760.04,1.0,7,0.0,5700.0,0.0401,16050.0,3,1.07,0.01,30.0,84.88
+Dfh5DzRgSvvCFDoYc2ciTkMrbDfRKybA4SoFbPmApump,PIPPIN,950000.0,24,22,2,67624.92,58846.42,0.87,12,0.0,5700.0,0.6,21550.0,4,0.07,0.02,75.0,81.63
+9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump,FARTCOIN,3400000.0,85,60,25,162661.94,88103.14,0.542,43,0.0,16797.0,0.494,32847.0,4,-0.41,0.04,30.0,57.92
+CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuBpump,GOAT,2100000.0,62,46,16,114204.82,63050.44,0.552,34,0.0,5700.0,0.2714,21550.0,4,-0.44,0.01,75.0,57.89
+2qEHjDLDLbuBgRYvsxhc5D6uDWAivNFZGan56P1tpump,PNUT,1650000.0,54,37,17,116439.68,57693.3,0.495,27,0.0,5700.0,0.3455,21550.0,4,-0.49,0.01,75.0,56.97
+EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm,WIF,18200000.0,35,28,7,79808.25,61163.49,0.766,19,0.0,5700.0,0.0313,21550.0,4,-0.51,-0.01,30.0,53.99
+DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263,BONK,12500000.0,42,30,12,93909.25,51259.21,0.546,20,0.0,5700.0,0.0456,21550.0,4,-0.49,0.02,30.0,47.98
