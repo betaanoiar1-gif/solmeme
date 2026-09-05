@@ -1,0 +1,78 @@
+name: Solana Live Validation
+
+on:
+  push:
+    branches:
+      - arena/01a07111-solmeme
+  workflow_dispatch:
+
+jobs:
+  validate-live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          ref: arena/01a07111-solmeme
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: |
+          pip install tabulate python-dotenv requests pandas
+
+      - name: Check Environment & Connectivity
+        run: |
+          echo "=== RUNTIME ENVIRONMENT ==="
+          python3 --version
+          uname -a
+          curl -s https://ifconfig.me || true
+          echo ""
+
+      - name: Probe Solana RPC Endpoints
+        run: |
+          python3 -c '
+          import urllib.request, json, time
+          endpoints = [
+              "https://api.mainnet-beta.solana.com",
+              "https://solana-mainnet.rpc.extrnode.com",
+              "https://rpc.ankr.com/solana",
+              "https://solana.public-rpc.com"
+          ]
+          for ep in endpoints:
+              try:
+                  t0 = time.time()
+                  req = urllib.request.Request(
+                      ep,
+                      data=json.dumps({"jsonrpc":"2.0","id":1,"method":"getHealth"}).encode(),
+                      headers={"Content-Type":"application/json","User-Agent":"MemeHunter/1.0"}
+                  )
+                  with urllib.request.urlopen(req, timeout=5) as resp:
+                      res = json.loads(resp.read().decode())
+                      latency = (time.time() - t0) * 1000
+                      print(f"✅ {ep} -> Status: {resp.status} | Latency: {latency:.1f}ms | Result: {res.get(\"result\")}")
+              except Exception as e:
+                  print(f"❌ {ep} -> Error: {e}")
+          '
+
+      - name: Run Solana Live Paper Trading Engine
+        env:
+          DATA_MODE: live
+          REAL_DATA_ONLY: "true"
+        run: |
+          mkdir -p reports
+          python3 scripts/run_live_paper.py --mode live --duration-minutes 30 | tee reports/live_runtime.log
+
+      - name: Commit and Push Results
+        if: always()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add reports/
+          git commit -m "chore(live-audit): record 30-minute live solana mainnet validation artifacts" || echo "No changes to commit"
+          git push origin arena/01a07111-solmeme || echo "Push failed"
