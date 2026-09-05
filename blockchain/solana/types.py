@@ -13,6 +13,7 @@ class SourceType(str, Enum):
     MOCK = "MOCK"
     REPLAY = "REPLAY"
     SNAPSHOT = "SNAPSHOT"
+    UNKNOWN = "UNKNOWN"
 
 
 @dataclass

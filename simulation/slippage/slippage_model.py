@@ -3,6 +3,7 @@ Slippage and Price Impact Model for AMMs (Raydium / Orca / Pump.fun).
 """
 
 from dataclasses import dataclass
+from typing import Optional
 from app.config.settings import ExecutionConfig
 
 
@@ -21,14 +22,16 @@ class SlippageModel:
         cls,
         market_price: float,
         trade_size_usd: float,
-        liquidity_usd: float,
+        liquidity_usd: Optional[float],
         is_buy: bool,
         config: ExecutionConfig
     ) -> SlippageResult:
         base_slip = config.base_slippage_percent
 
         # AMM Constant product price impact: I = (size / liquidity) * constant
-        impact = (trade_size_usd / max(liquidity_usd, 1_000.0)) * config.liquidity_impact_constant * 100.0
+        # If liquidity is unknown (None), apply conservative minimum depth
+        effective_liq = max(liquidity_usd, 1_000.0) if liquidity_usd is not None else 5_000.0
+        impact = (trade_size_usd / effective_liq) * config.liquidity_impact_constant * 100.0
         total_slip_pct = base_slip + impact
 
         slippage_usd = trade_size_usd * (total_slip_pct / 100.0)

@@ -22,14 +22,18 @@ logger = logging.getLogger("meme_alpha_hunter.emerging_smart_money")
 
 def is_swap_quote_verified(swap: RealSwapRecord) -> bool:
     """
-    Strictly verifies whether a swap has a verified quote on-chain.
+    Strictly verifies whether a swap has a verified quote on-chain and RPC.
     """
     if swap.quote_amount_usd is None:
         return False
     if not getattr(swap, "is_quote_verified", False):
         return False
     prov = getattr(swap, "provenance", None)
-    if prov is None or not getattr(prov, "verified_on_chain", False):
+    if prov is None:
+        return False
+    if not getattr(prov, "verified_on_chain", False):
+        return False
+    if hasattr(prov, "rpc_verified") and getattr(prov, "rpc_verified") is False:
         return False
     return True
 

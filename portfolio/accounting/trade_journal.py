@@ -24,7 +24,7 @@ class TradeRecord:
     entry_price: float
     size_usd: float
     simulated_fill_qty: float
-    liquidity_usd: float
+    liquidity_usd: Optional[float]
     slippage_usd: float
     fee_usd: float
     exit_time: float
@@ -54,7 +54,7 @@ class TradeJournal:
         entry_price: float,
         size_usd: float,
         simulated_fill_qty: float,
-        liquidity_usd: float,
+        liquidity_usd: Optional[float],
         slippage_usd: float,
         fee_usd: float,
         exit_time: float,

@@ -9,7 +9,9 @@ from scoring.opportunity.opportunity_scorer import OpportunityReport
 
 class EarlyLaunchSniper:
     @classmethod
-    def evaluate(cls, opp: OpportunityReport, age_minutes: float) -> bool:
+    def evaluate(cls, opp: OpportunityReport, age_minutes: Optional[float]) -> bool:
+        if age_minutes is None:
+            return False
         return (
             opp.recommendation == "PAPER_ENTRY" and
             opp.alpha_score >= 68.0 and

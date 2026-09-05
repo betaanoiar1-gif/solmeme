@@ -32,11 +32,20 @@ class DynamicExitEngine:
         smart_money_score: float,
         whale_netflow: float,
         regime: str,
-        liquidity_usd: float
+        liquidity_usd: Optional[float] = None
     ) -> ExitVerdict:
         pnl_pct = ((current_price - entry_price) / max(entry_price, 1e-9)) * 100.0
         peak_gain_pct = ((peak_price - entry_price) / max(entry_price, 1e-9)) * 100.0
         duration_minutes = (current_time - entry_time) / 60.0
+
+        # 0. Liquidity Drain / Rug Exit (only if verified liquidity drops < $500)
+        if liquidity_usd is not None and self.config.exit_on_liquidity_drain and liquidity_usd < 500.0:
+            return ExitVerdict(
+                should_exit=True,
+                sell_ratio=1.0,
+                exit_reason=f"LIQUIDITY_DRAIN_DETECTED (Liquidity ${liquidity_usd:.1f} < $500.0)",
+                is_stop_loss=True
+            )
 
         # 1. Hard Stop Loss
         if pnl_pct <= -self.config.stop_loss_percent:

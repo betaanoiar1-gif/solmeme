@@ -40,8 +40,8 @@ class ExecutionSimulator:
         self,
         market_price: float,
         trade_size_usd: float,
-        liquidity_usd: float,
-        is_buy: bool,
+        liquidity_usd: Optional[float] = None,
+        is_buy: bool = True,
         latency_mode: str = "fast"
     ) -> SimulatedExecutionResult:
         # 1. Partial fill calculation

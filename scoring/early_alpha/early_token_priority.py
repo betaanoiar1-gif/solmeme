@@ -35,13 +35,18 @@ def is_swap_quote_verified(swap: RealSwapRecord) -> bool:
     1. quote_amount_usd is not None
     2. is_quote_verified is True
     3. provenance.verified_on_chain is True
+    4. (rpc_verified is True if available)
     """
     if swap.quote_amount_usd is None:
         return False
     if not getattr(swap, "is_quote_verified", False):
         return False
     prov = getattr(swap, "provenance", None)
-    if prov is None or not getattr(prov, "verified_on_chain", False):
+    if prov is None:
+        return False
+    if not getattr(prov, "verified_on_chain", False):
+        return False
+    if hasattr(prov, "rpc_verified") and getattr(prov, "rpc_verified") is False:
         return False
     return True
 

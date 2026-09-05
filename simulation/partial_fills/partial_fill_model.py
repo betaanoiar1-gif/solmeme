@@ -4,6 +4,7 @@ Calculates filled quantity, unfilled quantity, and fill ratio.
 """
 
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass
@@ -16,7 +17,7 @@ class FillResult:
 
 class PartialFillModel:
     @classmethod
-    def calculate(cls, requested_usd: float, liquidity_usd: float, enable_partial: bool = True) -> FillResult:
+    def calculate(cls, requested_usd: float, liquidity_usd: Optional[float] = None, enable_partial: bool = True) -> FillResult:
         if not enable_partial:
             return FillResult(
                 requested_size_usd=requested_usd,
@@ -26,7 +27,8 @@ class PartialFillModel:
             )
 
         # If trade size is > 5% of entire pool, it only fills partially
-        max_fill_capacity = max(liquidity_usd * 0.05, 10.0)
+        effective_liq = liquidity_usd if liquidity_usd is not None else 1_000.0
+        max_fill_capacity = max(effective_liq * 0.05, 10.0)
         if requested_usd > max_fill_capacity:
             filled = max_fill_capacity
             unfilled = requested_usd - filled

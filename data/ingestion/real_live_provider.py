@@ -35,6 +35,13 @@ class RealSolanaLiveProvider(BaseDataProvider):
         resp = self.rpc.get_health()
         return resp == "ok"
 
+    def get_sol_price_usd(self) -> Optional[float]:
+        """Fetches verified live SOL/USD price from live DEX market feed without static fallbacks."""
+        sol_data = self.dex_api.get_token_market_data("So11111111111111111111111111111111111111112")
+        if sol_data and sol_data.get("price") and float(sol_data["price"]) > 0:
+            return float(sol_data["price"])
+        return None
+
     def get_token_metadata(self, mint: str) -> Optional[Dict[str, Any]]:
         """Queries on-chain mint account via Solana RPC getAccountInfo."""
         verification = self.mint_verifier.verify_mint(mint)

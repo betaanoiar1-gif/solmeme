@@ -312,9 +312,10 @@ class MemeAlphaHunterOrchestrator:
         for mint, pos in list(self.wallet.positions.items()):
             curr_price = price_map.get(mint, pos.current_price)
 
-            # Fetch dynamic real token market data
+            # Fetch dynamic real token market data (Zero hardcoded 50000 fallback)
             live_token_data = self.provider.get_token_market_data(mint) or {}
-            live_liq = float(live_token_data.get("liquidity", 50_000.0))
+            raw_liq = live_token_data.get("liquidity")
+            live_liq = float(raw_liq) if raw_liq is not None else None
 
             # Fetch dynamic real trades & smart money / whale metrics
             recent_trades = self.provider.get_recent_trades(mint, limit=30)

@@ -14,8 +14,10 @@ class ConfidenceCalculator:
         dna_snapshots_count: int,
         trades_count: int
     ) -> float:
-        holders = int(token_data.get("holders_count", 0))
-        liquidity = float(token_data.get("liquidity", 0.0))
+        raw_holders = token_data.get("holders_count")
+        holders = int(raw_holders) if raw_holders is not None else 0
+        raw_liq = token_data.get("liquidity")
+        liquidity = float(raw_liq) if raw_liq is not None else 0.0
 
         # Sample depth scores
         holder_confidence = min((holders / 1_000.0) * 40.0, 40.0)

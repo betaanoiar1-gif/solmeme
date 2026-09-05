@@ -42,18 +42,21 @@ class RealWhaleTracker:
         self._wallet_positions: Dict[str, Dict[str, float]] = {}  # wallet -> {mint -> net_usd_invested}
         self._token_whale_flows: Dict[str, float] = {}  # mint -> netflow_usd
 
-    def process_real_swap(self, swap: RealSwapRecord, pool_liquidity_usd: float = 50_000.0) -> Optional[RealWhaleEvent]:
+    def process_real_swap(self, swap: RealSwapRecord, pool_liquidity_usd: Optional[float] = None) -> Optional[RealWhaleEvent]:
         """
         Evaluates a real swap for whale impact.
         Classifies single large trades as BUY / SELL,
         and sustained buying / liquidating as ACCUMULATION / DISTRIBUTION.
+        Zero hardcoded default pool liquidity ($50,000).
         """
         usd_val = swap.quote_amount_usd
         if usd_val is None or not swap.is_quote_verified:
             # Cannot determine USD size reliably; do not process as whale
             return None
 
-        is_whale_size = (usd_val >= self.WHALE_THRESHOLD_USD) or (pool_liquidity_usd > 0 and (usd_val / pool_liquidity_usd >= 0.015))
+        is_whale_size = (usd_val >= self.WHALE_THRESHOLD_USD) or (
+            pool_liquidity_usd is not None and pool_liquidity_usd > 0 and (usd_val / pool_liquidity_usd >= 0.015)
+        )
 
         wallet = swap.wallet
         mint = swap.mint
@@ -87,9 +90,12 @@ class RealWhaleTracker:
             else:
                 action = "SELL"
 
-        # Impact score based on % of pool liquidity
-        impact_pct = (usd_val / max(pool_liquidity_usd, 1.0)) * 100.0
-        impact_score = min(max(impact_pct * 10.0, 10.0), 100.0)
+        # Impact score based on % of pool liquidity (neutral 50.0 if unknown)
+        if pool_liquidity_usd is not None and pool_liquidity_usd > 0:
+            impact_pct = (usd_val / pool_liquidity_usd) * 100.0
+            impact_score = min(max(impact_pct * 10.0, 10.0), 100.0)
+        else:
+            impact_score = 50.0
 
         event_id = f"whale_{swap.signature[:8]}_{int(swap.timestamp)}"
 

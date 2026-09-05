@@ -31,8 +31,10 @@ class RegimeEngine:
         smart_money_score: float,
         whale_netflow: float
     ) -> MarketRegime:
-        vol = float(token_data.get("volume_24h", 0.0))
-        liq = float(token_data.get("liquidity", 0.0))
+        raw_vol = token_data.get("volume_24h")
+        vol = float(raw_vol) if raw_vol is not None else 0.0
+        raw_liq = token_data.get("liquidity")
+        liq = float(raw_liq) if raw_liq is not None else 0.0
         v_price = micro_metrics.price_velocity
         buyers = micro_metrics.buy_count
         sellers = micro_metrics.sell_count

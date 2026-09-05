@@ -62,7 +62,8 @@ class OpportunityScorer:
     ) -> OpportunityReport:
         mint = token_data.get("mint", "")
         symbol = token_data.get("symbol", "UNKNOWN")
-        liquidity = float(token_data.get("liquidity", 0.0))
+        raw_liq = token_data.get("liquidity")
+        liquidity = float(raw_liq) if raw_liq is not None else 0.0
 
         # 1. Calculate Core Scores
         alpha = AlphaCalculator.calculate(

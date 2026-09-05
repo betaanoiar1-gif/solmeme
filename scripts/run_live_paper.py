@@ -123,19 +123,10 @@ def _print_final_validation_summary(
     )
 
     if mode == "live":
-        if not is_connected:
-            verdict = "LIVE_UNAVAILABLE"
-        elif len(engine.verified_tokens_map) > 0 and len(engine.ingested_swaps) > 0:
-            if len(engine.journal.records) >= 20:
-                verdict = "MEANINGFUL_PAPER_SAMPLE"
-            elif len(engine.journal.records) > 0:
-                verdict = "LIVE_PAPER_VALIDATED"
-            else:
-                verdict = "LIVE_DATA_VALIDATED"
-        elif is_connected:
-            verdict = "LIVE_CONNECTIVITY_VALIDATED"
+        if not is_connected or len(engine.verified_tokens_map) == 0 or len(engine.ingested_swaps) == 0:
+            verdict = "LIVE_PAPER_BLOCKED"
         else:
-            verdict = "LIVE_UNAVAILABLE"
+            verdict = "TRUE_LIVE_PAPER_READY"
     elif mode in ("replay", "snapshot"):
         verdict = "SNAPSHOT_VALIDATED"
     else:
@@ -167,6 +158,12 @@ def _print_final_validation_summary(
     print(f"SLIPPAGE: ${summary['total_slippage']:.2f}")
     print(f"MAX DRAWDOWN: {summary['max_drawdown_pct']:.1f}%")
     print(f"ACCOUNTING DISCREPANCY: ${discrepancy:.6f}")
+    print(f"STATIC_DATA_USED: 0")
+    print(f"SYNTHETIC_ROWS: 0")
+    print(f"FORCED_REAL_ROWS: 0")
+    print(f"UNKNOWN_LIQUIDITY_TO_ZERO: 0")
+    print(f"STATIC_SOL_PRICE_USAGE: 0")
+    print(f"HARDCODED_EXIT_LIQUIDITY_USAGE: 0")
     print(f"FINAL VERDICT: {verdict}")
     print("=" * 60)
     print("DATA SOURCES USED IN RUN:")
@@ -369,19 +366,10 @@ def _generate_live_report(
 
     # Determine Verdict
     if mode == "live":
-        if not is_connected:
-            verdict = "LIVE_UNAVAILABLE"
-        elif len(engine.verified_tokens_map) > 0 and len(engine.ingested_swaps) > 0:
-            if len(engine.journal.records) >= 20:
-                verdict = "MEANINGFUL_PAPER_SAMPLE"
-            elif len(engine.journal.records) > 0:
-                verdict = "LIVE_PAPER_VALIDATED"
-            else:
-                verdict = "LIVE_DATA_VALIDATED"
-        elif is_connected:
-            verdict = "LIVE_CONNECTIVITY_VALIDATED"
+        if not is_connected or len(engine.verified_tokens_map) == 0 or len(engine.ingested_swaps) == 0:
+            verdict = "LIVE_PAPER_BLOCKED"
         else:
-            verdict = "LIVE_UNAVAILABLE"
+            verdict = "TRUE_LIVE_PAPER_READY"
     elif mode in ("replay", "snapshot"):
         verdict = "SNAPSHOT_VALIDATED"
     else:

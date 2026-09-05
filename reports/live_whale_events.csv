@@ -1,1 +1,1 @@
-event_id,signature,mint,wallet,action,amount_tokens,amount_usd,timestamp,source_type
+event_id,signature,mint,wallet,action,amount_tokens,amount_usd,impact_score,timestamp,source_type
