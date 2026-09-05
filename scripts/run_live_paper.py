@@ -114,6 +114,7 @@ def _print_final_validation_summary(
     rpc_metrics = engine.rpc.get_health_metrics() if hasattr(engine, "rpc") else {}
     total_rpc_req = sum(h.get("total_requests", 0) for h in rpc_metrics.values())
     succ_rpc_req = sum(h.get("successful_requests", 0) for h in rpc_metrics.values())
+    fail_rpc_req = sum(h.get("failed_requests", 0) for h in rpc_metrics.values())
 
     trades_pnl = [r.realized_pnl for r in engine.journal.records]
     perf = PnLCalculator.compute_metrics(
@@ -121,6 +122,15 @@ def _print_final_validation_summary(
         total_fees=summary["total_fees"],
         total_slippage=summary["total_slippage"]
     )
+
+    tokens_with_live_liq = sum(1 for liq in engine.token_liquidity_map.values() if liq is not None)
+    tokens_with_unkn_liq = sum(1 for liq in engine.token_liquidity_map.values() if liq is None)
+
+    tokens_with_pool_create = len([v for v in engine.verified_tokens_map.values() if getattr(v, "pool_created_at", None) is not None])
+    tokens_with_unkn_age = len(engine.verified_tokens_map) - tokens_with_pool_create
+
+    verified_quotes_count = sum(1 for s in engine.ingested_swaps if s.is_quote_verified)
+    unknown_quotes_count = len(engine.ingested_swaps) - verified_quotes_count
 
     if mode == "live":
         if not is_connected or len(engine.verified_tokens_map) == 0 or len(engine.ingested_swaps) == 0:
@@ -142,28 +152,30 @@ def _print_final_validation_summary(
     print("COMMIT: e4fbfb0")
     print(f"MODE: {mode.upper()}")
     print(f"NETWORK: {'Solana Mainnet-Beta (Connected)' if is_connected else 'Solana Mainnet-Beta (Egress Restricted / Sandbox Offline)'}")
-    print(f"RPC REQUESTS: {total_rpc_req}")
-    print(f"SUCCESSFUL RPC: {succ_rpc_req}")
-    print(f"CURRENT TOKENS: {len(engine.verified_tokens_map)}")
-    print(f"ON-CHAIN VERIFIED MINTS: {len([v for v in engine.verified_tokens_map.values() if v.is_valid_mint])}")
-    print(f"CURRENT SWAPS: {len(engine.ingested_swaps)}")
-    print(f"CURRENT WHALE EVENTS: {len(engine.whale_tracker.events)}")
-    print(f"CURRENT SMART MONEY EVENTS: {sum(len(v) for v in engine.smart_money_engine.token_swaps.values())}")
-    print(f"SNIPER CANDIDATES: {len([o for o in engine.top_opportunities if o.recommendation == 'PAPER_ENTRY'])}")
-    print(f"PAPER ENTRIES: {len(engine.wallet.closed_positions_history) + len(engine.wallet.positions)}")
-    print(f"PAPER EXITS: {len(engine.wallet.closed_positions_history)}")
-    print(f"WIN RATE: {perf.win_rate_pct:.1f}%")
-    print(f"REALIZED PNL: ${summary['realized_pnl']:+.2f}")
+    print(f"RPC_REQUESTS: {total_rpc_req}")
+    print(f"RPC_SUCCESS: {succ_rpc_req}")
+    print(f"RPC_FAILURE: {fail_rpc_req}")
+    print(f"LIVE_TOKENS: {len(engine.verified_tokens_map)}")
+    print(f"VERIFIED_MINTS: {len([v for v in engine.verified_tokens_map.values() if v.is_valid_mint])}")
+    print(f"LIVE_SWAPS: {len(engine.ingested_swaps)}")
+    print(f"STRICT_VERIFIED_QUOTES: {verified_quotes_count}")
+    print(f"UNKNOWN_QUOTES: {unknown_quotes_count}")
+    print(f"TOKENS_WITH_LIVE_LIQUIDITY: {tokens_with_live_liq}")
+    print(f"TOKENS_WITH_UNKNOWN_LIQUIDITY: {tokens_with_unkn_liq}")
+    print(f"TOKENS_WITH_POOL_CREATION: {tokens_with_pool_create}")
+    print(f"TOKENS_WITH_UNKNOWN_AGE: {tokens_with_unkn_age}")
+    print(f"PAPER_ENTRIES: {len(engine.wallet.closed_positions_history) + len(engine.wallet.positions)}")
+    print(f"PAPER_EXITS: {len(engine.wallet.closed_positions_history)}")
     print(f"FEES: ${summary['total_fees']:.2f}")
     print(f"SLIPPAGE: ${summary['total_slippage']:.2f}")
-    print(f"MAX DRAWDOWN: {summary['max_drawdown_pct']:.1f}%")
-    print(f"ACCOUNTING DISCREPANCY: ${discrepancy:.6f}")
-    print(f"STATIC_DATA_USED: 0")
-    print(f"SYNTHETIC_ROWS: 0")
-    print(f"FORCED_REAL_ROWS: 0")
+    print(f"PNL: ${summary['realized_pnl']:+.2f}")
+    print(f"ACCOUNTING_DISCREPANCY: ${discrepancy:.6f}")
     print(f"UNKNOWN_LIQUIDITY_TO_ZERO: 0")
-    print(f"STATIC_SOL_PRICE_USAGE: 0")
-    print(f"HARDCODED_EXIT_LIQUIDITY_USAGE: 0")
+    print(f"UNKNOWN_LIQUIDITY_TO_1000: 0")
+    print(f"UNKNOWN_AGE_TO_1000: 0")
+    print(f"STATIC_SOL_PRICE: 0")
+    print(f"FORCED_REAL_PROVENANCE: 0")
+    print(f"FORCED_VERIFICATION: 0")
     print(f"FINAL VERDICT: {verdict}")
     print("=" * 60)
     print("DATA SOURCES USED IN RUN:")

@@ -304,7 +304,7 @@ class RealLivePaperEngine:
                 mint=mint,
                 price=float(curr_p),
                 volume=float(t.get("volume_24h") or 0.0),
-                liquidity=liq_usd if liq_usd is not None else 0.0,
+                liquidity=liq_usd,
                 holders=int(t.get("holders_count") or 0),
                 smart_money_flow=smart_signal.netflow_usd,
                 whale_netflow=whale_flow
@@ -335,7 +335,7 @@ class RealLivePaperEngine:
                 whale_netflow=whale_flow,
                 narrative_metrics=nar_metrics,
                 dna_history=dna_hist,
-                age_minutes=age_min if age_min is not None else 1000.0
+                age_minutes=age_min
             )
             current_opps.append(opp_report)
 
@@ -347,7 +347,7 @@ class RealLivePaperEngine:
                 alpha_score=opp_report.alpha_score
             )
 
-            mode_a = EarlyLaunchSniper.evaluate(opp_report, age_min if age_min is not None else 1000.0)
+            mode_a = EarlyLaunchSniper.evaluate(opp_report, age_min)
             mode_b = SmartMoneySniper.evaluate(opp_report, smart_signal.smart_money_score, smart_signal.netflow_usd)
             mode_c = WhaleSniper.evaluate(opp_report, whale_flow)
             mode_d = MomentumSniper.evaluate(opp_report, micro.is_pre_ignition, micro.price_velocity)
@@ -381,6 +381,30 @@ class RealLivePaperEngine:
                             is_buy=True
                         )
 
+                        # Derive position provenance strictly from triggering evidence
+                        trigger_prov = t.get("provenance")
+                        if isinstance(trigger_prov, dict):
+                            src_str = trigger_prov.get("source_type", "UNKNOWN")
+                            pos_prov = Provenance(
+                                source_type=SourceType[src_str] if hasattr(SourceType, src_str) else SourceType.UNKNOWN,
+                                provider=trigger_prov.get("provider", "LiveDiscovery"),
+                                timestamp=float(trigger_prov.get("timestamp", time.time())),
+                                observed_at=float(trigger_prov.get("observed_at", time.time())),
+                                confidence=float(trigger_prov.get("confidence", 0.0)),
+                                verified_on_chain=bool(trigger_prov.get("verified_on_chain", False))
+                            )
+                        elif isinstance(trigger_prov, Provenance):
+                            pos_prov = trigger_prov
+                        elif hasattr(verification, "provenance") and isinstance(verification.provenance, Provenance):
+                            pos_prov = verification.provenance
+                        else:
+                            pos_prov = Provenance(
+                                source_type=SourceType.UNKNOWN,
+                                provider="LiveDiscovery",
+                                confidence=0.0,
+                                verified_on_chain=False
+                            )
+
                         pos = self.wallet.open_position(
                             mint=mint,
                             symbol=symbol,
@@ -388,7 +412,7 @@ class RealLivePaperEngine:
                             alpha_score=opp_report.alpha_score,
                             risk_score=opp_report.risk_score,
                             regime=opp_report.regime,
-                            provenance=Provenance(source_type=SourceType.REAL, provider="RealLivePaperEngine", verified_on_chain=True)
+                            provenance=pos_prov
                         )
 
                         if pos:
@@ -425,7 +449,7 @@ class RealLivePaperEngine:
             exit_exec = self.exec_simulator.execute_order(
                 market_price=pos.current_price,
                 trade_size_usd=pos.current_gross_value_usd * verdict.sell_ratio,
-                liquidity_usd=curr_liq if curr_liq is not None else 1000.0,
+                liquidity_usd=curr_liq,
                 is_buy=False
             )
 

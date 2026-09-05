@@ -61,24 +61,34 @@ class DexPublicProvider(BaseDataProvider):
         res = self._get_json(url)
         if res and "pairs" in res and res["pairs"]:
             pair = res["pairs"][0]
+            pair_created = float(pair["pairCreatedAt"]) / 1000.0 if pair.get("pairCreatedAt") is not None else None
+            price_val = float(pair["priceUsd"]) if pair.get("priceUsd") is not None else None
+            liq_val = float(pair["liquidity"]["usd"]) if (pair.get("liquidity") and pair["liquidity"].get("usd") is not None) else None
+            mcap_val = float(pair["fdv"]) if pair.get("fdv") is not None else None
+            vol_val = float(pair["volume"]["h24"]) if (pair.get("volume") and pair["volume"].get("h24") is not None) else None
+            vol_5m = float(pair["volume"]["m5"]) if (pair.get("volume") and pair["volume"].get("m5") is not None) else None
+            vol_1h = float(pair["volume"]["h1"]) if (pair.get("volume") and pair["volume"].get("h1") is not None) else None
+            buys_24h = int(pair["txns"]["h24"]["buys"]) if (pair.get("txns") and pair["txns"].get("h24") and pair["txns"]["h24"].get("buys") is not None) else 0
+            sells_24h = int(pair["txns"]["h24"]["sells"]) if (pair.get("txns") and pair["txns"].get("h24") and pair["txns"]["h24"].get("sells") is not None) else 0
+
             return {
                 "mint": mint,
                 "symbol": pair.get("baseToken", {}).get("symbol", ""),
                 "name": pair.get("baseToken", {}).get("name", ""),
-                "price": float(pair.get("priceUsd", 0.0) or 0.0),
-                "liquidity": float(pair.get("liquidity", {}).get("usd", 0.0) or 0.0),
-                "market_cap": float(pair.get("fdv", 0.0) or 0.0),
-                "volume_24h": float(pair.get("volume", {}).get("h24", 0.0) or 0.0),
-                "volume_5m": float(pair.get("volume", {}).get("m5", 0.0) or 0.0),
-                "volume_1h": float(pair.get("volume", {}).get("h1", 0.0) or 0.0),
-                "buyers_24h": int(pair.get("txns", {}).get("h24", {}).get("buys", 0) or 0),
-                "sellers_24h": int(pair.get("txns", {}).get("h24", {}).get("sells", 0) or 0),
+                "price": price_val,
+                "liquidity": liq_val,
+                "market_cap": mcap_val,
+                "volume_24h": vol_val,
+                "volume_5m": vol_5m,
+                "volume_1h": vol_1h,
+                "buyers_24h": buys_24h,
+                "sellers_24h": sells_24h,
                 "pool_address": pair.get("pairAddress", ""),
                 "dex": pair.get("dexId", "raydium"),
-                "pair_created_at": pair.get("pairCreatedAt", time.time() * 1000) / 1000.0,
+                "pair_created_at": pair_created,
                 "chain": "solana",
                 "source": "DexScreener",
-                "first_seen_ts": time.time(),
+                "first_seen_ts": pair_created,
                 "updated_at": time.time(),
                 "provenance": self.create_provenance(confidence=0.95, verified_on_chain=True).to_dict()
             }

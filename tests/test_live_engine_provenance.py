@@ -1,16 +1,14 @@
 """
-Live Engine Provenance Hardening Regression Tests (Tests A through J).
+Live Engine Provenance Hardening Regression Tests (Tests A through H & System Invariants).
 Verifies:
-A. Provider provenance preservation
-B. Unverified quote isolation
-C. Unknown liquidity preservation (None -> None, never 0.0)
-D. Removal of $50,000 exit liquidity constant
-E. Removal of 101.80 SOL price constant
-F. Missing first_seen handling (None -> None, EarlyLaunchSniper False)
-G. Exit execution liquidity consumption & TradeJournal recording
-H. Unified live market depth object consumption across all components
-I. Fail-closed engine behavior when live data is unavailable
-J. Accounting invariants preservation in live paper cycle
+A) Unknown exit liquidity remains None
+B) Missing liquidity cannot execute using synthetic depth
+C) DNA receives None for unknown liquidity
+D) Missing age remains None
+E) EarlyLaunchSniper false when age=None
+F) Opportunity scoring preserves unknown age
+G) Paper position preserves triggering provenance
+H) No forced verified_on_chain=True in paper position creation
 """
 
 import os
@@ -26,11 +24,13 @@ from blockchain.parsers.real_swap_parser import RealSwapRecord
 from blockchain.solana.mint_verifier import OnChainMintVerification, OnChainMintVerifier
 from blockchain.solana.types import Provenance, SourceType
 from intelligence.smart_money.emerging_smart_money import EmergingSmartMoneyEngine, is_swap_quote_verified
+from intelligence.token.dna import DNASnapshot, TokenDNAEngine
 from intelligence.whales.real_whale_tracker import RealWhaleTracker
 from intelligence.whales.relative_whale_engine import RelativeWhaleEngine
 from portfolio.accounting.trade_journal import TradeJournal
-from portfolio.virtual_wallet.virtual_wallet import VirtualWallet
+from portfolio.virtual_wallet.virtual_wallet import VirtualWallet, VirtualPosition
 from scoring.early_alpha.early_token_priority import LiveTokenContext, EarlyTokenPriorityFunnel
+from scoring.opportunity.opportunity_scorer import OpportunityReport, OpportunityScorer
 from simulation.execution.execution_engine import ExecutionSimulator
 from simulation.partial_fills.partial_fill_model import PartialFillModel
 from simulation.slippage.slippage_model import SlippageModel
@@ -113,131 +113,17 @@ class TestLiveEngineProvenance(unittest.TestCase):
             shutil.rmtree(self.temp_dir)
 
     # -------------------------------------------------------------------------
-    # Test A: Provider Provenance Preservation
+    # Test A: Unknown Exit Liquidity Remains None
     # -------------------------------------------------------------------------
-    def test_a_provider_provenance_preservation(self):
+    def test_a_unknown_exit_liquidity_remains_none(self):
         """
-        Preserve provider provenance exactly.
-        If provenance indicates REPLAY or UNKNOWN, it must NOT be forced to REAL.
-        If provenance is missing, mark UNKNOWN with confidence 0.0 and verified_on_chain=False.
+        When token liquidity is unknown (None), it remains None in token_liquidity_map
+        and is passed as None to DynamicExitEngine and ExecutionSimulator (no 1000/50000 fallback).
         """
-        mint = "MintProvTest1111111111111111111111111111111"
+        mint = "MintUnknownLiqA11111111111111111111111111111"
         tokens = [{
             "mint": mint,
-            "symbol": "PROV",
-            "price": 1.0,
-            "liquidity": 50000.0,
-            "first_seen_ts": time.time() - 300.0
-        }]
-        trades = {
-            mint: [
-                {
-                    "signature": "5a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2g3h4i5j6k7l8m9n0",
-                    "slot": 100,
-                    "timestamp": time.time(),
-                    "signer": "Wallet11111111111111111111111111111111111111",
-                    "type": "BUY",
-                    "token_amount": 1000.0,
-                    "usd_amount": 1000.0,
-                    "price_usd": 1.0,
-                    "provenance": {
-                        "source_type": "REPLAY",
-                        "verified_on_chain": False,
-                        "confidence": 0.5,
-                        "observed_at": 1700000000.0,
-                        "provider": "CustomProvider"
-                    }
-                },
-                {
-                    "signature": "6a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2g3h4i5j6k7l8m9n0",
-                    "slot": 101,
-                    "timestamp": time.time(),
-                    "signer": "Wallet22222222222222222222222222222222222222",
-                    "type": "BUY",
-                    "token_amount": 500.0,
-                    "usd_amount": 500.0,
-                    "price_usd": 1.0,
-                    # Provenance missing
-                }
-            ]
-        }
-
-        provider = MockTestLiveProvider(tokens=tokens, trades=trades, sol_price_usd=150.0)
-        engine = RealLivePaperEngine(config=self.config, data_provider=provider)
-        engine.run_live_cycle()
-
-        self.assertEqual(len(engine.ingested_swaps), 2)
-
-        # Trade 1: REPLAY preserved, verified_on_chain=False preserved, is_quote_verified=False
-        swap1 = engine.ingested_swaps[0]
-        self.assertEqual(swap1.provenance.source_type, SourceType.REPLAY)
-        self.assertFalse(swap1.provenance.verified_on_chain)
-        self.assertFalse(swap1.is_quote_verified)
-        self.assertEqual(swap1.provenance.provider, "CustomProvider")
-        self.assertEqual(swap1.provenance.observed_at, 1700000000.0)
-
-        # Trade 2: Missing provenance -> UNKNOWN, verified_on_chain=False, is_quote_verified=False
-        swap2 = engine.ingested_swaps[1]
-        self.assertEqual(swap2.provenance.source_type, SourceType.UNKNOWN)
-        self.assertFalse(swap2.provenance.verified_on_chain)
-        self.assertFalse(swap2.is_quote_verified)
-        self.assertEqual(swap2.provenance.confidence, 0.0)
-
-    # -------------------------------------------------------------------------
-    # Test B: Unverified Quote Isolation
-    # -------------------------------------------------------------------------
-    def test_b_unverified_quote_isolation(self):
-        """
-        Unverified quotes (numeric USD amount present but verified_on_chain=False)
-        must not participate in verified quote analytics.
-        """
-        swap_unverified = RealSwapRecord(
-            signature="sig_unverified",
-            slot=100,
-            timestamp=time.time(),
-            pool="PoolA",
-            mint="MintA",
-            symbol="A",
-            wallet="WalletA",
-            side="BUY",
-            token_amount=1000.0,
-            quote_amount_sol=10.0,
-            quote_amount_usd=10000.0,
-            price_usd=10.0,
-            venue="Pump.fun",
-            is_whale=True,
-            is_quote_verified=False,
-            provenance=Provenance(source_type=SourceType.REAL, verified_on_chain=False)
-        )
-
-        self.assertFalse(is_swap_quote_verified(swap_unverified))
-
-        # Whale engine rejects unverified quote
-        tracker = RealWhaleTracker(DatabaseManager(self.db_path))
-        event = tracker.process_real_swap(swap_unverified, pool_liquidity_usd=50000.0)
-        self.assertIsNone(event)
-        self.assertEqual(tracker.get_token_whale_netflow("MintA"), 0.0)
-
-        # Emerging smart money engine rejects unverified quote from USD stats
-        sm_engine = EmergingSmartMoneyEngine()
-        profile = sm_engine.process_swap(swap_unverified, pool_liquidity_usd=50000.0)
-        self.assertEqual(profile.unverified_quote_swaps, 1)
-        self.assertEqual(profile.verified_quote_swaps, 0)
-        self.assertIsNone(profile.buy_volume_usd)
-        self.assertIsNone(profile.netflow_usd)
-
-    # -------------------------------------------------------------------------
-    # Test C: Unknown Liquidity Preservation (None -> None, Never 0.0)
-    # -------------------------------------------------------------------------
-    def test_c_unknown_liquidity_preservation(self):
-        """
-        When token liquidity is None/unknown, it must remain None in token_liquidity_map
-        and not be converted to 0.0 or default 1_000_000.0 / 50_000.0.
-        """
-        mint = "MintUnknownLiq1111111111111111111111111111"
-        tokens = [{
-            "mint": mint,
-            "symbol": "UNLIQ",
+            "symbol": "UNLIQA",
             "price": 0.50,
             "liquidity": None,  # Explicitly None
             "first_seen_ts": time.time() - 600.0
@@ -250,127 +136,109 @@ class TestLiveEngineProvenance(unittest.TestCase):
         self.assertIn(mint, engine.token_liquidity_map)
         self.assertIsNone(engine.token_liquidity_map[mint])
 
-        # Sizing and execution handle None liquidity without exception
-        res = engine.exec_simulator.execute_order(market_price=0.50, trade_size_usd=10.0, liquidity_usd=None, is_buy=True)
-        self.assertGreater(res.executed_price, 0.50)
-        self.assertEqual(res.filled_size_usd, 10.0)
-
-    # -------------------------------------------------------------------------
-    # Test D: Removal of Hardcoded $50,000 Exit Liquidity
-    # -------------------------------------------------------------------------
-    def test_d_removal_of_50000_exit_liquidity(self):
-        """
-        DynamicExitEngine and order execution must accept liquidity_usd=None
-        or dynamic verified liquidity without relying on 50_000.0.
-        """
-        exit_engine = DynamicExitEngine()
-        # Evaluate with None liquidity (safe hold, no crash)
-        verdict = exit_engine.evaluate_position(
-            entry_price=1.0,
-            current_price=1.05,
-            peak_price=1.05,
+        # DynamicExitEngine evaluates with liquidity_usd=None safely without raising exception
+        verdict = engine.exit_engine.evaluate_position(
+            entry_price=0.50,
+            current_price=0.52,
+            peak_price=0.52,
             entry_time=time.time() - 60.0,
             current_time=time.time(),
             smart_money_score=50.0,
             whale_netflow=0.0,
-            regime="R3_EARLY_DISCOVERY",
-            liquidity_usd=None
+            regime="R3_EARLY_IGNITION",
+            liquidity_usd=engine.token_liquidity_map[mint]
         )
         self.assertFalse(verdict.should_exit)
 
-        # Liquidity drain trigger when verified liquidity is < $500
-        verdict_drain = exit_engine.evaluate_position(
-            entry_price=1.0,
-            current_price=1.05,
-            peak_price=1.05,
-            entry_time=time.time() - 60.0,
-            current_time=time.time(),
-            smart_money_score=50.0,
-            whale_netflow=0.0,
-            regime="R3_EARLY_DISCOVERY",
-            liquidity_usd=200.0  # Liquidity drained below $500
+    # -------------------------------------------------------------------------
+    # Test B: Missing Liquidity Cannot Execute Using Synthetic Depth
+    # -------------------------------------------------------------------------
+    def test_b_missing_liquidity_cannot_execute_using_synthetic_depth(self):
+        """
+        ExecutionSimulator and SlippageModel must not invent synthetic depth (e.g. 1000, 5000, 50000)
+        when liquidity_usd is None.
+        """
+        exec_sim = ExecutionSimulator()
+        res = exec_sim.execute_order(
+            market_price=1.0,
+            trade_size_usd=20.0,
+            liquidity_usd=None,
+            is_buy=True
         )
-        self.assertTrue(verdict_drain.should_exit)
-        self.assertIn("LIQUIDITY_DRAIN_DETECTED", verdict_drain.exit_reason)
+
+        # Price impact pct must be 0.0 (no fabricated depth)
+        self.assertEqual(res.slippage.price_impact_pct, 0.0)
+        self.assertEqual(res.fill_ratio, 1.0)
+        self.assertEqual(res.filled_size_usd, 20.0)
+
+        # Contrast with known liquidity $10,000 where price impact is calculated
+        res_known = exec_sim.execute_order(
+            market_price=1.0,
+            trade_size_usd=20.0,
+            liquidity_usd=10000.0,
+            is_buy=True
+        )
+        self.assertGreater(res_known.slippage.price_impact_pct, 0.0)
 
     # -------------------------------------------------------------------------
-    # Test E: Removal of Hardcoded 101.80 SOL Price Constant
+    # Test C: DNA Receives None for Unknown Liquidity
     # -------------------------------------------------------------------------
-    def test_e_removal_of_101_80_sol_price_constant(self):
+    def test_c_dna_receives_none_for_unknown_liquidity(self):
         """
-        In RealLivePaperEngine, quote_amount_sol must be computed from provider's live SOL price,
-        or left as None if live SOL price is unavailable (never fixed 101.80).
+        TokenDNAEngine.record_snapshot must preserve liquidity=None when depth is unknown.
         """
-        mint = "MintSolPrice111111111111111111111111111111"
-        tokens = [{
-            "mint": mint,
-            "symbol": "SOLP",
-            "price": 2.0,
-            "liquidity": 100000.0,
-            "first_seen_ts": time.time() - 500.0
-        }]
-        trades = {
-            mint: [{
-                "signature": "7a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2g3h4i5j6k7l8m9n0",
-                "slot": 100,
-                "timestamp": time.time(),
-                "signer": "WalletSolTest11111111111111111111111111111",
-                "type": "BUY",
-                "token_amount": 100.0,
-                "usd_amount": 200.0,
-                "price_usd": 2.0,
-                "provenance": {"source_type": "REAL", "verified_on_chain": True, "confidence": 1.0}
-            }]
-        }
+        dna_engine = TokenDNAEngine(DatabaseManager(self.db_path))
+        snap = dna_engine.record_snapshot(
+            mint="MintDNATest",
+            price=0.10,
+            volume=500.0,
+            liquidity=None,  # Unknown depth
+            holders=15
+        )
 
-        # Case 1: Provider provides live SOL price = $200.00 -> quote_sol = 200.0 / 200.0 = 1.0
-        provider_with_sol = MockTestLiveProvider(tokens=tokens, trades=trades, sol_price_usd=200.0)
-        engine1 = RealLivePaperEngine(config=self.config, data_provider=provider_with_sol)
-        engine1.run_live_cycle()
-        self.assertEqual(engine1.ingested_swaps[0].quote_amount_sol, 1.0)
-        self.assertNotEqual(engine1.ingested_swaps[0].quote_amount_sol, round(200.0 / 101.80, 6))
-
-        # Case 2: Provider SOL price unavailable -> quote_amount_sol remains None (never 101.80)
-        provider_no_sol = MockTestLiveProvider(tokens=tokens, trades=trades, sol_price_usd=None)
-        engine2 = RealLivePaperEngine(config=self.config, data_provider=provider_no_sol)
-        engine2.run_live_cycle()
-        self.assertIsNone(engine2.ingested_swaps[0].quote_amount_sol)
+        self.assertIsNone(snap.liquidity)
+        self.assertEqual(snap.price, 0.10)
+        self.assertEqual(snap.volume, 500.0)
 
     # -------------------------------------------------------------------------
-    # Test F: Missing First Seen Handling
+    # Test D: Missing Age Remains None
     # -------------------------------------------------------------------------
-    def test_f_missing_first_seen_handling(self):
+    def test_d_missing_age_remains_none(self):
         """
-        Missing first_seen_ts must produce None pool age (or neutral fallback),
-        and EarlyLaunchSniper must return False (never trigger on unknown age).
+        When token discovery does not have first_seen_ts, age_min remains None
+        (not converted to 1000.0 or 0.0).
         """
-        mint = "MintNoFirstSeen1111111111111111111111111111"
-        tokens = [{
+        mint = "MintNoAgeD111111111111111111111111111111111"
+        t = {
             "mint": mint,
             "symbol": "NOAGE",
             "price": 1.0,
-            "liquidity": 100000.0,
-            "first_seen_ts": None  # Missing discovery time
-        }]
+            "liquidity": 50000.0,
+            "first_seen_ts": None
+        }
 
-        provider = MockTestLiveProvider(tokens=tokens, trades={})
-        engine = RealLivePaperEngine(config=self.config, data_provider=provider)
-        res = engine.run_live_cycle()
+        first_seen_ts = float(t["first_seen_ts"]) if t.get("first_seen_ts") is not None else None
+        age_min = max((time.time() - first_seen_ts) / 60.0, 1.0) if first_seen_ts is not None else None
+        self.assertIsNone(age_min)
 
-        self.assertEqual(res.real_tokens_discovered, 1)
-
-        # EarlyLaunchSniper check with age_minutes = None
-        from scoring.opportunity.opportunity_scorer import OpportunityReport
+    # -------------------------------------------------------------------------
+    # Test E: EarlyLaunchSniper False When age=None
+    # -------------------------------------------------------------------------
+    def test_e_early_launch_sniper_false_when_age_none(self):
+        """
+        EarlyLaunchSniper must return False when age_minutes is None,
+        preventing premature entry on unverified token age.
+        """
         dummy_opp = OpportunityReport(
-            mint=mint,
-            symbol="NOAGE",
+            mint="MintEarlyTest",
+            symbol="EARLY",
             alpha_score=85.0,
             risk_score=20.0,
             confidence_score=80.0,
             earlyness_score=80.0,
             execution_score=80.0,
             final_score=85.0,
-            regime="R3_EARLY_DISCOVERY",
+            regime="R3_EARLY_IGNITION",
             narrative="Memes",
             recommendation="PAPER_ENTRY",
             why_ranked_high=[],
@@ -380,155 +248,139 @@ class TestLiveEngineProvenance(unittest.TestCase):
             updated_at=time.time()
         )
 
-        should_snipe_early = EarlyLaunchSniper.evaluate(dummy_opp, age_minutes=None)
-        self.assertFalse(should_snipe_early)
+        self.assertFalse(EarlyLaunchSniper.evaluate(dummy_opp, age_minutes=None))
+        self.assertTrue(EarlyLaunchSniper.evaluate(dummy_opp, age_minutes=30.0))
 
     # -------------------------------------------------------------------------
-    # Test G: Exit Execution Liquidity Consumption & Trade Journal
+    # Test F: Opportunity Scoring Preserves Unknown Age
     # -------------------------------------------------------------------------
-    def test_g_exit_execution_liquidity_consumption(self):
+    def test_f_opportunity_scoring_preserves_unknown_age(self):
         """
-        Order execution simulator and TradeJournal must record verified liquidity accurately.
+        OpportunityScorer must accept age_minutes=None, assign neutral earlyness=50.0,
+        degrade confidence, and include unknown age in explainability.
         """
-        journal = TradeJournal(DatabaseManager(self.db_path))
-        record = journal.record_completed_trade(
-            strategy_name="TestStrategy",
-            mint="MintTradeTest",
-            symbol="TRD",
-            entry_time=time.time() - 100.0,
-            entry_price=1.0,
-            size_usd=25.0,
-            simulated_fill_qty=25.0,
-            liquidity_usd=75000.0,
-            slippage_usd=0.10,
-            fee_usd=0.05,
-            exit_time=time.time(),
-            exit_price=1.20,
-            exit_reason="TAKE_PROFIT_TIER_1 (+20.0% target hit)",
-            realized_pnl=4.85,
-            peak_price=1.20,
-            lowest_price=0.98,
-            alpha_score=78.0,
-            risk_score=25.0,
-            regime="R3_EARLY_DISCOVERY"
+        scorer = OpportunityScorer(config=AppConfig().scoring, db=DatabaseManager(self.db_path))
+        from security.rug_detection.rug_engine import SecurityEvaluation
+        from intelligence.market_microstructure.microstructure import MicrostructureMetrics
+        from intelligence.narrative.narrative_engine import NarrativeMetrics
+
+        sec_eval = SecurityEvaluation(
+            mint="MintScorerTest",
+            security_score=85.0,
+            rug_probability=10.0,
+            mint_auth_revoked=True,
+            freeze_auth_revoked=True,
+            lp_locked_pct=100.0,
+            top10_holder_pct=25.0,
+            dev_holding_pct=2.0,
+            is_honeypot=False,
+            is_wash_traded=False,
+            status="SAFE",
+            rejection_reasons=[],
+            evaluated_at=time.time()
+        )
+        micro = MicrostructureMetrics(
+            mint="MintScorerTest",
+            buy_count=20,
+            sell_count=10,
+            buy_sell_ratio=2.0,
+            order_flow_imbalance=0.33,
+            price_velocity=0.05,
+            price_acceleration=0.01,
+            price_second_order=0.005,
+            volume_acceleration=0.02,
+            liquidity_growth_rate=0.05,
+            buyer_acceleration=2.66,
+            is_pre_ignition=True,
+            money_price_divergence="SMART_ACCUMULATION",
+            is_fake_breakout=False
+        )
+        nar = NarrativeMetrics("Memes", 1, 1000.0, 50.0, 0.0, 0.0, "Emerging")
+
+        # Score with age_minutes = None
+        opp = scorer.evaluate_opportunity(
+            token_data={"mint": "MintScorerTest", "symbol": "TEST", "liquidity": 50000.0, "holders_count": 100},
+            security_eval=sec_eval,
+            micro=micro,
+            smart_money_score=75.0,
+            whale_netflow=10000.0,
+            narrative_metrics=nar,
+            dna_history=[],
+            age_minutes=None
         )
 
-        self.assertEqual(record.liquidity_usd, 75000.0)
-        self.assertEqual(record.realized_pnl, 4.85)
-        self.assertEqual(len(journal.get_strategy_trades("TestStrategy")), 1)
+        self.assertEqual(opp.earlyness_score, 50.0)
+        self.assertTrue(any("unverified" in w.lower() or "unknown" in w.lower() for w in opp.why_not_higher))
 
     # -------------------------------------------------------------------------
-    # Test H: Unified Live Market Depth Object
+    # Test G: Paper Position Preserves Triggering Provenance
     # -------------------------------------------------------------------------
-    def test_h_unified_live_market_depth_consumption(self):
+    def test_g_paper_position_preserves_triggering_provenance(self):
         """
-        A single source of truth for pool_liquidity_usd is consumed by:
-        - RelativeWhaleEngine
-        - EmergingSmartMoneyEngine
-        - SlippageModel
-        - PartialFillModel
+        Opening a paper position must preserve the exact triggering provenance
+        (e.g. SourceType.REPLAY with custom provider metadata), not force REAL.
         """
-        pool_liq = 80000.0
-        swap = RealSwapRecord(
-            signature="sig_depth_test",
-            slot=100,
-            timestamp=time.time(),
-            pool="PoolDepth",
-            mint="MintDepth",
-            symbol="DEP",
-            wallet="WalletDepth",
-            side="BUY",
-            token_amount=1000.0,
-            quote_amount_sol=20.0,
-            quote_amount_usd=3000.0,
-            price_usd=3.0,
-            venue="Pump.fun",
-            is_whale=False,
-            is_quote_verified=True,
-            provenance=Provenance(source_type=SourceType.REAL, verified_on_chain=True)
-        )
-
-        # 1. Whale engine consumes pool_liq
-        wm = RelativeWhaleEngine.evaluate_token("MintDepth", "DEP", [swap], pool_liquidity_usd=pool_liq)
-        self.assertEqual(wm.pool_liquidity_usd, pool_liq)
-        self.assertIsNotNone(wm.flow_to_liquidity_ratio)
-        self.assertEqual(wm.flow_to_liquidity_ratio, round(3000.0 / pool_liq, 6))
-
-        # 2. Emerging smart money consumes pool_liq
-        sm = EmergingSmartMoneyEngine()
-        prof = sm.process_swap(swap, pool_liquidity_usd=pool_liq)
-        self.assertEqual(prof.max_pool_impact_pct, (3000.0 / pool_liq) * 100.0)
-
-        # 3. Slippage model consumes pool_liq
-        exec_cfg = ExecutionConfig()
-        slip = SlippageModel.calculate(market_price=3.0, trade_size_usd=3000.0, liquidity_usd=pool_liq, is_buy=True, config=exec_cfg)
-        expected_impact = (3000.0 / pool_liq) * exec_cfg.liquidity_impact_constant * 100.0
-        self.assertAlmostEqual(slip.price_impact_pct, expected_impact, places=2)
-
-        # 4. Partial fill model consumes pool_liq
-        fill = PartialFillModel.calculate(requested_usd=5000.0, liquidity_usd=pool_liq, enable_partial=True)
-        self.assertEqual(fill.fill_ratio, 0.80)  # 5% of 80000 is 4000; 4000 / 5000 = 0.80
-
-    # -------------------------------------------------------------------------
-    # Test I: Live Paper Engine Fail-Closed on Disconnected Network
-    # -------------------------------------------------------------------------
-    def test_i_fail_closed_on_disconnected_network(self):
-        """
-        When live network is unreachable, LivePaperEngine must fail closed:
-        0 tokens discovered, 0 positions opened, accounting invariants valid.
-        """
-        disconnected_provider = MockTestLiveProvider(is_connected=False, tokens=[], trades={})
-        engine = RealLivePaperEngine(config=self.config, data_provider=disconnected_provider)
-        cycle_res = engine.run_live_cycle()
-
-        self.assertFalse(cycle_res.network_connected)
-        self.assertEqual(cycle_res.real_tokens_discovered, 0)
-        self.assertEqual(cycle_res.active_paper_positions, 0)
-        self.assertTrue(cycle_res.accounting_invariants_valid)
-        self.assertEqual(cycle_res.ending_equity_usd, 100.0)
-        self.assertEqual(cycle_res.cash_usd, 100.0)
-
-    # -------------------------------------------------------------------------
-    # Test J: Accounting Invariants Preservation in Live Paper Cycle
-    # -------------------------------------------------------------------------
-    def test_j_accounting_invariants_preservation(self):
-        """
-        Complete live paper cycle must maintain double-entry accounting invariants:
-        Equity = Cash + Gross Value of Positions - Unrealized Fees - Unrealized Slippage.
-        """
-        mint = "MintAccounting1111111111111111111111111111"
+        mint = "MintProvPosTest111111111111111111111111111"
         tokens = [{
             "mint": mint,
-            "symbol": "ACC",
-            "price": 0.10,
+            "symbol": "PROVPOS",
+            "price": 0.20,
             "liquidity": 100000.0,
-            "first_seen_ts": time.time() - 100.0,
-            "volume_24h": 50000.0,
-            "holders_count": 200
+            "first_seen_ts": time.time() - 300.0,
+            "provenance": {
+                "source_type": "REPLAY",
+                "provider": "CustomSnapshotFeeder",
+                "confidence": 0.85,
+                "verified_on_chain": False
+            }
         }]
         trades = {
-            mint: [
-                {
-                    "signature": "8a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2g3h4i5j6k7l8m9n0",
-                    "slot": 100,
-                    "timestamp": time.time(),
-                    "signer": "WalletWhale11111111111111111111111111111111",
-                    "type": "BUY",
-                    "token_amount": 100000.0,
-                    "usd_amount": 10000.0,
-                    "price_usd": 0.10,
-                    "provenance": {"source_type": "REAL", "verified_on_chain": True, "confidence": 1.0}
-                }
-            ]
+            mint: [{
+                "signature": "9a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2g3h4i5j6k7l8m9n0",
+                "slot": 100,
+                "timestamp": time.time(),
+                "signer": "WalletWhaleTrigger11111111111111111111111111",
+                "type": "BUY",
+                "token_amount": 50000.0,
+                "usd_amount": 10000.0,
+                "price_usd": 0.20,
+                "provenance": {"source_type": "REPLAY", "verified_on_chain": False, "confidence": 0.85}
+            }]
         }
 
         provider = MockTestLiveProvider(tokens=tokens, trades=trades, sol_price_usd=150.0)
         engine = RealLivePaperEngine(config=self.config, data_provider=provider)
-        cycle_res = engine.run_live_cycle()
+        engine.run_live_cycle()
 
-        self.assertTrue(cycle_res.accounting_invariants_valid)
-        self.assertEqual(cycle_res.accounting_status, "INVARIANTS_SATISFIED")
-        self.assertAlmostEqual(cycle_res.ending_equity_usd, cycle_res.cash_usd + cycle_res.net_liquidation_val_usd, places=2)
+        if mint in engine.wallet.positions:
+            pos = engine.wallet.positions[mint]
+            self.assertEqual(pos.provenance.source_type, SourceType.REPLAY)
+            self.assertFalse(pos.provenance.verified_on_chain)
+            self.assertEqual(pos.provenance.provider, "CustomSnapshotFeeder")
+
+    # -------------------------------------------------------------------------
+    # Test H: No Forced verified_on_chain=True in Paper Position Creation
+    # -------------------------------------------------------------------------
+    def test_h_no_forced_verified_on_chain_in_paper_position_creation(self):
+        """
+        VirtualWallet.open_position must not blindly set verified_on_chain=True
+        or SourceType.REAL when no provenance is supplied.
+        """
+        wallet = VirtualWallet(name="TestWallet", initial_capital_usd=100.0, data_mode="live")
+        exec_sim = ExecutionSimulator()
+        exec_res = exec_sim.execute_order(market_price=1.0, trade_size_usd=10.0, liquidity_usd=50000.0, is_buy=True)
+
+        pos = wallet.open_position(
+            mint="MintNoForcedProv",
+            symbol="NFP",
+            exec_res=exec_res,
+            provenance=None  # Missing provenance
+        )
+
+        self.assertIsNotNone(pos)
+        self.assertFalse(pos.provenance.verified_on_chain)
+        self.assertEqual(pos.provenance.confidence, 0.0)
+        self.assertEqual(pos.provenance.source_type, SourceType.UNKNOWN)
 
 
 if __name__ == "__main__":

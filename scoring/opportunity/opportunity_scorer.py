@@ -58,12 +58,12 @@ class OpportunityScorer:
         whale_netflow: float,
         narrative_metrics: NarrativeMetrics,
         dna_history: List[DNASnapshot],
-        age_minutes: float = 30.0
+        age_minutes: Optional[float] = None
     ) -> OpportunityReport:
         mint = token_data.get("mint", "")
         symbol = token_data.get("symbol", "UNKNOWN")
         raw_liq = token_data.get("liquidity")
-        liquidity = float(raw_liq) if raw_liq is not None else 0.0
+        liquidity = float(raw_liq) if raw_liq is not None else None
 
         # 1. Calculate Core Scores
         alpha = AlphaCalculator.calculate(
@@ -77,7 +77,7 @@ class OpportunityScorer:
         risk = RiskCalculator.calculate(
             security_eval=security_eval,
             micro=micro,
-            liquidity_usd=liquidity
+            liquidity_usd=liquidity if liquidity is not None else 0.0
         )
 
         confidence = ConfidenceCalculator.calculate(
@@ -86,8 +86,11 @@ class OpportunityScorer:
             trades_count=micro.buy_count + micro.sell_count
         )
 
-        # 2. Earlyness Score (Higher if fresh/young token or early accumulation phase)
-        if age_minutes < 60.0:
+        # 2. Earlyness Score (Preserves UNKNOWN age as neutral 50.0 and degrades confidence)
+        if age_minutes is None:
+            earlyness = 50.0
+            confidence = round(confidence * 0.9, 2)
+        elif age_minutes < 60.0:
             earlyness = max(100.0 - (age_minutes / 60.0) * 30.0, 70.0)
         elif age_minutes < 1440.0:  # < 24h
             earlyness = max(70.0 - (age_minutes / 1440.0) * 30.0, 40.0)
@@ -95,7 +98,10 @@ class OpportunityScorer:
             earlyness = 30.0
 
         # 3. Execution Score (Liquidity depth and slippage friendliness)
-        if liquidity > 1_000_000.0:
+        if liquidity is None:
+            execution_score = 35.0
+            confidence = round(confidence * 0.8, 2)
+        elif liquidity > 1_000_000.0:
             execution_score = 95.0
         elif liquidity > 100_000.0:
             execution_score = 85.0
@@ -151,9 +157,14 @@ class OpportunityScorer:
 
         if risk > 30.0:
             why_not_higher.append(f"Elevated risk factors (Risk Score: {risk:.1f})")
-        if liquidity < 50_000.0:
+        if liquidity is None:
+            why_not_higher.append("Liquidity pool depth is unverified")
+        elif liquidity < 50_000.0:
             why_not_higher.append(f"Moderate liquidity pool (${liquidity:,.0f})")
-        if earlyness < 50.0:
+
+        if age_minutes is None:
+            why_not_higher.append("Token age is unknown (unverified pool creation timestamp)")
+        elif earlyness < 50.0:
             why_not_higher.append("Token is established / older lifecycle stage")
 
         supports.append(f"Market Regime: {regime.value}")

@@ -15,7 +15,7 @@ class DNASnapshot:
     timestamp: float
     price: float
     volume: float
-    liquidity: float
+    liquidity: Optional[float]
     holders: int
     smart_money_flow: float
     whale_netflow: float
@@ -32,8 +32,8 @@ class TokenDNAEngine:
         mint: str,
         price: float,
         volume: float,
-        liquidity: float,
-        holders: int,
+        liquidity: Optional[float] = None,
+        holders: int = 0,
         smart_money_flow: float = 0.0,
         whale_netflow: float = 0.0,
         regime: str = "R2_ACCUMULATION",

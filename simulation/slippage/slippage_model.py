@@ -29,9 +29,11 @@ class SlippageModel:
         base_slip = config.base_slippage_percent
 
         # AMM Constant product price impact: I = (size / liquidity) * constant
-        # If liquidity is unknown (None), apply conservative minimum depth
-        effective_liq = max(liquidity_usd, 1_000.0) if liquidity_usd is not None else 5_000.0
-        impact = (trade_size_usd / effective_liq) * config.liquidity_impact_constant * 100.0
+        # If liquidity is unknown (None), do not invent synthetic depth
+        if liquidity_usd is not None and liquidity_usd > 0:
+            impact = (trade_size_usd / liquidity_usd) * config.liquidity_impact_constant * 100.0
+        else:
+            impact = 0.0
         total_slip_pct = base_slip + impact
 
         slippage_usd = trade_size_usd * (total_slip_pct / 100.0)

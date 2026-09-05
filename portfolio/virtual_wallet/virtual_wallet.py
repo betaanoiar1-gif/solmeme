@@ -184,8 +184,10 @@ class VirtualWallet:
             risk_score=risk_score,
             regime=regime,
             provenance=provenance or Provenance(
-                source_type=SourceType.REAL if self.data_mode == "live" else SourceType.MOCK,
-                provider="VirtualWalletSimulator"
+                source_type=SourceType.UNKNOWN,
+                provider="VirtualWalletSimulator",
+                verified_on_chain=False,
+                confidence=0.0
             ),
             is_open=True
         )
