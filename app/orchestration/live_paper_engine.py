@@ -240,7 +240,7 @@ class RealLivePaperEngine:
                 swap_rec = RealSwapRecord(
                     signature=tr["signature"],
                     slot=tr.get("slot", 0),
-                    timestamp=tr_ts or time.time(),
+                    timestamp=tr_ts,
                     pool=t.get("pool_address", "UnknownPool"),
                     mint=mint,
                     symbol=symbol,
@@ -400,11 +400,13 @@ class RealLivePaperEngine:
                         trigger_prov = t.get("provenance")
                         if isinstance(trigger_prov, dict):
                             src_str = trigger_prov.get("source_type", "UNKNOWN")
+                            pos_ts = float(trigger_prov["timestamp"]) if trigger_prov.get("timestamp") is not None else None
+                            pos_obs = float(trigger_prov["observed_at"]) if trigger_prov.get("observed_at") is not None else time.time()
                             pos_prov = Provenance(
                                 source_type=SourceType[src_str] if hasattr(SourceType, src_str) else SourceType.UNKNOWN,
                                 provider=trigger_prov.get("provider", "LiveDiscovery"),
-                                timestamp=float(trigger_prov.get("timestamp", time.time())),
-                                observed_at=float(trigger_prov.get("observed_at", time.time())),
+                                timestamp=pos_ts,
+                                observed_at=pos_obs,
                                 confidence=float(trigger_prov.get("confidence", 0.0)),
                                 verified_on_chain=bool(trigger_prov.get("verified_on_chain", False))
                             )

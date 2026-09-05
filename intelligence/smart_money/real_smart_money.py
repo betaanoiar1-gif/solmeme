@@ -20,7 +20,7 @@ logger = logging.getLogger("meme_alpha_hunter.real_smart_money")
 @dataclass
 class WalletTradeRecord:
     mint: str
-    entry_time: float
+    entry_time: Optional[float]
     entry_price: float
     entry_usd: float
     exit_time: Optional[float] = None
@@ -41,8 +41,8 @@ class WalletProfile:
     avg_earlyness_score: float = 50.0
     smart_wallet_score: float = 50.0  # 0 to 100
     is_smart_money: bool = False
-    first_seen: float = field(default_factory=time.time)
-    last_seen: float = field(default_factory=time.time)
+    first_seen: Optional[float] = None
+    last_seen: Optional[float] = None
     trades: List[WalletTradeRecord] = field(default_factory=list)
 
 

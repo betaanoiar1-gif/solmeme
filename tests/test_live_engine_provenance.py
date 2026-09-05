@@ -408,6 +408,95 @@ class TestLiveEngineProvenance(unittest.TestCase):
         self.assertIsNone(prov.timestamp)
         self.assertIsNotNone(prov.observed_at)
 
+    def test_missing_swap_timestamp_remains_none(self):
+        """
+        When a parsed transaction or trade lacks a blockTime/timestamp,
+        RealSwapRecord.timestamp must be None, never replaced with time.time().
+        """
+        mint = "MintNoSwapTs11111111111111111111111111111"
+        tokens = [{
+            "mint": mint,
+            "symbol": "NOTS",
+            "price": 1.0,
+            "liquidity": 10000.0,
+            "first_seen_ts": None
+        }]
+        trades = {
+            mint: [{
+                "signature": "sig_no_ts_11111111111111111111111111111111111111111111111111111111111111111111111111",
+                "slot": 500,
+                "timestamp": None,  # Missing source timestamp
+                "signer": "WalletNoTs11111111111111111111111111111111",
+                "type": "BUY",
+                "token_amount": 100.0,
+                "usd_amount": 50.0,
+                "price_usd": 0.50,
+                "provenance": {"source_type": "REAL", "verified_on_chain": True, "confidence": 1.0, "timestamp": None}
+            }]
+        }
+
+        provider = MockTestLiveProvider(tokens=tokens, trades=trades, sol_price_usd=150.0)
+        engine = RealLivePaperEngine(config=self.config, data_provider=provider)
+        engine.run_live_cycle()
+
+        self.assertEqual(len(engine.ingested_swaps), 1)
+        swap = engine.ingested_swaps[0]
+        self.assertIsNone(swap.timestamp)
+        self.assertIsNone(swap.provenance.timestamp)
+
+    def test_missing_event_timestamp_never_converted_to_current_time(self):
+        """
+        RealSwapParser.parse_transaction on a transaction without blockTime must set
+        timestamp=None on the resulting RealSwapRecord and Provenance.
+        """
+        tx_data = {
+            "slot": 123456,
+            "transaction": {
+                "signatures": ["sig_no_blocktime_12345"],
+                "message": {
+                    "accountKeys": [
+                        {"pubkey": "Signer11111111111111111111111111111111111111", "signer": True}
+                    ]
+                }
+            },
+            "meta": {
+                "err": None,
+                "preTokenBalances": [{"mint": "MintA", "owner": "Signer11111111111111111111111111111111111111", "uiTokenAmount": {"uiAmount": 0.0}}],
+                "postTokenBalances": [{"mint": "MintA", "owner": "Signer11111111111111111111111111111111111111", "uiTokenAmount": {"uiAmount": 100.0}}],
+                "preBalances": [2000000000],
+                "postBalances": [1000000000],
+                "fee": 5000
+            }
+            # Note: "blockTime" key is absent
+        }
+
+        swaps = RealSwapParser.parse_transaction(tx_data, sol_price_usd=150.0)
+        self.assertEqual(len(swaps), 1)
+        self.assertIsNone(swaps[0].timestamp)
+        self.assertIsNone(swaps[0].provenance.timestamp)
+
+    def test_observed_at_remains_separate_from_event_timestamp(self):
+        """
+        observed_at represents local system clock at ingestion, whereas event timestamp
+        represents on-chain block time (which may be historical or None).
+        """
+        historical_event_ts = 1700000000.0  # Historical epoch
+        before_time = time.time()
+        prov = Provenance(
+            source_type=SourceType.REAL,
+            provider="SolanaRPC",
+            timestamp=historical_event_ts,
+            observed_at=time.time(),
+            confidence=1.0,
+            verified_on_chain=True
+        )
+        after_time = time.time()
+
+        self.assertEqual(prov.timestamp, historical_event_ts)
+        self.assertGreaterEqual(prov.observed_at, before_time)
+        self.assertLessEqual(prov.observed_at, after_time)
+        self.assertNotEqual(prov.timestamp, prov.observed_at)
+
     # -------------------------------------------------------------------------
     # 14. test_missing_provenance_never_becomes_real
     # -------------------------------------------------------------------------

@@ -24,7 +24,7 @@ class RealWhaleEvent:
     action: str  # "BUY", "SELL", "ACCUMULATION", "DISTRIBUTION"
     amount_tokens: float
     usd_estimate: float
-    timestamp: float
+    timestamp: Optional[float]
     signature: str
     pool: str
     source: str
@@ -97,7 +97,7 @@ class RealWhaleTracker:
         else:
             impact_score = 50.0
 
-        event_id = f"whale_{swap.signature[:8]}_{int(swap.timestamp)}"
+        event_id = f"whale_{swap.signature[:8]}_{int(swap.timestamp)}" if swap.timestamp is not None else f"whale_{swap.signature[:8]}"
 
         event = RealWhaleEvent(
             event_id=event_id,

@@ -24,7 +24,7 @@ USDT_MINT = "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"
 class RealSwapRecord:
     signature: str
     slot: int
-    timestamp: float
+    timestamp: Optional[float]
     pool: str
     mint: str
     symbol: Optional[str]
@@ -63,7 +63,8 @@ class RealSwapParser:
         signature = signatures[0] if signatures else tx_data.get("signature", "unknown_tx")
 
         slot = int(tx_data.get("slot", 0))
-        block_time = float(tx_data.get("blockTime") or time.time())
+        raw_block_time = tx_data.get("blockTime")
+        block_time = float(raw_block_time) if raw_block_time is not None else None
 
         # Determine signer (primary wallet)
         message = tx.get("message", {})
