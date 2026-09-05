@@ -533,6 +533,12 @@ def execute_early_alpha_pipeline(
     forced_real_provenance = 0
     observation_window_used_as_pool_age = 0
 
+    # Determine Final Verdict
+    if tokens_count > 0 and verified_mints_count == tokens_count and total_swaps > 0 and verified_quotes_count == total_swaps:
+        final_verdict = "TRUE_LIVE_EARLY_ALPHA_INTEGRITY"
+    else:
+        final_verdict = "LIVE_DATA_UNAVAILABLE"
+
     # 1. Export emerging_smart_money_scores.csv
     emerging_wallets_rows = []
     for w, p in emerging_engine.wallets.items():
@@ -662,8 +668,8 @@ def execute_early_alpha_pipeline(
         for p in integrity_rows:
             f.write(f"| `{p['mint'][:8]}...` | **{p['symbol']}** | `{p['source_type']}` | `{p['pool_created_at']}` | {p['pool_age_minutes']} | {p['swap_count']} | {p['quote_quality']*100:.1f}% | **{p['early_alpha_score']:.1f}** | **{p['confidence']:.2f}** | `{p['pipeline_stage']}` |\n")
 
-        f.write("\n## 3. Final Verification Verdict\n\n")
-        f.write("**FINAL VERDICT: TRUE_LIVE_EARLY_ALPHA_INTEGRITY**\n")
+        f.write(f"\n## 3. Final Verification Verdict\n\n")
+        f.write(f"**FINAL VERDICT: {final_verdict}**\n")
 
     # Console output as required by prompt
     print("==================================================")
@@ -681,7 +687,7 @@ def execute_early_alpha_pipeline(
     print(f"FORCED_VERIFICATION: {forced_verification}")
     print(f"FORCED_REAL_PROVENANCE: {forced_real_provenance}")
     print(f"OBSERVATION_WINDOW_USED_AS_POOL_AGE: {observation_window_used_as_pool_age}")
-    print("FINAL VERDICT: TRUE_LIVE_EARLY_ALPHA_INTEGRITY")
+    print(f"FINAL VERDICT: {final_verdict}")
     print("==================================================")
 
     return {
@@ -697,7 +703,7 @@ def execute_early_alpha_pipeline(
         "forced_verification": forced_verification,
         "forced_real_provenance": forced_real_provenance,
         "observation_window_used_as_pool_age": observation_window_used_as_pool_age,
-        "verdict": "TRUE_LIVE_EARLY_ALPHA_INTEGRITY"
+        "verdict": final_verdict
     }
 
 
