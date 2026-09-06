@@ -3,13 +3,11 @@ Real Smart Money Intelligence Engine for Solana.
 Builds wallet reputations dynamically from observed on-chain transactions:
 win rate, earlyness timing, trade size, and realized profitability.
 Adds an evidence-gated emerging smart-money layer for cold-start live runs.
-Zero hardcoded scores in live mode.
+Zero hardcoded market scores in live mode.
 """
 
 from dataclasses import dataclass, field
-import logging
-import time
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional, Set
 
 from app.core.database import DatabaseManager
 from blockchain.parsers.real_swap_parser import RealSwapRecord
@@ -18,8 +16,6 @@ from intelligence.smart_money.emerging_smart_money import (
     EmergingSmartMoneyEngine,
     is_swap_quote_verified,
 )
-
-logger = logging.getLogger("meme_alpha_hunter.real_smart_money")
 
 
 @dataclass
@@ -76,7 +72,7 @@ class RealSmartMoneyEngine:
         self.db = db or DatabaseManager()
         self.wallets: Dict[str, WalletProfile] = {}
         self.token_swaps: Dict[str, List[RealSwapRecord]] = {}
-        # Cold-start detector: learns from the current run without seeded reputation.
+        self.processed_signatures: Set[str] = set()
         self.emerging_engine = EmergingSmartMoneyEngine()
 
     def process_real_swap(
@@ -85,7 +81,13 @@ class RealSmartMoneyEngine:
         token_first_seen: Optional[float] = None,
         pool_liquidity_usd: Optional[float] = None,
     ) -> WalletProfile:
-        """Update both historical-style and cold-start smart-money models from one real swap."""
+        """Update both reputation models exactly once per on-chain signature."""
+        signature = getattr(swap, "signature", None)
+        if signature and signature in self.processed_signatures:
+            return self.wallets.get(swap.wallet) or WalletProfile(address=swap.wallet)
+        if signature:
+            self.processed_signatures.add(signature)
+
         wallet_addr = swap.wallet
         mint = swap.mint
 
@@ -97,15 +99,13 @@ class RealSmartMoneyEngine:
 
         profile = self.wallets[wallet_addr]
         profile.last_seen = swap.timestamp
-        if swap.is_quote_verified and swap.quote_amount_usd is not None:
-            profile.total_volume_usd += swap.quote_amount_usd
+        if is_swap_quote_verified(swap) and swap.quote_amount_usd is not None:
+            profile.total_volume_usd += float(swap.quote_amount_usd)
 
         if mint not in self.token_swaps:
             self.token_swaps[mint] = []
         self.token_swaps[mint].append(swap)
 
-        # The emerging model is intentionally fed every observed swap. Its USD
-        # analytics are internally gated to strictly verified quotes.
         self.emerging_engine.process_swap(
             swap,
             pool_liquidity_usd=pool_liquidity_usd,
@@ -129,7 +129,7 @@ class RealSmartMoneyEngine:
                 earlyness = 40.0
 
         if (
-            swap.is_quote_verified
+            is_swap_quote_verified(swap)
             and swap.side == "BUY"
             and swap.quote_amount_usd is not None
             and swap.price_usd is not None
@@ -139,11 +139,11 @@ class RealSmartMoneyEngine:
                     mint=mint,
                     entry_time=swap.timestamp,
                     entry_price=swap.price_usd,
-                    entry_usd=swap.quote_amount_usd,
+                    entry_usd=float(swap.quote_amount_usd),
                 )
             )
         elif (
-            swap.is_quote_verified
+            is_swap_quote_verified(swap)
             and swap.side == "SELL"
             and swap.quote_amount_usd is not None
             and swap.price_usd is not None
@@ -153,9 +153,8 @@ class RealSmartMoneyEngine:
                 buy_trade = open_buys[0]
                 buy_trade.exit_time = swap.timestamp
                 buy_trade.exit_price = swap.price_usd
-                buy_trade.exit_usd = swap.quote_amount_usd
+                buy_trade.exit_usd = float(swap.quote_amount_usd)
                 buy_trade.is_closed = True
-
                 pnl = buy_trade.exit_usd - buy_trade.entry_usd
                 buy_trade.realized_pnl_usd = pnl
                 profile.total_realized_pnl_usd += pnl
@@ -170,12 +169,11 @@ class RealSmartMoneyEngine:
         return profile
 
     def _compute_wallet_score(self, profile: WalletProfile, latest_earlyness: float) -> float:
-        """Compute the reputation score from observed wallet history."""
+        """Compute reputation from observed wallet history only."""
         if profile.total_trades_count == 0:
             return round((latest_earlyness * 0.5) + 25.0, 2)
 
         win_rate = (profile.winning_trades_count / profile.total_trades_count) * 100.0
-
         if profile.total_realized_pnl_usd > 10_000.0:
             pnl_factor = 95.0
         elif profile.total_realized_pnl_usd > 1_000.0:
@@ -191,14 +189,6 @@ class RealSmartMoneyEngine:
         return round(min(max(score, 5.0), 99.0), 2)
 
     def evaluate_token_smart_money(self, mint: str) -> TokenSmartMoneySignal:
-        """
-        Combine established wallet reputation with evidence-gated cold-start intelligence.
-
-        The emerging layer is allowed to influence the live score only when it has
-        real verified quote evidence. This avoids manufacturing confidence while
-        allowing strong within-run accumulation to matter before a wallet has a
-        historical win/loss record.
-        """
         swaps = self.token_swaps.get(mint, [])
         if not swaps:
             return TokenSmartMoneySignal(
@@ -212,7 +202,7 @@ class RealSmartMoneyEngine:
                 provenance=Provenance(
                     source_type=SourceType.REAL,
                     provider="RealSmartMoneyEngine",
-                    confidence=0.5,
+                    confidence=0.0,
                 ),
             )
 
@@ -220,14 +210,18 @@ class RealSmartMoneyEngine:
         smart_sellers = set()
         smart_buy_vol = 0.0
         smart_sell_vol = 0.0
-        weighted_scores = []
+        weighted_scores: List[float] = []
+        latest_ts: Optional[float] = None
 
         for s in swaps:
             profile = self.wallets.get(s.wallet)
-            wallet_score = profile.smart_wallet_score if profile else 50.0
-            weighted_scores.append(wallet_score)
+            if profile is None:
+                continue
+            weighted_scores.append(profile.smart_wallet_score)
+            if s.timestamp is not None:
+                latest_ts = max(latest_ts, float(s.timestamp)) if latest_ts is not None else float(s.timestamp)
 
-            if wallet_score >= self.SMART_MONEY_THRESHOLD and is_swap_quote_verified(s):
+            if profile.smart_wallet_score >= self.SMART_MONEY_THRESHOLD and is_swap_quote_verified(s):
                 if s.side == "BUY":
                     smart_buyers.add(s.wallet)
                     smart_buy_vol += float(s.quote_amount_usd)
@@ -236,7 +230,7 @@ class RealSmartMoneyEngine:
                     smart_sell_vol += float(s.quote_amount_usd)
 
         netflow = smart_buy_vol - smart_sell_vol
-        avg_score = (sum(weighted_scores) / len(weighted_scores)) if weighted_scores else 50.0
+        avg_score = sum(weighted_scores) / len(weighted_scores) if weighted_scores else 50.0
 
         if netflow > 10_000.0:
             base_score = min(avg_score + 15.0, 98.0)
@@ -264,10 +258,7 @@ class RealSmartMoneyEngine:
         final_score = base_score
         final_netflow = netflow
         final_label = base_label
-
         if emerging_usable:
-            # Cold-start evidence can promote the score when verified accumulation
-            # is materially stronger than the historical-reputation layer.
             final_score = round(min(max(base_score, float(emerging_score)), 98.0), 2)
             final_netflow = float(emerging_netflow)
             if emerging.signal_label == "HIGH_CONVICTION_ACCUMULATION" and emerging_score >= 75.0:
@@ -288,8 +279,11 @@ class RealSmartMoneyEngine:
             provenance=Provenance(
                 source_type=SourceType.REAL,
                 provider="RealSmartMoneyEngine",
-                timestamp=time.time(),
-                confidence=round(max(0.0, min(1.0, emerging.quote_quality if emerging_usable else 1.0)), 4),
+                timestamp=latest_ts,
+                confidence=round(
+                    max(0.0, min(1.0, emerging.quote_quality if emerging_usable else 1.0)),
+                    4,
+                ),
                 verified_on_chain=True,
             ),
             emerging_smart_money_score=round(float(emerging_score), 2) if emerging_score is not None else None,
@@ -302,9 +296,8 @@ class RealSmartMoneyEngine:
 
 
 def emerging_smart_money_quote_quality_is_usable(quote_quality: float) -> bool:
-    """Return True only when a meaningful fraction of the token's swaps is verified."""
+    """Return True only when a meaningful fraction of token swaps is verified."""
     return quote_quality >= 0.50
 
 
-# Keep the helper name close to the data layer vocabulary while remaining private.
 emerging_quote_quality_is_usable = emerging_smart_money_quote_quality_is_usable
