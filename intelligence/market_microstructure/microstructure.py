@@ -5,8 +5,8 @@ and Money vs Price divergences.
 """
 
 from dataclasses import dataclass
-import math
-from typing import Any, Dict, List, Optional
+from typing import Any, List
+
 from intelligence.token.dna import DNASnapshot
 
 
@@ -33,7 +33,7 @@ class MarketMicrostructureEngine:
     def compute(
         cls,
         mint: str,
-        token_data: Dict[str, Any],
+        token_data: dict[str, Any],
         dna_history: List[DNASnapshot],
         smart_money_score: float,
         whale_netflow: float
@@ -45,66 +45,67 @@ class MarketMicrostructureEngine:
         buy_sell_ratio = buyers / max(sellers, 1)
         imbalance = (buyers - sellers) / max(tot_tx, 1)
 
-        # Time series analysis on DNA history
-        if len(dna_history) >= 3:
+        # Time-series features are evidence-gated. When a required historical
+        # observation is missing, preserve that absence as neutral/zero rather
+        # than inventing market movement.
+        v_curr = 0.0
+        accel = 0.0
+        second_order = 0.0
+        vol_accel = 0.0
+        liq_growth = 0.0
+
+        if len(dna_history) >= 2:
             p_curr = dna_history[-1].price
             p_prev1 = dna_history[-2].price
-            p_prev2 = dna_history[-3].price
-
             if p_curr is not None and p_prev1 is not None and p_prev1 > 0:
                 v_curr = (p_curr - p_prev1) / max(p_prev1, 1e-9)
-            else:
-                v_curr = 0.02
-
-            if p_prev1 is not None and p_prev2 is not None and p_prev2 > 0:
-                v_prev = (p_prev1 - p_prev2) / max(p_prev2, 1e-9)
-            else:
-                v_prev = 0.01
-
-            accel = v_curr - v_prev
-
-            if len(dna_history) >= 4:
-                p_prev3 = dna_history[-4].price
-                if p_prev2 is not None and p_prev3 is not None and p_prev3 > 0:
-                    v_prev2 = (p_prev2 - p_prev3) / max(p_prev3, 1e-9)
-                else:
-                    v_prev2 = 0.005
-                accel_prev = v_prev - v_prev2
-                second_order = accel - accel_prev
-            else:
-                second_order = 0.0
 
             vol_curr = dna_history[-1].volume
             vol_prev = dna_history[-2].volume
             if vol_curr is not None and vol_prev is not None and vol_prev > 0:
                 vol_accel = (vol_curr - vol_prev) / max(vol_prev, 1.0)
-            else:
-                vol_accel = 0.0
 
             liq_curr = dna_history[-1].liquidity
             liq_prev = dna_history[-2].liquidity
             if liq_curr is not None and liq_prev is not None and liq_prev > 0:
                 liq_growth = (liq_curr - liq_prev) / max(liq_prev, 1.0)
-            else:
-                liq_growth = 0.0
-        else:
-            v_curr = 0.02
-            accel = 0.01
-            second_order = 0.005
-            vol_accel = 0.15
-            liq_growth = 0.05
+
+        if len(dna_history) >= 3:
+            p_curr = dna_history[-1].price
+            p_prev1 = dna_history[-2].price
+            p_prev2 = dna_history[-3].price
+            if p_curr is not None and p_prev1 is not None and p_prev1 > 0:
+                v_curr = (p_curr - p_prev1) / max(p_prev1, 1e-9)
+            if p_prev1 is not None and p_prev2 is not None and p_prev2 > 0:
+                v_prev = (p_prev1 - p_prev2) / max(p_prev2, 1e-9)
+                accel = v_curr - v_prev
+
+        if len(dna_history) >= 4:
+            p_prev2 = dna_history[-3].price
+            p_prev3 = dna_history[-4].price
+            if p_prev2 is not None and p_prev3 is not None and p_prev3 > 0:
+                v_prev2 = (p_prev2 - p_prev3) / max(p_prev3, 1e-9)
+                if len(dna_history) >= 3:
+                    p_prev1 = dna_history[-2].price
+                    p_curr = dna_history[-1].price
+                    if p_curr is not None and p_prev1 is not None and p_prev1 > 0 and p_prev2 is not None and p_prev2 > 0:
+                        v_curr = (p_curr - p_prev1) / max(p_prev1, 1e-9)
+                        v_prev = (p_prev1 - p_prev2) / max(p_prev2, 1e-9)
+                        accel = v_curr - v_prev
+                        accel_prev = v_prev - v_prev2
+                        second_order = accel - accel_prev
 
         buyer_accel = buy_sell_ratio * (1.0 + imbalance)
 
-        # Pre-ignition detection: Liquidity expanding, smart money high, buyer acceleration strong before parabolic surge
+        # A pre-ignition label requires actual time-series history.
         is_pre_ignition = (
+            len(dna_history) >= 3 and
             buyer_accel > 1.8 and
             smart_money_score > 75.0 and
             liq_growth >= 0.0 and
-            v_curr < 0.20  # Hasn't pumped parabolically yet
+            v_curr < 0.20
         )
 
-        # Money vs Price Divergence
         if smart_money_score > 80.0 and v_curr < 0.05:
             money_price_div = "SMART_ACCUMULATION"
         elif smart_money_score < 40.0 and v_curr > 0.15:
@@ -114,8 +115,8 @@ class MarketMicrostructureEngine:
         else:
             money_price_div = "CONVERGENT_BEAR"
 
-        # Fake Breakout Detector: Price ↑ & Volume ↑ but Smart Money ↓ and Sellers surging
         is_fake_breakout = (
+            len(dna_history) >= 2 and
             v_curr > 0.10 and
             vol_accel > 0.30 and
             smart_money_score < 35.0 and
