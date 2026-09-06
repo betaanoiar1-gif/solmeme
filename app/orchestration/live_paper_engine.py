@@ -110,6 +110,7 @@ class RealLivePaperEngine:
         self.cycle_count = 0
         self.verified_tokens_map: Dict[str, OnChainMintVerification] = {}
         self.token_liquidity_map: Dict[str, Optional[float]] = {}
+        self.token_first_seen_map: Dict[str, Optional[float]] = {}
         self.top_opportunities: List[OpportunityReport] = []
         self.ingested_swaps: List[RealSwapRecord] = []
 
@@ -160,6 +161,11 @@ class RealLivePaperEngine:
 
             price_map[mint] = float(curr_p)
             symbol = t.get("symbol", "UNKNOWN")
+
+            # Preserve source-derived pool creation time for downstream audit/export.
+            first_seen_raw = t.get("first_seen_ts")
+            first_seen_ts = float(first_seen_raw) if first_seen_raw is not None else None
+            self.token_first_seen_map[mint] = first_seen_ts
 
             # Strict liquidity extraction (None remains None, never 0.0)
             raw_liq = t.get("liquidity")
@@ -278,7 +284,6 @@ class RealLivePaperEngine:
                     whales_count += 1
 
                 # Token first seen (no manufactured start time)
-                first_seen_ts = float(t["first_seen_ts"]) if t.get("first_seen_ts") is not None else None
                 self.smart_money_engine.process_real_swap(swap_rec, token_first_seen=first_seen_ts)
 
             # Cluster analysis
@@ -339,7 +344,6 @@ class RealLivePaperEngine:
             )
 
             # 7. Scorer & Opportunity (Age derived strictly from verified first_seen_ts)
-            first_seen_ts = float(t["first_seen_ts"]) if t.get("first_seen_ts") is not None else None
             age_min = ((time.time() - first_seen_ts) / 60.0) if first_seen_ts is not None else None
 
             opp_report = self.scorer.evaluate_opportunity(
