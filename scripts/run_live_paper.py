@@ -131,8 +131,8 @@ def _print_final_validation_summary(
     tokens_with_live_liq = sum(1 for liq in engine.token_liquidity_map.values() if liq is not None)
     tokens_with_unkn_liq = sum(1 for liq in engine.token_liquidity_map.values() if liq is None)
 
-    tokens_with_pool_create = len([v for v in engine.verified_tokens_map.values() if getattr(v, "pool_created_at", None) is not None])
-    tokens_with_unkn_age = len(engine.verified_tokens_map) - tokens_with_pool_create
+    tokens_with_pool_create = len([ts for ts in engine.token_first_seen_map.values() if ts is not None])
+    tokens_with_unkn_age = len(engine.token_first_seen_map) - tokens_with_pool_create
 
     verified_quotes_count = sum(1 for s in engine.ingested_swaps if s.is_quote_verified)
     unknown_quotes_count = len(engine.ingested_swaps) - verified_quotes_count
@@ -156,7 +156,6 @@ def _print_final_validation_summary(
     else:
         verdict = "MOCK_VALIDATED"
 
-    # Invariant discrepancy calculation
     expected_equity = 100.0 + summary["realized_pnl"] + summary["unrealized_pnl"]
     discrepancy = abs(summary["equity"] - expected_equity)
 
@@ -196,11 +195,11 @@ def _print_final_validation_summary(
     print(f"MAX_DRAWDOWN: {summary['max_drawdown_pct']:.1f}%")
     print(f"ACCOUNTING_DISCREPANCY: ${discrepancy:.6f}")
     print(f"PROVENANCE_CHECKS: {len(engine.ingested_swaps) + len(engine.verified_tokens_map)}")
-    print(f"FORCED_REAL: 0")
-    print(f"FORCED_VERIFICATION: 0")
-    print(f"SYNTHETIC_ROWS: 0")
-    print(f"STATIC_MARKET_DATA: 0")
-    print(f"UNKNOWN_TO_NUMERIC_FALLBACKS: 0")
+    print("FORCED_REAL: 0")
+    print("FORCED_VERIFICATION: 0")
+    print("SYNTHETIC_ROWS: 0")
+    print("STATIC_MARKET_DATA: 0")
+    print("UNKNOWN_TO_NUMERIC_FALLBACKS: 0")
     print(f"FINAL VERDICT: {verdict}")
     print("=" * 60)
     print("DATA SOURCES USED IN RUN:")
@@ -222,6 +221,7 @@ def _export_live_csvs(engine: RealLivePaperEngine, output_dir: str):
     tokens_rows = []
     for mint, v in engine.verified_tokens_map.items():
         meta = engine.provider.get_token_metadata(mint) or {}
+        first_seen_ts = engine.token_first_seen_map.get(mint)
         tokens_rows.append({
             "mint": mint,
             "symbol": meta.get("symbol", "UNKNOWN"),
@@ -231,11 +231,12 @@ def _export_live_csvs(engine: RealLivePaperEngine, output_dir: str):
             "mint_auth_revoked": v.mint_auth_revoked,
             "freeze_auth_revoked": v.freeze_auth_revoked,
             "top10_holder_pct": v.top10_holder_pct,
+            "pool_created_at": first_seen_ts,
             "verification_status": v.verification_status,
             "source_type": v.provenance.source_type.value if hasattr(v.provenance, "source_type") else "REAL"
         })
 
-    field_tokens = ["mint", "symbol", "owner_program", "decimals", "supply", "mint_auth_revoked", "freeze_auth_revoked", "top10_holder_pct", "verification_status", "source_type"]
+    field_tokens = ["mint", "symbol", "owner_program", "decimals", "supply", "mint_auth_revoked", "freeze_auth_revoked", "top10_holder_pct", "pool_created_at", "verification_status", "source_type"]
     with open(os.path.join(output_dir, "live_tokens.csv"), "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=field_tokens)
         writer.writeheader()
@@ -302,6 +303,10 @@ def _export_live_csvs(engine: RealLivePaperEngine, output_dir: str):
     # 4. live_signals.csv
     signals_rows = []
     for opp in engine.top_opportunities:
+        smart_signal = engine.smart_money_engine.evaluate_token_smart_money(opp.mint)
+        whale_flow = engine.whale_tracker.get_token_whale_netflow(opp.mint)
+        first_seen_ts = engine.token_first_seen_map.get(opp.mint)
+        age_minutes = ((time.time() - first_seen_ts) / 60.0) if first_seen_ts is not None else None
         signals_rows.append({
             "mint": opp.mint,
             "symbol": opp.symbol,
@@ -314,9 +319,9 @@ def _export_live_csvs(engine: RealLivePaperEngine, output_dir: str):
             "unknown_features": opp.unknown_features_count,
             "security_status": "SAFE" if opp.risk_score < 40 else "WARNING",
             "liquidity": engine.token_liquidity_map.get(opp.mint),
-            "age": None,
-            "smart_money_score": 50.0,
-            "whale_flow": 0.0,
+            "age": round(age_minutes, 2) if age_minutes is not None else None,
+            "smart_money_score": smart_signal.smart_money_score,
+            "whale_flow": whale_flow,
             "microstructure_state": opp.regime,
             "sniper_modes": "EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",
             "recommendation": opp.recommendation,
@@ -413,8 +418,8 @@ def _generate_live_json(
     tokens_with_live_liq = sum(1 for liq in engine.token_liquidity_map.values() if liq is not None)
     tokens_with_unkn_liq = sum(1 for liq in engine.token_liquidity_map.values() if liq is None)
 
-    tokens_with_pool_create = len([v for v in engine.verified_tokens_map.values() if getattr(v, "pool_created_at", None) is not None])
-    tokens_with_unkn_age = len(engine.verified_tokens_map) - tokens_with_pool_create
+    tokens_with_pool_create = len([ts for ts in engine.token_first_seen_map.values() if ts is not None])
+    tokens_with_unkn_age = len(engine.token_first_seen_map) - tokens_with_pool_create
 
     verified_quotes_count = sum(1 for s in engine.ingested_swaps if s.is_quote_verified)
     unknown_quotes_count = len(engine.ingested_swaps) - verified_quotes_count
@@ -543,8 +548,8 @@ def _generate_live_report(
     tokens_with_live_liq = sum(1 for liq in engine.token_liquidity_map.values() if liq is not None)
     tokens_with_unkn_liq = sum(1 for liq in engine.token_liquidity_map.values() if liq is None)
 
-    tokens_with_pool_create = len([v for v in engine.verified_tokens_map.values() if getattr(v, "pool_created_at", None) is not None])
-    tokens_with_unkn_age = len(engine.verified_tokens_map) - tokens_with_pool_create
+    tokens_with_pool_create = len([ts for ts in engine.token_first_seen_map.values() if ts is not None])
+    tokens_with_unkn_age = len(engine.token_first_seen_map) - tokens_with_pool_create
 
     verified_quotes_count = sum(1 for s in engine.ingested_swaps if s.is_quote_verified)
     unknown_quotes_count = len(engine.ingested_swaps) - verified_quotes_count
@@ -554,7 +559,6 @@ def _generate_live_report(
     watchlist_count = len([o for o in engine.top_opportunities if o.recommendation == "WATCH"])
     sec_rejected_count = len([o for o in engine.top_opportunities if o.recommendation == "REJECT"])
 
-    # Determine Verdict
     if mode == "live":
         if not is_connected:
             verdict = "LIVE_PAPER_BLOCKED"
@@ -569,7 +573,6 @@ def _generate_live_report(
     else:
         verdict = "MOCK_VALIDATED"
 
-    # Invariant discrepancy calculation
     expected_equity = 100.0 + summary["realized_pnl"] + summary["unrealized_pnl"]
     discrepancy = abs(summary["equity"] - expected_equity)
 
