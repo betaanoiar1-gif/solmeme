@@ -45,12 +45,56 @@ class OpportunityReport:
     known_features_count: int = 13
     unknown_features_count: int = 0
     confidence_adjustment: float = 0.0
+    smart_money_bridge_bonus: float = 0.0
 
 
 class OpportunityScorer:
     def __init__(self, config: Optional[ScoringConfig] = None, db: Optional[DatabaseManager] = None):
         self.config = config or ScoringConfig()
         self.db = db or DatabaseManager()
+
+    @staticmethod
+    def _smart_money_entry_bridge(
+        smart_money_score: float,
+        whale_netflow: float,
+        earlyness: float,
+        risk: float,
+        is_fake_breakout: bool,
+    ) -> tuple[float, str]:
+        """
+        Convert *independent early* smart-money evidence into a bounded bonus.
+
+        This deliberately requires agreement between:
+        - strong smart-money score,
+        - positive whale flow,
+        - genuinely early lifecycle,
+        - acceptable risk,
+        - no fake-breakout flag.
+
+        Missing/weak evidence produces no bonus. The bridge never overrides a
+        hard security reject and is capped to avoid turning one feature into an
+        unconditional entry trigger.
+        """
+        if is_fake_breakout or earlyness < 70.0 or risk > 45.0:
+            return 0.0, ""
+
+        sm = max(0.0, min(100.0, float(smart_money_score)))
+        whale = float(whale_netflow)
+
+        # Tier A: strongest convergence. This is the only tier allowed to
+        # materially lift an early candidate toward the entry boundary.
+        if sm >= 85.0 and whale > 0.0 and risk <= 35.0:
+            return 3.5, "High-conviction early smart-money + positive whale-flow convergence"
+
+        # Tier B: strong early smart-money with corroborating whale flow.
+        if sm >= 78.0 and whale > 0.0 and risk <= 40.0:
+            return 2.0, "Strong early smart-money with positive whale-flow confirmation"
+
+        # Tier C: useful early confirmation, intentionally small.
+        if sm >= 70.0 and whale > 0.0 and earlyness >= 80.0:
+            return 0.75, "Early smart-money accumulation has positive whale-flow support"
+
+        return 0.0, ""
 
     def evaluate_opportunity(
         self,
@@ -144,8 +188,20 @@ class OpportunityScorer:
             whale_netflow=whale_netflow
         )
 
-        # 5. Composite Final Score
-        # Opportunity = (Alpha * 0.45) + ((100 - Risk) * 0.25) + (Confidence * 0.15) + (Earlyness * 0.15)
+        # 5. Composite Final Score + bounded early smart-money bridge
+        # Base Opportunity = Alpha*0.45 + (100-Risk)*0.25 + Confidence*0.15 + Earlyness*0.15
+        bridge_bonus, bridge_reason = self._smart_money_entry_bridge(
+            smart_money_score=smart_money_score,
+            whale_netflow=whale_netflow,
+            earlyness=earlyness,
+            risk=risk,
+            is_fake_breakout=micro.is_fake_breakout,
+        )
+
+        # The bridge is intentionally capped and applied as a modest alpha lift;
+        # strong convergence can therefore move a candidate across the entry
+        # boundary, while weak/contradictory evidence remains unchanged.
+        alpha = round(min(alpha + bridge_bonus, 100.0), 2)
         final_score = (
             (alpha * 0.45) +
             ((100.0 - risk) * 0.25) +
@@ -176,6 +232,8 @@ class OpportunityScorer:
             why_high.append(f"High multi-factor Alpha ({alpha:.1f}) with positive microstructure")
         if smart_money_score > 75.0:
             why_high.append(f"Strong Smart Money backing (Score: {smart_money_score:.1f})")
+        if bridge_reason:
+            why_high.append(f"Entry bridge: {bridge_reason} (+{bridge_bonus:.2f} Alpha)")
         if micro.is_pre_ignition:
             why_high.append("Pre-ignition signature: expanding liquidity + accelerating buyers before parabolic spike")
 
@@ -190,6 +248,11 @@ class OpportunityScorer:
             why_not_higher.append("Token age is unknown (unverified pool creation timestamp)")
         elif earlyness < 50.0:
             why_not_higher.append("Token is established / older lifecycle stage")
+
+        if smart_money_score >= 70.0 and whale_netflow <= 0.0:
+            why_not_higher.append("Smart Money lacks positive whale-flow confirmation")
+        if smart_money_score >= 78.0 and earlyness < 70.0:
+            why_not_higher.append("Strong Smart Money is not early enough for entry acceleration")
 
         supports.append(f"Market Regime: {regime.value}")
         supports.append(f"Narrative: {narrative_metrics.name} ({narrative_metrics.stage})")
@@ -218,7 +281,8 @@ class OpportunityScorer:
             updated_at=time.time(),
             known_features_count=known_count,
             unknown_features_count=unknown_count,
-            confidence_adjustment=confidence_adj
+            confidence_adjustment=confidence_adj,
+            smart_money_bridge_bonus=round(bridge_bonus, 2),
         )
 
         # Persist to database
@@ -239,7 +303,8 @@ class OpportunityScorer:
                     "why_ranked_high": report.why_ranked_high,
                     "why_not_higher": report.why_not_higher,
                     "what_supports_it": report.what_supports_it,
-                    "what_could_invalidate_it": report.what_could_invalidate_it
+                    "what_could_invalidate_it": report.what_could_invalidate_it,
+                    "smart_money_bridge_bonus": report.smart_money_bridge_bonus,
                 }),
                 "updated_at": report.updated_at
             })
