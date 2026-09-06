@@ -9,10 +9,12 @@
 ================================================================================
 CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 ================================================================================
-2026-09-06 18:32:33 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
-#1      11          11          81        1         $100.00     INVARIANTS_SATISFIED
-2026-09-06 18:37:43 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #2 ---
-#2      11          11          80        2         $100.00     INVARIANTS_SATISFIED
+2026-09-06 19:06:48 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
+#1      10          10          81        1         $100.00     INVARIANTS_SATISFIED
+2026-09-06 19:11:23 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #2 ---
+#2      9           9           125       4         $100.00     INVARIANTS_SATISFIED
+2026-09-06 19:15:45 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #3 ---
+#3      10          10          179       5         $100.00     INVARIANTS_SATISFIED
 
 ================================================================================
   ⚡ MEME ALPHA HUNTER — SOLANA INTELLIGENCE & PAPER TRADING PLATFORM ⚡
@@ -35,14 +37,14 @@ CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 --------------------------------------------------------------------------------
   SYMBOL     ALPHA    RISK     CONF     EARLY    FINAL    REGIME             DECISION    
   ----------------------------------------------------------------------------
-  GIVE       51.4     21.0     42.1     92.6     63.1     R1_DORMANT         REJECT      
-  FCAT       49.7     21.0     40.3     98.6     62.9     R1_DORMANT         REJECT      
-  VALVA      51.3     21.0     36.0     90.2     61.8     R1_DORMANT         REJECT      
-  MORGAN     53.1     21.0     41.2     79.3     61.7     R1_DORMANT         REJECT      
-  MemePerps  52.0     21.0     39.4     78.3     60.8     R1_DORMANT         REJECT      
-  SLOWLANA   49.6     19.0     52.2     65.5     60.2     R1_DORMANT         REJECT      
-  SHRIMP     47.6     21.0     38.3     81.0     59.1     R1_DORMANT         REJECT      
-  GG         49.0     24.0     35.2     83.7     58.9     R1_DORMANT         REJECT      
+  MSTR       67.8     19.0     47.8     94.2     72.0     R1_DORMANT         PAPER_ENTRY 
+  SHATCHAIR  62.1     21.0     40.2     89.2     67.1     R6_PARABOLIC       WAIT_FOR_RETEST
+  NOLA       60.7     19.0     52.1     67.8     65.5     R1_DORMANT         WATCH       
+  GPU        57.7     21.0     37.7     76.3     62.8     R7_EUPHORIA        WAIT_FOR_RETEST
+  THUG       60.5     23.0     31.0     68.3     61.4     R0_DEAD            WATCH       
+  BATON      61.3     19.0     53.8     30.0     60.4     R4_CONFIRMED_IGNITION WATCH       
+  BOOMER     43.6     19.0     56.8     79.7     60.3     R1_DORMANT         REJECT      
+  STOOL      48.6     21.0     44.5     79.9     60.3     R1_DORMANT         REJECT      
 --------------------------------------------------------------------------------
 
 🩺 [SYSTEM HEALTH]
@@ -64,25 +66,25 @@ FINAL LIVE VALIDATION
 COMMIT: 0f8f93a
 MODE: LIVE
 NETWORK_CONNECTED: TRUE
-RPC_REQUESTS: 1956
-RPC_SUCCESS: 312
-RPC_FAILURE: 1644
-RPC_AVG_LATENCY_MS: 122.9
-LIVE_TOKENS: 12
-VERIFIED_MINTS: 12
-LIVE_SWAPS: 161
-VERIFIED_QUOTES: 143
-UNKNOWN_QUOTES: 18
-QUOTE_QUALITY: 0.8882
-TOKENS_WITH_LIVE_LIQUIDITY: 11
-TOKENS_WITH_UNKNOWN_LIQUIDITY: 1
-TOKENS_WITH_POOL_CREATION_TIME: 0
-TOKENS_WITH_UNKNOWN_AGE: 12
-EARLY_ALPHA_SCORED: 11
-DEEP_ANALYSIS_PRIORITIZED: 0
-WATCHLIST: 0
-SECURITY_REJECTED: 11
-SNIPER_CANDIDATES: 0
+RPC_REQUESTS: 1876
+RPC_SUCCESS: 620
+RPC_FAILURE: 1256
+RPC_AVG_LATENCY_MS: 641.48
+LIVE_TOKENS: 11
+VERIFIED_MINTS: 11
+LIVE_SWAPS: 385
+VERIFIED_QUOTES: 341
+UNKNOWN_QUOTES: 44
+QUOTE_QUALITY: 0.8857
+TOKENS_WITH_LIVE_LIQUIDITY: 8
+TOKENS_WITH_UNKNOWN_LIQUIDITY: 3
+TOKENS_WITH_POOL_CREATION_TIME: 10
+TOKENS_WITH_UNKNOWN_AGE: 1
+EARLY_ALPHA_SCORED: 10
+DEEP_ANALYSIS_PRIORITIZED: 1
+WATCHLIST: 3
+SECURITY_REJECTED: 4
+SNIPER_CANDIDATES: 1
 PAPER_ENTRIES: 0
 PAPER_EXITS: 0
 OPEN_POSITIONS: 0
@@ -93,7 +95,7 @@ UNREALIZED_PNL: $+0.00
 FINAL_EQUITY: $100.00
 MAX_DRAWDOWN: 0.0%
 ACCOUNTING_DISCREPANCY: $0.000000
-PROVENANCE_CHECKS: 173
+PROVENANCE_CHECKS: 396
 FORCED_REAL: 0
 FORCED_VERIFICATION: 0
 SYNTHETIC_ROWS: 0
