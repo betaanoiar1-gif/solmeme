@@ -9,6 +9,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: solana-live-validation-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   validate-live:
     runs-on: ubuntu-latest
@@ -19,6 +23,7 @@ jobs:
         with:
           ref: arena/01a07111-solmeme
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -58,6 +63,8 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin arena/01a07111-solmeme
+          git rebase origin/arena/01a07111-solmeme
           git add reports/
           git commit -m "chore(live-audit): record 10-minute live solana mainnet validation artifacts [skip ci]" || echo "No changes to commit"
-          git push origin arena/01a07111-solmeme || echo "Push failed"
+          git push origin HEAD:arena/01a07111-solmeme
