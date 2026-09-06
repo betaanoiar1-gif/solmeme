@@ -1,50 +1,50 @@
 {
-  "commit": "88562b453a72d2fc4ba40baf2a6601ee067f46e6",
+  "commit": "7f07a4380d001ad81865a9ee92aa8a6efd3263cb",
   "mode": "LIVE",
   "environment": "GitHub Actions / Cloud VPS / Standalone",
-  "start_time_utc": "2026-09-06 20:16:25 UTC",
-  "end_time_utc": "2026-09-06 20:28:20 UTC",
-  "duration_sec": 714.46,
+  "start_time_utc": "2026-09-06 20:34:15 UTC",
+  "end_time_utc": "2026-09-06 20:44:50 UTC",
+  "duration_sec": 634.74,
   "total_cycles": 3,
   "network_connected": true,
   "rpc_telemetry": {
-    "total_requests": 2232,
-    "success_requests": 376,
-    "failed_requests": 1856,
-    "avg_latency_ms": 339.83,
+    "total_requests": 1728,
+    "success_requests": 396,
+    "failed_requests": 1332,
+    "avg_latency_ms": 49.45,
     "per_endpoint": {
       "https://api.mainnet-beta.solana.com": {
-        "total_requests": 840,
-        "successful_requests": 376,
-        "failed_requests": 464,
+        "total_requests": 729,
+        "successful_requests": 396,
+        "failed_requests": 333,
         "consecutive_errors": 0,
-        "avg_latency_ms": 339.83121473452246,
+        "avg_latency_ms": 49.44504515051314,
         "is_active": true,
         "in_cooldown": true
       },
       "https://solana-mainnet.rpc.extrnode.com": {
-        "total_requests": 464,
+        "total_requests": 333,
         "successful_requests": 0,
-        "failed_requests": 464,
-        "consecutive_errors": 464,
+        "failed_requests": 333,
+        "consecutive_errors": 333,
         "avg_latency_ms": 0.0,
         "is_active": true,
         "in_cooldown": true
       },
       "https://rpc.ankr.com/solana": {
-        "total_requests": 464,
+        "total_requests": 333,
         "successful_requests": 0,
-        "failed_requests": 464,
-        "consecutive_errors": 464,
+        "failed_requests": 333,
+        "consecutive_errors": 333,
         "avg_latency_ms": 0.0,
         "is_active": true,
         "in_cooldown": true
       },
       "https://solana.public-rpc.com": {
-        "total_requests": 464,
+        "total_requests": 333,
         "successful_requests": 0,
-        "failed_requests": 464,
-        "consecutive_errors": 464,
+        "failed_requests": 333,
+        "consecutive_errors": 333,
         "avg_latency_ms": 0.0,
         "is_active": true,
         "in_cooldown": true
@@ -54,15 +54,15 @@
   "discovery": {
     "live_tokens_discovered": 11,
     "onchain_verified_mints": 11,
-    "live_swaps": 234,
+    "live_swaps": 189,
     "unique_live_mints": 10,
-    "unique_live_wallets": 212,
-    "unique_live_signatures": 231
+    "unique_live_wallets": 163,
+    "unique_live_signatures": 183
   },
   "data_quality": {
-    "strict_verified_quotes": 225,
-    "unknown_quotes": 9,
-    "quote_quality": 0.9615,
+    "strict_verified_quotes": 169,
+    "unknown_quotes": 20,
+    "quote_quality": 0.8942,
     "tokens_with_live_liquidity": 9,
     "tokens_with_unknown_liquidity": 2,
     "tokens_with_pool_creation_time": 11,
@@ -70,29 +70,29 @@
   },
   "alpha_pipeline": {
     "early_alpha_scored": 10,
-    "deep_analysis_prioritized": 4,
-    "watchlist": 1,
-    "sniper_candidates": 4,
-    "scoring_rejected": 5
+    "deep_analysis_prioritized": 1,
+    "watchlist": 4,
+    "sniper_candidates": 1,
+    "scoring_rejected": 4
   },
   "paper_trading": {
     "starting_capital": 100.0,
-    "paper_entries": 4,
-    "paper_exits": 1,
-    "open_positions": 3,
-    "total_fees": 0.14,
-    "total_slippage": 0.14,
-    "realized_pnl": 0.81,
-    "unrealized_pnl": 0.25,
-    "final_equity": 101.06,
-    "max_drawdown_pct": 0.11
+    "paper_entries": 2,
+    "paper_exits": 2,
+    "open_positions": 0,
+    "total_fees": 0.1,
+    "total_slippage": 0.08,
+    "realized_pnl": -6.81,
+    "unrealized_pnl": 0,
+    "final_equity": 93.19,
+    "max_drawdown_pct": 6.83
   },
   "accounting": {
     "accounting_invariants_valid": true,
     "accounting_discrepancy": 0.0
   },
   "provenance_guard": {
-    "provenance_checks": 245,
+    "provenance_checks": 200,
     "forced_real": 0,
     "forced_verification": 0,
     "synthetic_rows": 0,
