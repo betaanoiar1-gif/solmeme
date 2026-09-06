@@ -9,12 +9,13 @@
 ================================================================================
 CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 ================================================================================
-2026-09-06 21:02:22 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
-#1      10          10          62        2         $100.00     INVARIANTS_SATISFIED
-2026-09-06 21:06:57 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #2 ---
-#2      9           9           32        0         $100.00     INVARIANTS_SATISFIED
-2026-09-06 21:10:02 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #3 ---
-#3      10          10          33        0         $100.00     INVARIANTS_SATISFIED
+2026-09-06 21:15:47 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
+#1      11          11          78        0         $100.00     INVARIANTS_SATISFIED
+2026-09-06 21:20:43 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #2 ---
+#2      11          11          74        0         $100.00     INVARIANTS_SATISFIED
+2026-09-06 21:25:42 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #3 ---
+2026-09-06 21:27:02 [INFO] [meme_alpha_hunter.live_paper] 🎯 [REAL LIVE PAPER ENTRY] AMD @ $0.000214 | Size: $5.82
+#3      12          12          85        2         $99.89      INVARIANTS_SATISFIED
 
 ================================================================================
   ⚡ MEME ALPHA HUNTER — SOLANA INTELLIGENCE & PAPER TRADING PLATFORM ⚡
@@ -23,28 +24,33 @@ CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 📊 [VIRTUAL WALLET STATUS]
 --------------------------------------------------------------------------------
   Starting Capital:  $100.00 USD
-  Current Equity:    $100.00 USD
-  Available Cash:    $100.00 USD
-  Open Positions:    $0.00 USD (0 active)
+  Current Equity:    $99.89 USD
+  Available Cash:    $94.15 USD
+  Open Positions:    $5.73 USD (1 active)
   Realized PnL:      $+0.00 USD
-  Unrealized PnL:    $+0.00 USD
-  Total Fees:        -$0.00 USD
-  Total Slippage:    -$0.00 USD
-  Max Drawdown:       0.0%
+  Unrealized PnL:    $-0.11 USD
+  Total Fees:        -$0.03 USD
+  Total Slippage:    -$0.03 USD
+  Max Drawdown:       0.1%
+--------------------------------------------------------------------------------
+  [ACTIVE OPEN POSITIONS]
+  SYMBOL       SIZE (USD)   ENTRY PRICE    CURR PRICE     PnL ($)      PnL (%)        
+  ----------------------------------------------------------------------------
+  AMD          $5.82        $0.000214      $0.000213      $-0.11       -1.96         %
 --------------------------------------------------------------------------------
 
 🎯 [TOP OPPORTUNITY RANKINGS]
 --------------------------------------------------------------------------------
   SYMBOL     ALPHA    RISK     CONF     EARLY    FINAL    REGIME             DECISION    
   ----------------------------------------------------------------------------
-  ZALIEN     70.4     24.0     36.2     80.2     68.2     R2_ACCUMULATION    WATCH       
-  GPT        56.5     21.0     45.2     85.2     64.7     R1_DORMANT         WATCH       
-  SOLTREE    57.4     23.0     29.4     90.2     63.0     R0_DEAD            WATCH       
-  STAKE      54.2     23.0     29.4     92.4     61.9     R0_DEAD            REJECT      
-  ISG        55.9     23.0     27.8     83.2     61.0     R0_DEAD            WATCH       
-  luffy      50.5     24.0     37.0     85.3     60.1     R1_DORMANT         REJECT      
-  Lexapro    50.9     23.0     31.0     79.5     58.7     R0_DEAD            REJECT      
-  TOKUBI     47.5     24.0     35.9     80.4     57.8     R1_DORMANT         REJECT      
+  AMD        75.8     19.0     54.5     89.2     75.9     R5_EXPANSION       PAPER_ENTRY 
+  STAKE      61.6     23.0     31.0     83.8     64.2     R0_DEAD            WATCH       
+  TIME       53.1     21.0     38.3     80.6     61.5     R1_DORMANT         REJECT      
+  GPT        51.4     21.0     43.7     76.5     60.9     R3_EARLY_IGNITION  REJECT      
+  SOLTREE    53.5     23.0     31.0     81.6     60.2     R0_DEAD            REJECT      
+  BUDDY      48.3     21.0     41.1     82.3     60.0     R1_DORMANT         REJECT      
+  Lexapro    51.0     23.0     31.0     70.5     57.4     R0_DEAD            REJECT      
+  ZALIEN     49.2     24.0     36.2     71.5     57.3     R1_DORMANT         REJECT      
 --------------------------------------------------------------------------------
 
 🩺 [SYSTEM HEALTH]
@@ -66,42 +72,42 @@ FINAL LIVE VALIDATION
 COMMIT: 0f8f93a
 MODE: LIVE
 NETWORK_CONNECTED: TRUE
-RPC_REQUESTS: 2331
-RPC_SUCCESS: 283
-RPC_FAILURE: 2048
-RPC_AVG_LATENCY_MS: 133.16
+RPC_REQUESTS: 3021
+RPC_SUCCESS: 401
+RPC_FAILURE: 2620
+RPC_AVG_LATENCY_MS: 98.68
 LIVE_TOKENS: 13
 VERIFIED_MINTS: 13
-LIVE_SWAPS: 127
-VERIFIED_QUOTES: 111
-UNKNOWN_QUOTES: 16
-QUOTE_QUALITY: 0.8740
+LIVE_SWAPS: 237
+VERIFIED_QUOTES: 210
+UNKNOWN_QUOTES: 27
+QUOTE_QUALITY: 0.8861
 TOKENS_WITH_LIVE_LIQUIDITY: 8
 TOKENS_WITH_UNKNOWN_LIQUIDITY: 5
 TOKENS_WITH_POOL_CREATION_TIME: 13
 TOKENS_WITH_UNKNOWN_AGE: 0
-EARLY_ALPHA_SCORED: 10
-DEEP_ANALYSIS_PRIORITIZED: 0
-WATCHLIST: 4
-SECURITY_REJECTED: 6
-SNIPER_CANDIDATES: 0
-PAPER_ENTRIES: 0
+EARLY_ALPHA_SCORED: 12
+DEEP_ANALYSIS_PRIORITIZED: 1
+WATCHLIST: 1
+SECURITY_REJECTED: 10
+SNIPER_CANDIDATES: 1
+PAPER_ENTRIES: 1
 PAPER_EXITS: 0
-OPEN_POSITIONS: 0
-FEES: $0.00
-SLIPPAGE: $0.00
+OPEN_POSITIONS: 1
+FEES: $0.03
+SLIPPAGE: $0.03
 REALIZED_PNL: $+0.00
-UNREALIZED_PNL: $+0.00
-FINAL_EQUITY: $100.00
-MAX_DRAWDOWN: 0.0%
+UNREALIZED_PNL: $-0.11
+FINAL_EQUITY: $99.89
+MAX_DRAWDOWN: 0.1%
 ACCOUNTING_DISCREPANCY: $0.000000
-PROVENANCE_CHECKS: 140
+PROVENANCE_CHECKS: 250
 FORCED_REAL: 0
 FORCED_VERIFICATION: 0
 SYNTHETIC_ROWS: 0
 STATIC_MARKET_DATA: 0
 UNKNOWN_TO_NUMERIC_FALLBACKS: 0
-FINAL VERDICT: LIVE_DATA_VALIDATED
+FINAL VERDICT: LIVE_PAPER_VALIDATED
 ============================================================
 DATA SOURCES USED IN RUN:
   • Solana Mainnet RPC: https://api.mainnet-beta.solana.com, extrnode, ankr, public-rpc
