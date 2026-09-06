@@ -11,10 +11,17 @@ import argparse
 import csv
 import json
 import os
-import time
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Optional
+
+# Running ``python3 scripts/postprocess_live_reports.py`` puts ``scripts/``
+# on sys.path, not the repository root. Add the root explicitly so the local
+# ``blockchain`` and ``intelligence`` packages resolve in GitHub Actions.
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 from blockchain.parsers.real_swap_parser import RealSwapRecord
 from blockchain.solana.types import Provenance, SourceType
