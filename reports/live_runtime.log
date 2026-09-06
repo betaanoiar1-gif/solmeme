@@ -9,10 +9,13 @@
 ================================================================================
 CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 ================================================================================
-2026-09-06 19:48:09 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
-#1      11          11          139       6         $100.00     INVARIANTS_SATISFIED
-2026-09-06 19:53:35 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #2 ---
-#2      10          10          73        3         $100.00     INVARIANTS_SATISFIED
+2026-09-06 20:05:09 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
+#1      10          9           46        0         $100.00     INVARIANTS_SATISFIED
+2026-09-06 20:08:56 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #2 ---
+2026-09-06 20:09:41 [INFO] [meme_alpha_hunter.live_paper] 🎯 [REAL LIVE PAPER ENTRY] AMC @ $0.000156 | Size: $5.02
+#2      10          10          26        1         $99.89      INVARIANTS_SATISFIED
+2026-09-06 20:12:02 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #3 ---
+#3      9           9           47        0         $100.37     INVARIANTS_SATISFIED
 
 ================================================================================
   ⚡ MEME ALPHA HUNTER — SOLANA INTELLIGENCE & PAPER TRADING PLATFORM ⚡
@@ -21,28 +24,33 @@ CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 📊 [VIRTUAL WALLET STATUS]
 --------------------------------------------------------------------------------
   Starting Capital:  $100.00 USD
-  Current Equity:    $100.00 USD
-  Available Cash:    $100.00 USD
-  Open Positions:    $0.00 USD (0 active)
+  Current Equity:    $100.37 USD
+  Available Cash:    $94.95 USD
+  Open Positions:    $5.42 USD (1 active)
   Realized PnL:      $+0.00 USD
-  Unrealized PnL:    $+0.00 USD
-  Total Fees:        -$0.00 USD
-  Total Slippage:    -$0.00 USD
-  Max Drawdown:       0.0%
+  Unrealized PnL:    $+0.37 USD
+  Total Fees:        -$0.03 USD
+  Total Slippage:    -$0.03 USD
+  Max Drawdown:       0.1%
+--------------------------------------------------------------------------------
+  [ACTIVE OPEN POSITIONS]
+  SYMBOL       SIZE (USD)   ENTRY PRICE    CURR PRICE     PnL ($)      PnL (%)        
+  ----------------------------------------------------------------------------
+  AMC          $5.02        $0.000156      $0.000170      $0.37        +7.38         %
 --------------------------------------------------------------------------------
 
 🎯 [TOP OPPORTUNITY RANKINGS]
 --------------------------------------------------------------------------------
   SYMBOL     ALPHA    RISK     CONF     EARLY    FINAL    REGIME             DECISION    
   ----------------------------------------------------------------------------
-  CATBILL    63.1     19.0     48.6     72.8     66.9     R1_DORMANT         WATCH       
-  iCat       53.5     21.0     39.5     97.8     64.4     R1_DORMANT         REJECT      
-  DARKTRUMP  63.5     24.0     34.0     76.5     64.1     R1_DORMANT         WATCH       
-  MEMECAT    55.9     23.0     29.4     91.3     62.5     R0_DEAD            WATCH       
-  JIBR       56.9     23.0     27.2     86.2     61.9     R0_DEAD            WATCH       
-  PCAT       54.5     21.0     39.9     68.7     60.6     R1_DORMANT         REJECT      
-  MERT       53.5     21.0     40.0     68.3     60.1     R1_DORMANT         REJECT      
-  CLAUDE     50.5     21.0     40.2     70.9     59.1     R1_DORMANT         REJECT      
+  ONLYSTICK  69.7     19.0     46.6     96.5     73.1     R2_ACCUMULATION    PAPER_ENTRY 
+  AMC        65.2     19.0     52.0     90.5     71.0     R3_EARLY_IGNITION  PAPER_ENTRY 
+  MelonMusk  61.6     21.0     39.1     94.4     67.5     R2_ACCUMULATION    WATCH       
+  ape        60.7     23.0     31.0     93.6     65.2     R0_DEAD            WATCH       
+  iCat       51.5     21.0     44.0     87.6     62.7     R1_DORMANT         REJECT      
+  MEMECAT    55.6     23.0     31.0     81.2     61.1     R0_DEAD            WATCH       
+  SE         40.8     21.0     41.2     96.5     58.8     R1_DORMANT         REJECT      
+  JIBR       52.0     23.0     29.1     76.2     58.5     R0_DEAD            REJECT      
 --------------------------------------------------------------------------------
 
 🩺 [SYSTEM HEALTH]
@@ -64,42 +72,42 @@ FINAL LIVE VALIDATION
 COMMIT: 0f8f93a
 MODE: LIVE
 NETWORK_CONNECTED: TRUE
-RPC_REQUESTS: 1644
-RPC_SUCCESS: 376
-RPC_FAILURE: 1268
-RPC_AVG_LATENCY_MS: 107.26
+RPC_REQUESTS: 2383
+RPC_SUCCESS: 211
+RPC_FAILURE: 2172
+RPC_AVG_LATENCY_MS: 722.89
 LIVE_TOKENS: 12
 VERIFIED_MINTS: 12
-LIVE_SWAPS: 212
-VERIFIED_QUOTES: 192
-UNKNOWN_QUOTES: 20
-QUOTE_QUALITY: 0.9057
-TOKENS_WITH_LIVE_LIQUIDITY: 9
-TOKENS_WITH_UNKNOWN_LIQUIDITY: 3
+LIVE_SWAPS: 119
+VERIFIED_QUOTES: 116
+UNKNOWN_QUOTES: 3
+QUOTE_QUALITY: 0.9748
+TOKENS_WITH_LIVE_LIQUIDITY: 8
+TOKENS_WITH_UNKNOWN_LIQUIDITY: 4
 TOKENS_WITH_POOL_CREATION_TIME: 12
 TOKENS_WITH_UNKNOWN_AGE: 0
-EARLY_ALPHA_SCORED: 10
-DEEP_ANALYSIS_PRIORITIZED: 0
-WATCHLIST: 4
-SECURITY_REJECTED: 6
-SNIPER_CANDIDATES: 0
-PAPER_ENTRIES: 0
+EARLY_ALPHA_SCORED: 9
+DEEP_ANALYSIS_PRIORITIZED: 2
+WATCHLIST: 3
+SECURITY_REJECTED: 4
+SNIPER_CANDIDATES: 2
+PAPER_ENTRIES: 1
 PAPER_EXITS: 0
-OPEN_POSITIONS: 0
-FEES: $0.00
-SLIPPAGE: $0.00
+OPEN_POSITIONS: 1
+FEES: $0.03
+SLIPPAGE: $0.03
 REALIZED_PNL: $+0.00
-UNREALIZED_PNL: $+0.00
-FINAL_EQUITY: $100.00
-MAX_DRAWDOWN: 0.0%
+UNREALIZED_PNL: $+0.37
+FINAL_EQUITY: $100.37
+MAX_DRAWDOWN: 0.1%
 ACCOUNTING_DISCREPANCY: $0.000000
-PROVENANCE_CHECKS: 224
+PROVENANCE_CHECKS: 131
 FORCED_REAL: 0
 FORCED_VERIFICATION: 0
 SYNTHETIC_ROWS: 0
 STATIC_MARKET_DATA: 0
 UNKNOWN_TO_NUMERIC_FALLBACKS: 0
-FINAL VERDICT: LIVE_DATA_VALIDATED
+FINAL VERDICT: LIVE_PAPER_VALIDATED
 ============================================================
 DATA SOURCES USED IN RUN:
   • Solana Mainnet RPC: https://api.mainnet-beta.solana.com, extrnode, ankr, public-rpc
