@@ -16,7 +16,7 @@ concurrency:
 jobs:
   validate-live:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 330
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -38,13 +38,13 @@ jobs:
         run: |
           python3 scripts/probe_network.py
 
-      - name: Run Solana Live Paper Trading Engine (10 Minutes)
+      - name: Run Solana Live Paper Trading Engine (5 Hours)
         env:
           DATA_MODE: live
           REAL_DATA_ONLY: "true"
         run: |
           mkdir -p reports
-          python3 scripts/run_live_paper.py --mode live --duration-minutes 10.0 | tee reports/live_runtime.log
+          python3 scripts/run_live_paper.py --mode live --duration-minutes 300.0 | tee reports/live_runtime.log
 
       - name: Reconcile Live Report Fields
         env:
@@ -55,7 +55,7 @@ jobs:
       - name: Upload Report Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: solana-live-reports
+          name: solana-live-reports-5h
           path: reports/
 
       - name: Commit and Push Results
@@ -78,5 +78,5 @@ jobs:
           rm -rf "$report_tmp"
 
           git add reports/
-          git commit -m "chore(live-audit): record 10-minute live solana mainnet validation artifacts [skip ci]" || echo "No changes to commit"
+          git commit -m "chore(live-audit): record 5-hour live solana mainnet validation artifacts [skip ci]" || echo "No changes to commit"
           git push origin HEAD:arena/01a07111-solmeme
