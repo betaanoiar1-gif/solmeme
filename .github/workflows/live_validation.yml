@@ -21,7 +21,9 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          ref: arena/01a07111-solmeme
+          # Pin execution to the exact commit that triggered this workflow.
+          # This prevents a concurrent audit commit from changing the code under test.
+          ref: ${{ github.sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
