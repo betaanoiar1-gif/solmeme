@@ -6,20 +6,20 @@
 - **Execution Mode:** `DATA_MODE=LIVE`
 - **Git Branch:** `arena/01a07111-solmeme`
 - **Commit SHA:** `0f8f93a`
-- **Test Start Time:** 2026-09-05 20:34:53 UTC
-- **Test End Time:** 2026-09-05 20:47:13 UTC
-- **Total Duration:** 739.23 seconds (12.3 minutes)
+- **Test Start Time:** 2026-09-06 17:42:50 UTC
+- **Test End Time:** 2026-09-06 17:55:01 UTC
+- **Total Duration:** 731.45 seconds (12.2 minutes)
 - **Total Completed Cycles:** 3
 - **REAL_DATA_ONLY:** `TRUE`
 - **Network Status:** `SOLANA_MAINNET_CONNECTED`
-- **Total Real RPC Requests Attempted:** `2155`
-- **Successful Real RPC Requests:** `419`
-- **Failed Real RPC Requests:** `1736`
-- **Current Real Tokens Discovered:** `11`
-- **On-Chain Verified Mints:** `11`
-- **Current Ingested Real Swaps:** `250`
-- **Current Whale Events Detected:** `10`
-- **Current Smart Money Events:** `250`
+- **Total Real RPC Requests Attempted:** `1984`
+- **Successful Real RPC Requests:** `448`
+- **Failed Real RPC Requests:** `1536`
+- **Current Real Tokens Discovered:** `9`
+- **On-Chain Verified Mints:** `9`
+- **Current Ingested Real Swaps:** `201`
+- **Current Whale Events Detected:** `4`
+- **Current Smart Money Events:** `201`
 - **Sniper Candidates:** `0`
 - **Paper Entries:** `0`
 - **Paper Exits:** `0`
@@ -81,23 +81,23 @@ FINAL LIVE VALIDATION
 COMMIT: 0f8f93a
 MODE: LIVE
 NETWORK_CONNECTED: TRUE
-RPC_REQUESTS: 2155
-RPC_SUCCESS: 419
-RPC_FAILURE: 1736
-RPC_AVG_LATENCY_MS: 62.04
-LIVE_TOKENS: 11
-VERIFIED_MINTS: 11
-LIVE_SWAPS: 250
-VERIFIED_QUOTES: 236
-UNKNOWN_QUOTES: 14
-QUOTE_QUALITY: 0.9440
+RPC_REQUESTS: 1984
+RPC_SUCCESS: 448
+RPC_FAILURE: 1536
+RPC_AVG_LATENCY_MS: 689.4
+LIVE_TOKENS: 9
+VERIFIED_MINTS: 9
+LIVE_SWAPS: 201
+VERIFIED_QUOTES: 175
+UNKNOWN_QUOTES: 26
+QUOTE_QUALITY: 0.8706
 TOKENS_WITH_LIVE_LIQUIDITY: 6
-TOKENS_WITH_UNKNOWN_LIQUIDITY: 5
+TOKENS_WITH_UNKNOWN_LIQUIDITY: 3
 TOKENS_WITH_POOL_CREATION_TIME: 0
-TOKENS_WITH_UNKNOWN_AGE: 11
-EARLY_ALPHA_SCORED: 10
+TOKENS_WITH_UNKNOWN_AGE: 9
+EARLY_ALPHA_SCORED: 8
 DEEP_ANALYSIS_PRIORITIZED: 0
-WATCHLIST: 2
+WATCHLIST: 1
 SECURITY_REJECTED: 7
 SNIPER_CANDIDATES: 0
 PAPER_ENTRIES: 0
@@ -110,7 +110,7 @@ UNREALIZED_PNL: $+0.00
 FINAL_EQUITY: $100.00
 MAX_DRAWDOWN: 0.0%
 ACCOUNTING_DISCREPANCY: $0.000000
-PROVENANCE_CHECKS: 261
+PROVENANCE_CHECKS: 210
 FORCED_REAL: 0
 FORCED_VERIFICATION: 0
 SYNTHETIC_ROWS: 0

@@ -2,49 +2,49 @@
   "commit": "0f8f93a",
   "mode": "LIVE",
   "environment": "GitHub Actions / Cloud VPS / Standalone",
-  "start_time_utc": "2026-09-05 20:34:53 UTC",
-  "end_time_utc": "2026-09-05 20:47:13 UTC",
-  "duration_sec": 739.23,
+  "start_time_utc": "2026-09-06 17:42:50 UTC",
+  "end_time_utc": "2026-09-06 17:55:01 UTC",
+  "duration_sec": 731.45,
   "total_cycles": 3,
   "network_connected": true,
   "rpc_telemetry": {
-    "total_requests": 2155,
-    "success_requests": 419,
-    "failed_requests": 1736,
-    "avg_latency_ms": 62.04,
+    "total_requests": 1984,
+    "success_requests": 448,
+    "failed_requests": 1536,
+    "avg_latency_ms": 689.4,
     "per_endpoint": {
       "https://api.mainnet-beta.solana.com": {
-        "total_requests": 853,
-        "successful_requests": 419,
-        "failed_requests": 434,
+        "total_requests": 832,
+        "successful_requests": 448,
+        "failed_requests": 384,
         "consecutive_errors": 0,
-        "avg_latency_ms": 62.043956352341866,
+        "avg_latency_ms": 689.4049090494844,
         "is_active": true,
         "in_cooldown": true
       },
       "https://solana-mainnet.rpc.extrnode.com": {
-        "total_requests": 434,
+        "total_requests": 384,
         "successful_requests": 0,
-        "failed_requests": 434,
-        "consecutive_errors": 434,
+        "failed_requests": 384,
+        "consecutive_errors": 384,
         "avg_latency_ms": 0.0,
         "is_active": true,
         "in_cooldown": true
       },
       "https://rpc.ankr.com/solana": {
-        "total_requests": 434,
+        "total_requests": 384,
         "successful_requests": 0,
-        "failed_requests": 434,
-        "consecutive_errors": 434,
+        "failed_requests": 384,
+        "consecutive_errors": 384,
         "avg_latency_ms": 0.0,
         "is_active": true,
         "in_cooldown": true
       },
       "https://solana.public-rpc.com": {
-        "total_requests": 434,
+        "total_requests": 384,
         "successful_requests": 0,
-        "failed_requests": 434,
-        "consecutive_errors": 434,
+        "failed_requests": 384,
+        "consecutive_errors": 384,
         "avg_latency_ms": 0.0,
         "is_active": true,
         "in_cooldown": true
@@ -52,26 +52,26 @@
     }
   },
   "discovery": {
-    "live_tokens_discovered": 11,
-    "onchain_verified_mints": 11,
-    "live_swaps": 250,
-    "unique_live_mints": 11,
-    "unique_live_wallets": 187,
-    "unique_live_signatures": 229
+    "live_tokens_discovered": 9,
+    "onchain_verified_mints": 9,
+    "live_swaps": 201,
+    "unique_live_mints": 9,
+    "unique_live_wallets": 153,
+    "unique_live_signatures": 172
   },
   "data_quality": {
-    "strict_verified_quotes": 236,
-    "unknown_quotes": 14,
-    "quote_quality": 0.944,
+    "strict_verified_quotes": 175,
+    "unknown_quotes": 26,
+    "quote_quality": 0.8706,
     "tokens_with_live_liquidity": 6,
-    "tokens_with_unknown_liquidity": 5,
+    "tokens_with_unknown_liquidity": 3,
     "tokens_with_pool_creation_time": 0,
-    "tokens_with_unknown_age": 11
+    "tokens_with_unknown_age": 9
   },
   "alpha_pipeline": {
-    "early_alpha_scored": 10,
+    "early_alpha_scored": 8,
     "deep_analysis_prioritized": 0,
-    "watchlist": 2,
+    "watchlist": 1,
     "security_rejected": 7,
     "sniper_candidates": 0
   },
@@ -92,7 +92,7 @@
     "accounting_discrepancy": 0.0
   },
   "provenance_guard": {
-    "provenance_checks": 261,
+    "provenance_checks": 210,
     "forced_real": 0,
     "forced_verification": 0,
     "synthetic_rows": 0,
