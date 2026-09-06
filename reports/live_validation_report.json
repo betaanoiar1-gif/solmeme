@@ -1,50 +1,50 @@
 {
-  "commit": "0f8f93a",
+  "commit": "0023f88380c300a01e40d6f34d266f8185465bd6",
   "mode": "LIVE",
   "environment": "GitHub Actions / Cloud VPS / Standalone",
-  "start_time_utc": "2026-09-06 18:19:11 UTC",
-  "end_time_utc": "2026-09-06 18:29:58 UTC",
-  "duration_sec": 646.94,
+  "start_time_utc": "2026-09-06 18:32:33 UTC",
+  "end_time_utc": "2026-09-06 18:42:50 UTC",
+  "duration_sec": 617.3,
   "total_cycles": 2,
   "network_connected": true,
   "rpc_telemetry": {
-    "total_requests": 1770,
-    "success_requests": 406,
-    "failed_requests": 1364,
-    "avg_latency_ms": 82.59,
+    "total_requests": 1956,
+    "success_requests": 312,
+    "failed_requests": 1644,
+    "avg_latency_ms": 122.9,
     "per_endpoint": {
       "https://api.mainnet-beta.solana.com": {
-        "total_requests": 747,
-        "successful_requests": 406,
-        "failed_requests": 341,
+        "total_requests": 723,
+        "successful_requests": 312,
+        "failed_requests": 411,
         "consecutive_errors": 0,
-        "avg_latency_ms": 82.58619480734797,
+        "avg_latency_ms": 122.89852498926105,
         "is_active": true,
         "in_cooldown": true
       },
       "https://solana-mainnet.rpc.extrnode.com": {
-        "total_requests": 341,
+        "total_requests": 411,
         "successful_requests": 0,
-        "failed_requests": 341,
-        "consecutive_errors": 341,
+        "failed_requests": 411,
+        "consecutive_errors": 411,
         "avg_latency_ms": 0.0,
         "is_active": true,
         "in_cooldown": true
       },
       "https://rpc.ankr.com/solana": {
-        "total_requests": 341,
+        "total_requests": 411,
         "successful_requests": 0,
-        "failed_requests": 341,
-        "consecutive_errors": 341,
+        "failed_requests": 411,
+        "consecutive_errors": 411,
         "avg_latency_ms": 0.0,
         "is_active": true,
         "in_cooldown": true
       },
       "https://solana.public-rpc.com": {
-        "total_requests": 341,
+        "total_requests": 411,
         "successful_requests": 0,
-        "failed_requests": 341,
-        "consecutive_errors": 341,
+        "failed_requests": 411,
+        "consecutive_errors": 411,
         "avg_latency_ms": 0.0,
         "is_active": true,
         "in_cooldown": true
@@ -52,28 +52,28 @@
     }
   },
   "discovery": {
-    "live_tokens_discovered": 13,
-    "onchain_verified_mints": 13,
-    "live_swaps": 167,
-    "unique_live_mints": 13,
-    "unique_live_wallets": 132,
-    "unique_live_signatures": 160
+    "live_tokens_discovered": 12,
+    "onchain_verified_mints": 12,
+    "live_swaps": 161,
+    "unique_live_mints": 11,
+    "unique_live_wallets": 118,
+    "unique_live_signatures": 145
   },
   "data_quality": {
-    "strict_verified_quotes": 148,
-    "unknown_quotes": 19,
-    "quote_quality": 0.8862,
+    "strict_verified_quotes": 143,
+    "unknown_quotes": 18,
+    "quote_quality": 0.8882,
     "tokens_with_live_liquidity": 11,
-    "tokens_with_unknown_liquidity": 2,
+    "tokens_with_unknown_liquidity": 1,
     "tokens_with_pool_creation_time": 0,
-    "tokens_with_unknown_age": 13
+    "tokens_with_unknown_age": 12
   },
   "alpha_pipeline": {
-    "early_alpha_scored": 12,
+    "early_alpha_scored": 11,
     "deep_analysis_prioritized": 0,
     "watchlist": 0,
-    "security_rejected": 12,
-    "sniper_candidates": 0
+    "sniper_candidates": 0,
+    "scoring_rejected": 11
   },
   "paper_trading": {
     "starting_capital": 100.0,
@@ -92,12 +92,13 @@
     "accounting_discrepancy": 0.0
   },
   "provenance_guard": {
-    "provenance_checks": 180,
+    "provenance_checks": 173,
     "forced_real": 0,
     "forced_verification": 0,
     "synthetic_rows": 0,
     "static_market_data": 0,
     "unknown_to_numeric_fallbacks": 0
   },
-  "final_verdict": "LIVE_DATA_VALIDATED"
+  "final_verdict": "LIVE_DATA_VALIDATED",
+  "audit_note": "Exported smart-money fields are rebuilt from live_swaps.csv using the evidence-gated RealSmartMoneyEngine; no placeholder smart-money score is used."
 }

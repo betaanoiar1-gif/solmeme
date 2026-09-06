@@ -9,10 +9,10 @@
 ================================================================================
 CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 ================================================================================
-2026-09-06 18:19:11 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
-#1      12          12          122       4         $100.00     INVARIANTS_SATISFIED
-2026-09-06 18:25:00 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #2 ---
-#2      12          12          45        0         $100.00     INVARIANTS_SATISFIED
+2026-09-06 18:32:33 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
+#1      11          11          81        1         $100.00     INVARIANTS_SATISFIED
+2026-09-06 18:37:43 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #2 ---
+#2      11          11          80        2         $100.00     INVARIANTS_SATISFIED
 
 ================================================================================
   ⚡ MEME ALPHA HUNTER — SOLANA INTELLIGENCE & PAPER TRADING PLATFORM ⚡
@@ -35,14 +35,14 @@ CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 --------------------------------------------------------------------------------
   SYMBOL     ALPHA    RISK     CONF     EARLY    FINAL    REGIME             DECISION    
   ----------------------------------------------------------------------------
-  VALVA      48.5     19.0     43.4     97.0     63.1     R1_DORMANT         REJECT      
-  MemePerps  51.7     21.0     41.1     85.3     62.0     R1_DORMANT         REJECT      
-  MORGAN     51.1     21.0     40.9     86.2     61.8     R1_DORMANT         REJECT      
-  CIGS       50.3     19.0     56.7     68.5     61.6     R1_DORMANT         REJECT      
-  GG         50.3     24.0     35.2     90.8     60.5     R1_DORMANT         REJECT      
-  GIVE       52.7     23.0     29.4     83.7     59.9     R0_DEAD            REJECT      
-  PIKA       51.4     21.0     44.9     68.1     59.8     R1_DORMANT         REJECT      
-  SLOWLANA   48.9     19.0     51.0     65.8     59.8     R1_DORMANT         REJECT      
+  GIVE       51.4     21.0     42.1     92.6     63.1     R1_DORMANT         REJECT      
+  FCAT       49.7     21.0     40.3     98.6     62.9     R1_DORMANT         REJECT      
+  VALVA      51.3     21.0     36.0     90.2     61.8     R1_DORMANT         REJECT      
+  MORGAN     53.1     21.0     41.2     79.3     61.7     R1_DORMANT         REJECT      
+  MemePerps  52.0     21.0     39.4     78.3     60.8     R1_DORMANT         REJECT      
+  SLOWLANA   49.6     19.0     52.2     65.5     60.2     R1_DORMANT         REJECT      
+  SHRIMP     47.6     21.0     38.3     81.0     59.1     R1_DORMANT         REJECT      
+  GG         49.0     24.0     35.2     83.7     58.9     R1_DORMANT         REJECT      
 --------------------------------------------------------------------------------
 
 🩺 [SYSTEM HEALTH]
@@ -64,24 +64,24 @@ FINAL LIVE VALIDATION
 COMMIT: 0f8f93a
 MODE: LIVE
 NETWORK_CONNECTED: TRUE
-RPC_REQUESTS: 1770
-RPC_SUCCESS: 406
-RPC_FAILURE: 1364
-RPC_AVG_LATENCY_MS: 82.59
-LIVE_TOKENS: 13
-VERIFIED_MINTS: 13
-LIVE_SWAPS: 167
-VERIFIED_QUOTES: 148
-UNKNOWN_QUOTES: 19
-QUOTE_QUALITY: 0.8862
+RPC_REQUESTS: 1956
+RPC_SUCCESS: 312
+RPC_FAILURE: 1644
+RPC_AVG_LATENCY_MS: 122.9
+LIVE_TOKENS: 12
+VERIFIED_MINTS: 12
+LIVE_SWAPS: 161
+VERIFIED_QUOTES: 143
+UNKNOWN_QUOTES: 18
+QUOTE_QUALITY: 0.8882
 TOKENS_WITH_LIVE_LIQUIDITY: 11
-TOKENS_WITH_UNKNOWN_LIQUIDITY: 2
+TOKENS_WITH_UNKNOWN_LIQUIDITY: 1
 TOKENS_WITH_POOL_CREATION_TIME: 0
-TOKENS_WITH_UNKNOWN_AGE: 13
-EARLY_ALPHA_SCORED: 12
+TOKENS_WITH_UNKNOWN_AGE: 12
+EARLY_ALPHA_SCORED: 11
 DEEP_ANALYSIS_PRIORITIZED: 0
 WATCHLIST: 0
-SECURITY_REJECTED: 12
+SECURITY_REJECTED: 11
 SNIPER_CANDIDATES: 0
 PAPER_ENTRIES: 0
 PAPER_EXITS: 0
@@ -93,7 +93,7 @@ UNREALIZED_PNL: $+0.00
 FINAL_EQUITY: $100.00
 MAX_DRAWDOWN: 0.0%
 ACCOUNTING_DISCREPANCY: $0.000000
-PROVENANCE_CHECKS: 180
+PROVENANCE_CHECKS: 173
 FORCED_REAL: 0
 FORCED_VERIFICATION: 0
 SYNTHETIC_ROWS: 0
