@@ -21,8 +21,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          # Pin execution to the exact commit that triggered this workflow.
-          # This prevents a concurrent audit commit from changing the code under test.
           ref: ${{ github.sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
@@ -63,15 +61,21 @@ jobs:
       - name: Commit and Push Results
         if: always()
         run: |
+          set -e
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # The live engine modifies tracked report files before this step.
-          # Stash them before synchronizing with the remote branch, then restore.
-          git stash push -u -m "live-report-artifacts" || true
+          # Preserve this run's report snapshot outside the Git working tree.
+          report_tmp="$(mktemp -d)"
+          cp -a reports/. "$report_tmp/"
+
+          # Re-anchor onto the latest branch tip without merging generated reports.
           git fetch origin arena/01a07111-solmeme
-          git rebase origin/arena/01a07111-solmeme
-          git stash pop || true
+          git reset --hard origin/arena/01a07111-solmeme
+          rm -rf reports
+          mkdir -p reports
+          cp -a "$report_tmp/." reports/
+          rm -rf "$report_tmp"
 
           git add reports/
           git commit -m "chore(live-audit): record 10-minute live solana mainnet validation artifacts [skip ci]" || echo "No changes to commit"

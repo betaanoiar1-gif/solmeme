@@ -89,7 +89,6 @@ class OpportunityScorer:
         early_component = max(0.0, min(100.0, earlyness))
         execution_component = 50.0 if liquidity is not None else 25.0
 
-        # Agreement matters more than any single extreme number.
         score = (
             (sm_component * 0.30) +
             (flow_component * 0.25) +
@@ -99,8 +98,6 @@ class OpportunityScorer:
             (execution_component * 0.02)
         )
 
-        # A genuine pre-ignition signature is a qualitative confirmation, not a
-        # replacement for the underlying measured components.
         if micro.is_pre_ignition:
             score += 5.0
         if micro.money_price_divergence == "SMART_ACCUMULATION":
@@ -343,6 +340,7 @@ class OpportunityScorer:
                 "final_score": report.final_score,
                 "regime": report.regime,
                 "narrative": report.narrative,
+                "recommendation": report.recommendation,
                 "explanation_json": json.dumps({
                     "why_ranked_high": report.why_ranked_high,
                     "why_not_higher": report.why_not_higher,
