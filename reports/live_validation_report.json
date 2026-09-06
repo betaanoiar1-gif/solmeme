@@ -1,50 +1,50 @@
 {
-  "commit": "b1bed570dd26e6ebac1b519693fcffdfc26872cd",
+  "commit": "58b692208f62238f56beaa66bcb65cca1ef17b15",
   "mode": "LIVE",
   "environment": "GitHub Actions / Cloud VPS / Standalone",
-  "start_time_utc": "2026-09-06 19:06:48 UTC",
-  "end_time_utc": "2026-09-06 19:20:49 UTC",
-  "duration_sec": 840.93,
+  "start_time_utc": "2026-09-06 19:27:49 UTC",
+  "end_time_utc": "2026-09-06 19:41:42 UTC",
+  "duration_sec": 832.74,
   "total_cycles": 3,
   "network_connected": true,
   "rpc_telemetry": {
-    "total_requests": 1876,
-    "success_requests": 620,
-    "failed_requests": 1256,
-    "avg_latency_ms": 641.48,
+    "total_requests": 2919,
+    "success_requests": 339,
+    "failed_requests": 2580,
+    "avg_latency_ms": 97.53,
     "per_endpoint": {
       "https://api.mainnet-beta.solana.com": {
-        "total_requests": 934,
-        "successful_requests": 620,
-        "failed_requests": 314,
+        "total_requests": 984,
+        "successful_requests": 339,
+        "failed_requests": 645,
         "consecutive_errors": 0,
-        "avg_latency_ms": 641.4785060584912,
+        "avg_latency_ms": 97.52963221900201,
         "is_active": true,
         "in_cooldown": true
       },
       "https://solana-mainnet.rpc.extrnode.com": {
-        "total_requests": 314,
+        "total_requests": 645,
         "successful_requests": 0,
-        "failed_requests": 314,
-        "consecutive_errors": 314,
+        "failed_requests": 645,
+        "consecutive_errors": 645,
         "avg_latency_ms": 0.0,
         "is_active": true,
         "in_cooldown": true
       },
       "https://rpc.ankr.com/solana": {
-        "total_requests": 314,
+        "total_requests": 645,
         "successful_requests": 0,
-        "failed_requests": 314,
-        "consecutive_errors": 314,
+        "failed_requests": 645,
+        "consecutive_errors": 645,
         "avg_latency_ms": 0.0,
         "is_active": true,
         "in_cooldown": true
       },
       "https://solana.public-rpc.com": {
-        "total_requests": 314,
+        "total_requests": 645,
         "successful_requests": 0,
-        "failed_requests": 314,
-        "consecutive_errors": 314,
+        "failed_requests": 645,
+        "consecutive_errors": 645,
         "avg_latency_ms": 0.0,
         "is_active": true,
         "in_cooldown": true
@@ -52,53 +52,53 @@
     }
   },
   "discovery": {
-    "live_tokens_discovered": 11,
-    "onchain_verified_mints": 11,
-    "live_swaps": 385,
-    "unique_live_mints": 11,
-    "unique_live_wallets": 246,
-    "unique_live_signatures": 330
+    "live_tokens_discovered": 14,
+    "onchain_verified_mints": 14,
+    "live_swaps": 190,
+    "unique_live_mints": 14,
+    "unique_live_wallets": 154,
+    "unique_live_signatures": 182
   },
   "data_quality": {
-    "strict_verified_quotes": 341,
-    "unknown_quotes": 44,
-    "quote_quality": 0.8857,
-    "tokens_with_live_liquidity": 8,
+    "strict_verified_quotes": 167,
+    "unknown_quotes": 23,
+    "quote_quality": 0.8789,
+    "tokens_with_live_liquidity": 11,
     "tokens_with_unknown_liquidity": 3,
-    "tokens_with_pool_creation_time": 10,
-    "tokens_with_unknown_age": 1
+    "tokens_with_pool_creation_time": 14,
+    "tokens_with_unknown_age": 0
   },
   "alpha_pipeline": {
-    "early_alpha_scored": 10,
+    "early_alpha_scored": 11,
     "deep_analysis_prioritized": 1,
-    "watchlist": 3,
+    "watchlist": 2,
     "sniper_candidates": 1,
-    "scoring_rejected": 4
+    "scoring_rejected": 8
   },
   "paper_trading": {
     "starting_capital": 100.0,
-    "paper_entries": 0,
+    "paper_entries": 1,
     "paper_exits": 0,
-    "open_positions": 0,
-    "total_fees": 0.0,
-    "total_slippage": 0.0,
+    "open_positions": 1,
+    "total_fees": 0.03,
+    "total_slippage": 0.03,
     "realized_pnl": 0.0,
-    "unrealized_pnl": 0,
-    "final_equity": 100.0,
-    "max_drawdown_pct": 0.0
+    "unrealized_pnl": -0.11,
+    "final_equity": 99.89,
+    "max_drawdown_pct": 0.11
   },
   "accounting": {
     "accounting_invariants_valid": true,
     "accounting_discrepancy": 0.0
   },
   "provenance_guard": {
-    "provenance_checks": 396,
+    "provenance_checks": 204,
     "forced_real": 0,
     "forced_verification": 0,
     "synthetic_rows": 0,
     "static_market_data": 0,
     "unknown_to_numeric_fallbacks": 0
   },
-  "final_verdict": "LIVE_DATA_VALIDATED",
+  "final_verdict": "LIVE_PAPER_VALIDATED",
   "audit_note": "Exported smart-money fields are rebuilt from live_swaps.csv using the evidence-gated RealSmartMoneyEngine; no placeholder smart-money score is used."
 }

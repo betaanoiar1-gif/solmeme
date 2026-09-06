@@ -9,12 +9,13 @@
 ================================================================================
 CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 ================================================================================
-2026-09-06 19:06:48 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
-#1      10          10          81        1         $100.00     INVARIANTS_SATISFIED
-2026-09-06 19:11:23 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #2 ---
-#2      9           9           125       4         $100.00     INVARIANTS_SATISFIED
-2026-09-06 19:15:45 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #3 ---
-#3      10          10          179       5         $100.00     INVARIANTS_SATISFIED
+2026-09-06 19:27:49 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
+#1      13          12          76        2         $100.00     INVARIANTS_SATISFIED
+2026-09-06 19:33:07 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #2 ---
+#2      11          11          66        2         $100.00     INVARIANTS_SATISFIED
+2026-09-06 19:37:36 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #3 ---
+2026-09-06 19:38:51 [INFO] [meme_alpha_hunter.live_paper] 🎯 [REAL LIVE PAPER ENTRY] CATBILL @ $0.000134 | Size: $5.39
+#3      11          11          48        1         $99.89      INVARIANTS_SATISFIED
 
 ================================================================================
   ⚡ MEME ALPHA HUNTER — SOLANA INTELLIGENCE & PAPER TRADING PLATFORM ⚡
@@ -23,28 +24,33 @@ CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 📊 [VIRTUAL WALLET STATUS]
 --------------------------------------------------------------------------------
   Starting Capital:  $100.00 USD
-  Current Equity:    $100.00 USD
-  Available Cash:    $100.00 USD
-  Open Positions:    $0.00 USD (0 active)
+  Current Equity:    $99.89 USD
+  Available Cash:    $94.58 USD
+  Open Positions:    $5.31 USD (1 active)
   Realized PnL:      $+0.00 USD
-  Unrealized PnL:    $+0.00 USD
-  Total Fees:        -$0.00 USD
-  Total Slippage:    -$0.00 USD
-  Max Drawdown:       0.0%
+  Unrealized PnL:    $-0.11 USD
+  Total Fees:        -$0.03 USD
+  Total Slippage:    -$0.03 USD
+  Max Drawdown:       0.1%
+--------------------------------------------------------------------------------
+  [ACTIVE OPEN POSITIONS]
+  SYMBOL       SIZE (USD)   ENTRY PRICE    CURR PRICE     PnL ($)      PnL (%)        
+  ----------------------------------------------------------------------------
+  CATBILL      $5.39        $0.000134      $0.000134      $-0.11       -2.04         %
 --------------------------------------------------------------------------------
 
 🎯 [TOP OPPORTUNITY RANKINGS]
 --------------------------------------------------------------------------------
   SYMBOL     ALPHA    RISK     CONF     EARLY    FINAL    REGIME             DECISION    
   ----------------------------------------------------------------------------
-  MSTR       67.8     19.0     47.8     94.2     72.0     R1_DORMANT         PAPER_ENTRY 
-  SHATCHAIR  62.1     21.0     40.2     89.2     67.1     R6_PARABOLIC       WAIT_FOR_RETEST
-  NOLA       60.7     19.0     52.1     67.8     65.5     R1_DORMANT         WATCH       
-  GPU        57.7     21.0     37.7     76.3     62.8     R7_EUPHORIA        WAIT_FOR_RETEST
-  THUG       60.5     23.0     31.0     68.3     61.4     R0_DEAD            WATCH       
-  BATON      61.3     19.0     53.8     30.0     60.4     R4_CONFIRMED_IGNITION WATCH       
-  BOOMER     43.6     19.0     56.8     79.7     60.3     R1_DORMANT         REJECT      
-  STOOL      48.6     21.0     44.5     79.9     60.3     R1_DORMANT         REJECT      
+  CATBILL    77.6     19.0     49.9     81.5     74.9     R6_PARABOLIC       PAPER_ENTRY 
+  NOLA       61.1     21.0     45.5     67.3     64.2     R1_DORMANT         WATCH       
+  MERT       61.5     21.0     42.5     68.7     64.1     R1_DORMANT         WATCH       
+  SHATCHAIR  54.4     21.0     41.9     77.4     62.1     R5_EXPANSION       REJECT      
+  PCAT       52.4     21.0     43.1     76.9     61.3     R1_DORMANT         REJECT      
+  CLAUDE     49.6     21.0     41.7     79.9     60.3     R1_DORMANT         REJECT      
+  JIBR       50.7     23.0     20.8     95.0     59.4     R0_DEAD            REJECT      
+  STOOL      51.2     21.0     41.6     68.7     59.4     R1_DORMANT         REJECT      
 --------------------------------------------------------------------------------
 
 🩺 [SYSTEM HEALTH]
@@ -66,42 +72,42 @@ FINAL LIVE VALIDATION
 COMMIT: 0f8f93a
 MODE: LIVE
 NETWORK_CONNECTED: TRUE
-RPC_REQUESTS: 1876
-RPC_SUCCESS: 620
-RPC_FAILURE: 1256
-RPC_AVG_LATENCY_MS: 641.48
-LIVE_TOKENS: 11
-VERIFIED_MINTS: 11
-LIVE_SWAPS: 385
-VERIFIED_QUOTES: 341
-UNKNOWN_QUOTES: 44
-QUOTE_QUALITY: 0.8857
-TOKENS_WITH_LIVE_LIQUIDITY: 8
+RPC_REQUESTS: 2919
+RPC_SUCCESS: 339
+RPC_FAILURE: 2580
+RPC_AVG_LATENCY_MS: 97.53
+LIVE_TOKENS: 14
+VERIFIED_MINTS: 14
+LIVE_SWAPS: 190
+VERIFIED_QUOTES: 167
+UNKNOWN_QUOTES: 23
+QUOTE_QUALITY: 0.8789
+TOKENS_WITH_LIVE_LIQUIDITY: 11
 TOKENS_WITH_UNKNOWN_LIQUIDITY: 3
-TOKENS_WITH_POOL_CREATION_TIME: 10
-TOKENS_WITH_UNKNOWN_AGE: 1
-EARLY_ALPHA_SCORED: 10
+TOKENS_WITH_POOL_CREATION_TIME: 14
+TOKENS_WITH_UNKNOWN_AGE: 0
+EARLY_ALPHA_SCORED: 11
 DEEP_ANALYSIS_PRIORITIZED: 1
-WATCHLIST: 3
-SECURITY_REJECTED: 4
+WATCHLIST: 2
+SECURITY_REJECTED: 8
 SNIPER_CANDIDATES: 1
-PAPER_ENTRIES: 0
+PAPER_ENTRIES: 1
 PAPER_EXITS: 0
-OPEN_POSITIONS: 0
-FEES: $0.00
-SLIPPAGE: $0.00
+OPEN_POSITIONS: 1
+FEES: $0.03
+SLIPPAGE: $0.03
 REALIZED_PNL: $+0.00
-UNREALIZED_PNL: $+0.00
-FINAL_EQUITY: $100.00
-MAX_DRAWDOWN: 0.0%
+UNREALIZED_PNL: $-0.11
+FINAL_EQUITY: $99.89
+MAX_DRAWDOWN: 0.1%
 ACCOUNTING_DISCREPANCY: $0.000000
-PROVENANCE_CHECKS: 396
+PROVENANCE_CHECKS: 204
 FORCED_REAL: 0
 FORCED_VERIFICATION: 0
 SYNTHETIC_ROWS: 0
 STATIC_MARKET_DATA: 0
 UNKNOWN_TO_NUMERIC_FALLBACKS: 0
-FINAL VERDICT: LIVE_DATA_VALIDATED
+FINAL VERDICT: LIVE_PAPER_VALIDATED
 ============================================================
 DATA SOURCES USED IN RUN:
   • Solana Mainnet RPC: https://api.mainnet-beta.solana.com, extrnode, ankr, public-rpc
