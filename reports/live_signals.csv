@@ -1,9 +1,10 @@
 mint,symbol,timestamp,alpha_score,risk_score,final_score,confidence,known_features,unknown_features,security_status,liquidity,age,smart_money_score,whale_flow,microstructure_state,sniper_modes,recommendation,source_type
-Gh1AHEfFoUVngXkG7Q8yQreES44Soi2BQVxwCmMgjZYg,SAFEMOON,2026-09-06 17:52:32,62.58,21.0,66.39,38.15,8,5,SAFE,6809.22,,50.0,0.0,R1_DORMANT,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",WATCH,REAL
-C1SmvbwWEZkCremPBW9pQtZBv4mPpvCbg5ep1VvgqAtx,ZGUY,2026-09-06 17:54:29,51.16,21.0,63.7,43.48,8,5,SAFE,17460.45,,50.0,0.0,R5_EXPANSION,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",REJECT,REAL
-9RS8C1Tfa3tvG8Wv5cXqfFwcGrFBdzxrkhnjMA6qb6iy,CIGS,2026-09-06 17:52:04,41.35,19.0,60.04,59.75,8,5,SAFE,52788.68,,50.0,0.0,R4_CONFIRMED_IGNITION,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",REJECT,REAL
-8jaMdTkF81bMTopPsiBfZQzo7v7RNPyNisstnAEJpump,Nakula,2026-09-06 17:52:59,47.17,23.0,57.46,31.0,7,6,SAFE,,,50.0,0.0,R0_DEAD,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",REJECT,REAL
-AL55bcvnzsq8DMq7RPMztfXZbio4YdmMtxcCgtm4GoDu,PIKA,2026-09-06 17:51:36,40.06,19.0,56.82,50.84,8,5,SAFE,32186.15,,50.0,0.0,R1_DORMANT,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",REJECT,REAL
-Ejsu8TroRHAUgw4X8mMfaTFu8E1rLR6w28QAVbrPpump,75c,2026-09-06 17:54:59,49.01,23.0,56.25,31.0,7,6,SAFE,,,50.0,0.0,R0_DEAD,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",REJECT,REAL
-9BTijzJdsm46XFugddkWx8JKSkABFd5kxkbsxrwLpump,bear,2026-09-06 17:53:30,45.69,23.0,54.72,31.0,7,6,SAFE,,,50.0,0.0,R0_DEAD,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",REJECT,REAL
-8dKVVPtQ97uW1V69vhYZwHEaiiMBJ2dJBPBmTEwDuPZR,XRP,2026-09-06 17:53:59,35.71,21.0,52.07,40.46,8,5,SAFE,11427.4,,50.0,0.0,R1_DORMANT,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",REJECT,REAL
+AL55bcvnzsq8DMq7RPMztfXZbio4YdmMtxcCgtm4GoDu,PIKA,2026-09-06 18:08:57,62.8,19.0,65.93,47.62,8,5,SAFE,25746.79,,50.0,0.0,R5_EXPANSION,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",WAIT_FOR_RETEST,REAL
+5gfU5yCx9ysLhQ7q4i9f6Ukiwws8t7Re3y2334EhzQHJ,MemePerps,2026-09-06 18:07:33,48.92,19.0,63.62,47.12,8,5,SAFE,32731.15,,50.0,0.0,R1_DORMANT,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",REJECT,REAL
+SkuPjofYV7jrjgAfTgAWjHM36Pu2uib2Fj5ZpqCpump,survіve,2026-09-06 18:08:01,56.65,23.0,63.35,27.8,7,6,SAFE,,,50.0,0.0,R0_DEAD,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",WATCH,REAL
+8jaMdTkF81bMTopPsiBfZQzo7v7RNPyNisstnAEJpump,Nakula,2026-09-06 18:10:20,60.62,23.0,62.21,31.0,7,6,SAFE,,,50.0,0.0,R0_DEAD,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",WAIT_FOR_RETEST,REAL
+9RS8C1Tfa3tvG8Wv5cXqfFwcGrFBdzxrkhnjMA6qb6iy,CIGS,2026-09-06 18:09:24,39.26,19.0,57.63,58.58,8,5,SAFE,47652.11,,50.0,0.0,R1_DORMANT,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",REJECT,REAL
+8dKVVPtQ97uW1V69vhYZwHEaiiMBJ2dJBPBmTEwDuPZR,XRP,2026-09-06 18:11:14,47.78,21.0,57.21,38.88,8,5,SAFE,8256.62,,50.0,0.0,R1_DORMANT,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",REJECT,REAL
+Gh1AHEfFoUVngXkG7Q8yQreES44Soi2BQVxwCmMgjZYg,SAFEMOON,2026-09-06 18:09:52,43.48,21.0,56.44,37.81,8,5,SAFE,6128.0,,50.0,0.0,R1_DORMANT,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",REJECT,REAL
+9BTijzJdsm46XFugddkWx8JKSkABFd5kxkbsxrwLpump,bear,2026-09-06 18:10:47,48.56,23.0,55.95,31.0,7,6,SAFE,,,50.0,0.0,R0_DEAD,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",REJECT,REAL
+DXSAxxLnsf1kFgjUEp492FZQR4xfpszac26FXrtjWvwf,SLOWLANA,2026-09-06 18:08:28,37.34,19.0,54.51,50.15,8,5,SAFE,30808.41,,50.0,0.0,R1_DORMANT,"EarlyLaunch,SmartMoney,Whale,Momentum,Hybrid",REJECT,REAL

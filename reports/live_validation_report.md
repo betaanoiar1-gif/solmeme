@@ -6,20 +6,20 @@
 - **Execution Mode:** `DATA_MODE=LIVE`
 - **Git Branch:** `arena/01a07111-solmeme`
 - **Commit SHA:** `0f8f93a`
-- **Test Start Time:** 2026-09-06 17:42:50 UTC
-- **Test End Time:** 2026-09-06 17:55:01 UTC
-- **Total Duration:** 731.45 seconds (12.2 minutes)
+- **Test Start Time:** 2026-09-06 18:00:43 UTC
+- **Test End Time:** 2026-09-06 18:11:16 UTC
+- **Total Duration:** 633.14 seconds (10.6 minutes)
 - **Total Completed Cycles:** 3
 - **REAL_DATA_ONLY:** `TRUE`
 - **Network Status:** `SOLANA_MAINNET_CONNECTED`
-- **Total Real RPC Requests Attempted:** `1984`
-- **Successful Real RPC Requests:** `448`
-- **Failed Real RPC Requests:** `1536`
+- **Total Real RPC Requests Attempted:** `2023`
+- **Successful Real RPC Requests:** `309`
+- **Failed Real RPC Requests:** `1714`
 - **Current Real Tokens Discovered:** `9`
 - **On-Chain Verified Mints:** `9`
-- **Current Ingested Real Swaps:** `201`
-- **Current Whale Events Detected:** `4`
-- **Current Smart Money Events:** `201`
+- **Current Ingested Real Swaps:** `132`
+- **Current Whale Events Detected:** `5`
+- **Current Smart Money Events:** `132`
 - **Sniper Candidates:** `0`
 - **Paper Entries:** `0`
 - **Paper Exits:** `0`
@@ -81,24 +81,24 @@ FINAL LIVE VALIDATION
 COMMIT: 0f8f93a
 MODE: LIVE
 NETWORK_CONNECTED: TRUE
-RPC_REQUESTS: 1984
-RPC_SUCCESS: 448
-RPC_FAILURE: 1536
-RPC_AVG_LATENCY_MS: 689.4
+RPC_REQUESTS: 2023
+RPC_SUCCESS: 309
+RPC_FAILURE: 1714
+RPC_AVG_LATENCY_MS: 114.64
 LIVE_TOKENS: 9
 VERIFIED_MINTS: 9
-LIVE_SWAPS: 201
-VERIFIED_QUOTES: 175
-UNKNOWN_QUOTES: 26
-QUOTE_QUALITY: 0.8706
+LIVE_SWAPS: 132
+VERIFIED_QUOTES: 99
+UNKNOWN_QUOTES: 33
+QUOTE_QUALITY: 0.7500
 TOKENS_WITH_LIVE_LIQUIDITY: 6
 TOKENS_WITH_UNKNOWN_LIQUIDITY: 3
 TOKENS_WITH_POOL_CREATION_TIME: 0
 TOKENS_WITH_UNKNOWN_AGE: 9
-EARLY_ALPHA_SCORED: 8
+EARLY_ALPHA_SCORED: 9
 DEEP_ANALYSIS_PRIORITIZED: 0
 WATCHLIST: 1
-SECURITY_REJECTED: 7
+SECURITY_REJECTED: 6
 SNIPER_CANDIDATES: 0
 PAPER_ENTRIES: 0
 PAPER_EXITS: 0
@@ -110,7 +110,7 @@ UNREALIZED_PNL: $+0.00
 FINAL_EQUITY: $100.00
 MAX_DRAWDOWN: 0.0%
 ACCOUNTING_DISCREPANCY: $0.000000
-PROVENANCE_CHECKS: 210
+PROVENANCE_CHECKS: 141
 FORCED_REAL: 0
 FORCED_VERIFICATION: 0
 SYNTHETIC_ROWS: 0

@@ -9,12 +9,12 @@
 ================================================================================
 CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 ================================================================================
-2026-09-06 17:42:50 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
-#1      9           9           65        1         $100.00     INVARIANTS_SATISFIED
-2026-09-06 17:47:04 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #2 ---
-#2      9           9           52        1         $100.00     INVARIANTS_SATISFIED
-2026-09-06 17:51:09 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #3 ---
-#3      8           8           84        2         $100.00     INVARIANTS_SATISFIED
+2026-09-06 18:00:43 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
+#1      7           7           40        1         $100.00     INVARIANTS_SATISFIED
+2026-09-06 18:03:54 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #2 ---
+#2      7           7           43        4         $100.00     INVARIANTS_SATISFIED
+2026-09-06 18:07:06 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #3 ---
+#3      9           9           49        0         $100.00     INVARIANTS_SATISFIED
 
 ================================================================================
   ⚡ MEME ALPHA HUNTER — SOLANA INTELLIGENCE & PAPER TRADING PLATFORM ⚡
@@ -37,14 +37,14 @@ CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 --------------------------------------------------------------------------------
   SYMBOL     ALPHA    RISK     CONF     EARLY    FINAL    REGIME             DECISION    
   ----------------------------------------------------------------------------
-  SAFEMOON   62.6     21.0     38.1     85.0     66.4     R1_DORMANT         WATCH       
-  ZGUY       51.2     21.0     43.5     96.0     63.7     R5_EXPANSION       REJECT      
-  CIGS       41.4     19.0     59.8     81.5     60.0     R4_CONFIRMED_IGNITION REJECT      
-  Nakula     47.2     23.0     31.0     82.2     57.5     R0_DEAD            REJECT      
-  PIKA       40.1     19.0     50.8     72.8     56.8     R1_DORMANT         REJECT      
-  75c        49.0     23.0     31.0     68.6     56.2     R0_DEAD            REJECT      
-  bear       45.7     23.0     31.0     68.4     54.7     R0_DEAD            REJECT      
-  XRP        35.7     21.0     40.5     67.9     52.1     R1_DORMANT         REJECT      
+  PIKA       62.8     19.0     47.6     68.5     65.9     R5_EXPANSION       WAIT_FOR_RETEST
+  MemePerps  48.9     19.0     47.1     95.2     63.6     R1_DORMANT         REJECT      
+  survіve    56.6     23.0     27.8     96.2     63.4     R0_DEAD            WATCH       
+  Nakula     60.6     23.0     31.0     73.6     62.2     R0_DEAD            WAIT_FOR_RETEST
+  CIGS       39.3     19.0     58.6     72.8     57.6     R1_DORMANT         REJECT      
+  XRP        47.8     21.0     38.9     67.5     57.2     R1_DORMANT         REJECT      
+  SAFEMOON   43.5     21.0     37.8     76.4     56.4     R1_DORMANT         REJECT      
+  bear       48.6     23.0     31.0     68.0     56.0     R0_DEAD            REJECT      
 --------------------------------------------------------------------------------
 
 🩺 [SYSTEM HEALTH]
@@ -66,24 +66,24 @@ FINAL LIVE VALIDATION
 COMMIT: 0f8f93a
 MODE: LIVE
 NETWORK_CONNECTED: TRUE
-RPC_REQUESTS: 1984
-RPC_SUCCESS: 448
-RPC_FAILURE: 1536
-RPC_AVG_LATENCY_MS: 689.4
+RPC_REQUESTS: 2023
+RPC_SUCCESS: 309
+RPC_FAILURE: 1714
+RPC_AVG_LATENCY_MS: 114.64
 LIVE_TOKENS: 9
 VERIFIED_MINTS: 9
-LIVE_SWAPS: 201
-VERIFIED_QUOTES: 175
-UNKNOWN_QUOTES: 26
-QUOTE_QUALITY: 0.8706
+LIVE_SWAPS: 132
+VERIFIED_QUOTES: 99
+UNKNOWN_QUOTES: 33
+QUOTE_QUALITY: 0.7500
 TOKENS_WITH_LIVE_LIQUIDITY: 6
 TOKENS_WITH_UNKNOWN_LIQUIDITY: 3
 TOKENS_WITH_POOL_CREATION_TIME: 0
 TOKENS_WITH_UNKNOWN_AGE: 9
-EARLY_ALPHA_SCORED: 8
+EARLY_ALPHA_SCORED: 9
 DEEP_ANALYSIS_PRIORITIZED: 0
 WATCHLIST: 1
-SECURITY_REJECTED: 7
+SECURITY_REJECTED: 6
 SNIPER_CANDIDATES: 0
 PAPER_ENTRIES: 0
 PAPER_EXITS: 0
@@ -95,7 +95,7 @@ UNREALIZED_PNL: $+0.00
 FINAL_EQUITY: $100.00
 MAX_DRAWDOWN: 0.0%
 ACCOUNTING_DISCREPANCY: $0.000000
-PROVENANCE_CHECKS: 210
+PROVENANCE_CHECKS: 141
 FORCED_REAL: 0
 FORCED_VERIFICATION: 0
 SYNTHETIC_ROWS: 0
