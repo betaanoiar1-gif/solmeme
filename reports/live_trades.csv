@@ -1,3 +1,6 @@
 trade_id,strategy,mint,symbol,signal_time,decision_time,execution_time,latency,market_price,requested_size,filled_size,slippage,fees,liquidity_at_entry,liquidity_at_exit,fill_status,exit_time,exit_price,exit_reason,realized_pnl_usd,return_pct,alpha_score,risk_score,regime,source_type
+<<<<<<< Updated upstream
 eef7ba64,Real_Live_Paper_Wallet,FGrtNFHUZHbGoKXivi2r4gRmVstjsFqKZ3geVByHpump,AMC,2026-09-06 20:35:51,2026-09-06 20:35:51,2026-09-06 20:35:51,50.0,0.0005190692723023834,5.66,5.66,0.0286,0.0443,2770.0,2770.0,FILLED,2026-09-06 20:44:48,2.6872328248264834e-06,STOP_LOSS_TRIGGERED (-99.5% <= -10.0%),-5.6743,-100.25,67.21,19.0,R1_DORMANT,REAL
 e278c14b,Real_Live_Paper_Wallet,ACDCA4ndipepbaCQnkYyPhayGGNDS9PqnobSDirNpump,ONLYSTICK,2026-09-06 20:39:59,2026-09-06 20:39:59,2026-09-06 20:39:59,50.0,0.00021733493441234266,5.71,5.71,0.0519,0.0559,35436.8,35436.8,FILLED,2026-09-06 20:44:48,0.00017525462335888425,STOP_LOSS_TRIGGERED (-18.9% <= -10.0%),-1.1359,-19.89,79.45,19.0,R3_EARLY_IGNITION,REAL
+=======
+>>>>>>> Stashed changes

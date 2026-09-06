@@ -9,6 +9,7 @@
 ================================================================================
 CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 ================================================================================
+<<<<<<< Updated upstream
 2026-09-06 20:34:15 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
 2026-09-06 20:34:37 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for Hp1x97J6UqUgb4rvo2LFppB17bkubKercVpGXTxapump: You did not supply a value for binding parameter :recommendation.
 2026-09-06 20:35:02 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for CG8YntxS8egYsuZX2mFB9eExBvLZazYWvBo2Mrpupump: You did not supply a value for binding parameter :recommendation.
@@ -45,6 +46,44 @@ CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 2026-09-06 20:44:48 [INFO] [meme_alpha_hunter.live_paper] 🏁 [REAL LIVE PAPER EXIT] AMC @ $0.000003 | PnL: $-5.67 | Reason: STOP_LOSS_TRIGGERED (-99.5% <= -10.0%)
 2026-09-06 20:44:48 [INFO] [meme_alpha_hunter.live_paper] 🏁 [REAL LIVE PAPER EXIT] ONLYSTICK @ $0.000175 | PnL: $-1.14 | Reason: STOP_LOSS_TRIGGERED (-18.9% <= -10.0%)
 #3      10          10          105       5         $93.19      INVARIANTS_SATISFIED
+=======
+2026-09-06 20:45:25 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
+2026-09-06 20:45:56 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for FhxbMcvXzYYWStVrPr7o1qEh4EryQ1277AGzTDFGpump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:46:27 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for FPuhxgKu2PY3GfpqLBpJsV4TnJbyym9PHQdfDFqZpump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:46:58 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for AZJxs5CpVRDV5T4wxTCaHRaRHzZffQLiTR1LkET7pump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:47:30 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for HfPnvRVSVSZjM8soy5JVRfE1tGCMs7SUPtCGFufHpump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:47:59 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for Hp1x97J6UqUgb4rvo2LFppB17bkubKercVpGXTxapump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:48:30 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for CG8YntxS8egYsuZX2mFB9eExBvLZazYWvBo2Mrpupump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:48:59 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for 8oQo38kn5T1Lafzw3aUYdjJz7AwkVLmU3q4qrMQApump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:49:29 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for FGrtNFHUZHbGoKXivi2r4gRmVstjsFqKZ3geVByHpump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:49:59 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for Ex7ntKfpYHh23Pmr9NvGNRU2bNqUmNnhFHkmzusf8FAM: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:50:24 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for AjToeC9PjBK7NnHG8xFz3bwu3UZLQC37LfyPjUDRpump: You did not supply a value for binding parameter :recommendation.
+#1      10          10          129       9         $100.00     INVARIANTS_SATISFIED
+2026-09-06 20:50:26 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #2 ---
+2026-09-06 20:50:50 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for FhxbMcvXzYYWStVrPr7o1qEh4EryQ1277AGzTDFGpump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:51:15 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for FPuhxgKu2PY3GfpqLBpJsV4TnJbyym9PHQdfDFqZpump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:51:41 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for AZJxs5CpVRDV5T4wxTCaHRaRHzZffQLiTR1LkET7pump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:52:07 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for HfPnvRVSVSZjM8soy5JVRfE1tGCMs7SUPtCGFufHpump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:52:31 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for Hp1x97J6UqUgb4rvo2LFppB17bkubKercVpGXTxapump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:52:56 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for CG8YntxS8egYsuZX2mFB9eExBvLZazYWvBo2Mrpupump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:53:20 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for 8oQo38kn5T1Lafzw3aUYdjJz7AwkVLmU3q4qrMQApump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:53:45 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for FGrtNFHUZHbGoKXivi2r4gRmVstjsFqKZ3geVByHpump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:54:10 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for Ex7ntKfpYHh23Pmr9NvGNRU2bNqUmNnhFHkmzusf8FAM: You did not supply a value for binding parameter :recommendation.
+#2      9           9           32        1         $100.00     INVARIANTS_SATISFIED
+2026-09-06 20:54:12 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #3 ---
+2026-09-06 20:54:37 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for 4MXiKfLzRMvrvKdTuPCiYZ9r9GDgrXzMAfvTqR74kDGt: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:55:02 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for 8RAFGyzajpYX96ppL7MXEL5DwjBSnbAqjBTfhUXDhVYj: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:55:29 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for FhxbMcvXzYYWStVrPr7o1qEh4EryQ1277AGzTDFGpump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:55:54 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for FPuhxgKu2PY3GfpqLBpJsV4TnJbyym9PHQdfDFqZpump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:56:20 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for AZJxs5CpVRDV5T4wxTCaHRaRHzZffQLiTR1LkET7pump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:56:21 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for HfPnvRVSVSZjM8soy5JVRfE1tGCMs7SUPtCGFufHpump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:56:45 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for Hp1x97J6UqUgb4rvo2LFppB17bkubKercVpGXTxapump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:57:10 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for CG8YntxS8egYsuZX2mFB9eExBvLZazYWvBo2Mrpupump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:57:34 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for 8oQo38kn5T1Lafzw3aUYdjJz7AwkVLmU3q4qrMQApump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:57:59 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for FGrtNFHUZHbGoKXivi2r4gRmVstjsFqKZ3geVByHpump: You did not supply a value for binding parameter :recommendation.
+2026-09-06 20:58:24 [ERROR] [meme_alpha_hunter.scoring] Failed to persist opportunity score for Ex7ntKfpYHh23Pmr9NvGNRU2bNqUmNnhFHkmzusf8FAM: You did not supply a value for binding parameter :recommendation.
+#3      11          11          44        0         $100.00     INVARIANTS_SATISFIED
+>>>>>>> Stashed changes
 
 ================================================================================
   ⚡ MEME ALPHA HUNTER — SOLANA INTELLIGENCE & PAPER TRADING PLATFORM ⚡
@@ -53,6 +92,7 @@ CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 📊 [VIRTUAL WALLET STATUS]
 --------------------------------------------------------------------------------
   Starting Capital:  $100.00 USD
+<<<<<<< Updated upstream
   Current Equity:    $93.19 USD
   Available Cash:    $93.19 USD
   Open Positions:    $0.00 USD (0 active)
@@ -61,12 +101,23 @@ CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
   Total Fees:        -$0.10 USD
   Total Slippage:    -$0.08 USD
   Max Drawdown:       6.8%
+=======
+  Current Equity:    $100.00 USD
+  Available Cash:    $100.00 USD
+  Open Positions:    $0.00 USD (0 active)
+  Realized PnL:      $+0.00 USD
+  Unrealized PnL:    $+0.00 USD
+  Total Fees:        -$0.00 USD
+  Total Slippage:    -$0.00 USD
+  Max Drawdown:       0.0%
+>>>>>>> Stashed changes
 --------------------------------------------------------------------------------
 
 🎯 [TOP OPPORTUNITY RANKINGS]
 --------------------------------------------------------------------------------
   SYMBOL     ALPHA    RISK     CONF     EARLY    FINAL    REGIME             DECISION    
   ----------------------------------------------------------------------------
+<<<<<<< Updated upstream
   ZAPE       71.9     21.0     33.5     98.7     71.9     R6_PARABOLIC       PAPER_ENTRY 
   ONLYSTICK  60.1     19.0     52.5     80.5     67.2     R1_DORMANT         WATCH       
   Surfcat    61.1     21.0     38.5     90.1     66.5     R1_DORMANT         WAIT_FOR_RETEST
@@ -75,6 +126,16 @@ CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
   luffy      59.6     23.0     27.8     96.7     64.8     R0_DEAD            WATCH       
   Lexapro    58.3     23.0     27.8     95.1     63.9     R0_DEAD            WATCH       
   MelonMusk  44.6     21.0     43.7     78.4     58.1     R1_DORMANT         REJECT      
+=======
+  luffy      62.9     21.0     38.9     93.5     67.9     R1_DORMANT         WATCH       
+  GPT        56.5     19.0     47.1     93.6     66.8     R1_DORMANT         WATCH       
+  ARBCAT     59.7     23.0     27.8     87.3     63.4     R0_DEAD            WATCH       
+  ZAPE       53.6     24.0     36.2     91.5     62.3     R1_DORMANT         REJECT      
+  GANDALF    56.4     21.0     40.2     68.6     61.5     R1_DORMANT         WATCH       
+  Lexapro    53.4     23.0     31.0     87.9     61.1     R0_DEAD            REJECT      
+  ZALIEN     39.8     19.0     50.4     88.7     59.0     R1_DORMANT         REJECT      
+  TOKUBI     46.1     24.0     35.9     88.6     58.4     R1_DORMANT         REJECT      
+>>>>>>> Stashed changes
 --------------------------------------------------------------------------------
 
 🩺 [SYSTEM HEALTH]
@@ -96,6 +157,7 @@ FINAL LIVE VALIDATION
 COMMIT: 0f8f93a
 MODE: LIVE
 NETWORK_CONNECTED: TRUE
+<<<<<<< Updated upstream
 RPC_REQUESTS: 1728
 RPC_SUCCESS: 396
 RPC_FAILURE: 1332
@@ -107,9 +169,23 @@ VERIFIED_QUOTES: 169
 UNKNOWN_QUOTES: 20
 QUOTE_QUALITY: 0.8942
 TOKENS_WITH_LIVE_LIQUIDITY: 9
+=======
+RPC_REQUESTS: 2230
+RPC_SUCCESS: 438
+RPC_FAILURE: 1792
+RPC_AVG_LATENCY_MS: 84.65
+LIVE_TOKENS: 12
+VERIFIED_MINTS: 12
+LIVE_SWAPS: 205
+VERIFIED_QUOTES: 177
+UNKNOWN_QUOTES: 28
+QUOTE_QUALITY: 0.8634
+TOKENS_WITH_LIVE_LIQUIDITY: 10
+>>>>>>> Stashed changes
 TOKENS_WITH_UNKNOWN_LIQUIDITY: 2
-TOKENS_WITH_POOL_CREATION_TIME: 11
+TOKENS_WITH_POOL_CREATION_TIME: 12
 TOKENS_WITH_UNKNOWN_AGE: 0
+<<<<<<< Updated upstream
 EARLY_ALPHA_SCORED: 10
 DEEP_ANALYSIS_PRIORITIZED: 1
 WATCHLIST: 4
@@ -126,12 +202,30 @@ FINAL_EQUITY: $93.19
 MAX_DRAWDOWN: 6.8%
 ACCOUNTING_DISCREPANCY: $0.000000
 PROVENANCE_CHECKS: 200
+=======
+EARLY_ALPHA_SCORED: 11
+DEEP_ANALYSIS_PRIORITIZED: 0
+WATCHLIST: 4
+SECURITY_REJECTED: 7
+SNIPER_CANDIDATES: 0
+PAPER_ENTRIES: 0
+PAPER_EXITS: 0
+OPEN_POSITIONS: 0
+FEES: $0.00
+SLIPPAGE: $0.00
+REALIZED_PNL: $+0.00
+UNREALIZED_PNL: $+0.00
+FINAL_EQUITY: $100.00
+MAX_DRAWDOWN: 0.0%
+ACCOUNTING_DISCREPANCY: $0.000000
+PROVENANCE_CHECKS: 217
+>>>>>>> Stashed changes
 FORCED_REAL: 0
 FORCED_VERIFICATION: 0
 SYNTHETIC_ROWS: 0
 STATIC_MARKET_DATA: 0
 UNKNOWN_TO_NUMERIC_FALLBACKS: 0
-FINAL VERDICT: LIVE_PAPER_VALIDATED
+FINAL VERDICT: LIVE_DATA_VALIDATED
 ============================================================
 DATA SOURCES USED IN RUN:
   • Solana Mainnet RPC: https://api.mainnet-beta.solana.com, extrnode, ankr, public-rpc
