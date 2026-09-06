@@ -14,7 +14,7 @@ class EarlyLaunchSniper:
             return False
         return (
             opp.recommendation == "PAPER_ENTRY" and
-            opp.alpha_score >= 68.0 and
+            opp.alpha_score >= 65.0 and
             opp.risk_score <= 40.0 and
             age_minutes <= 120.0 and
             opp.earlyness_score >= 70.0
