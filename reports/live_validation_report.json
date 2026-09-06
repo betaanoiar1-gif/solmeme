@@ -1,94 +1,50 @@
 {
-<<<<<<< Updated upstream
-  "commit": "7f07a4380d001ad81865a9ee92aa8a6efd3263cb",
+  "commit": "f5505bad2acafc6cf09c20ffd5a6a3754059804d",
   "mode": "LIVE",
   "environment": "GitHub Actions / Cloud VPS / Standalone",
-  "start_time_utc": "2026-09-06 20:34:15 UTC",
-  "end_time_utc": "2026-09-06 20:44:50 UTC",
-  "duration_sec": 634.74,
+  "start_time_utc": "2026-09-06 21:02:22 UTC",
+  "end_time_utc": "2026-09-06 21:13:29 UTC",
+  "duration_sec": 667.35,
   "total_cycles": 3,
   "network_connected": true,
   "rpc_telemetry": {
-    "total_requests": 1728,
-    "success_requests": 396,
-    "failed_requests": 1332,
-    "avg_latency_ms": 49.45,
+    "total_requests": 2331,
+    "success_requests": 283,
+    "failed_requests": 2048,
+    "avg_latency_ms": 133.16,
     "per_endpoint": {
       "https://api.mainnet-beta.solana.com": {
-        "total_requests": 729,
-        "successful_requests": 396,
-        "failed_requests": 333,
+        "total_requests": 795,
+        "successful_requests": 283,
+        "failed_requests": 512,
         "consecutive_errors": 0,
-        "avg_latency_ms": 49.44504515051314,
-=======
-  "commit": "a8de6af501696ab0fba0a457332a77a8b6bf0d91",
-  "mode": "LIVE",
-  "environment": "GitHub Actions / Cloud VPS / Standalone",
-  "start_time_utc": "2026-09-06 20:45:25 UTC",
-  "end_time_utc": "2026-09-06 20:58:26 UTC",
-  "duration_sec": 780.38,
-  "total_cycles": 3,
-  "network_connected": true,
-  "rpc_telemetry": {
-    "total_requests": 2230,
-    "success_requests": 438,
-    "failed_requests": 1792,
-    "avg_latency_ms": 84.65,
-    "per_endpoint": {
-      "https://api.mainnet-beta.solana.com": {
-        "total_requests": 886,
-        "successful_requests": 438,
-        "failed_requests": 448,
-        "consecutive_errors": 0,
-        "avg_latency_ms": 84.64525719125987,
->>>>>>> Stashed changes
+        "avg_latency_ms": 133.15959242130305,
         "is_active": true,
         "in_cooldown": true
       },
       "https://solana-mainnet.rpc.extrnode.com": {
-<<<<<<< Updated upstream
-        "total_requests": 333,
+        "total_requests": 512,
         "successful_requests": 0,
-        "failed_requests": 333,
-        "consecutive_errors": 333,
-=======
-        "total_requests": 448,
-        "successful_requests": 0,
-        "failed_requests": 448,
-        "consecutive_errors": 448,
->>>>>>> Stashed changes
+        "failed_requests": 512,
+        "consecutive_errors": 512,
         "avg_latency_ms": 0.0,
         "is_active": true,
         "in_cooldown": true
       },
       "https://rpc.ankr.com/solana": {
-<<<<<<< Updated upstream
-        "total_requests": 333,
+        "total_requests": 512,
         "successful_requests": 0,
-        "failed_requests": 333,
-        "consecutive_errors": 333,
-=======
-        "total_requests": 448,
-        "successful_requests": 0,
-        "failed_requests": 448,
-        "consecutive_errors": 448,
->>>>>>> Stashed changes
+        "failed_requests": 512,
+        "consecutive_errors": 512,
         "avg_latency_ms": 0.0,
         "is_active": true,
         "in_cooldown": true
       },
       "https://solana.public-rpc.com": {
-<<<<<<< Updated upstream
-        "total_requests": 333,
+        "total_requests": 512,
         "successful_requests": 0,
-        "failed_requests": 333,
-        "consecutive_errors": 333,
-=======
-        "total_requests": 448,
-        "successful_requests": 0,
-        "failed_requests": 448,
-        "consecutive_errors": 448,
->>>>>>> Stashed changes
+        "failed_requests": 512,
+        "consecutive_errors": 512,
         "avg_latency_ms": 0.0,
         "is_active": true,
         "in_cooldown": true
@@ -96,62 +52,28 @@
     }
   },
   "discovery": {
-<<<<<<< Updated upstream
-    "live_tokens_discovered": 11,
-    "onchain_verified_mints": 11,
-    "live_swaps": 189,
-    "unique_live_mints": 10,
-    "unique_live_wallets": 163,
-    "unique_live_signatures": 183
+    "live_tokens_discovered": 13,
+    "onchain_verified_mints": 13,
+    "live_swaps": 127,
+    "unique_live_mints": 13,
+    "unique_live_wallets": 99,
+    "unique_live_signatures": 117
   },
   "data_quality": {
-    "strict_verified_quotes": 169,
-    "unknown_quotes": 20,
-    "quote_quality": 0.8942,
-    "tokens_with_live_liquidity": 9,
-=======
-    "live_tokens_discovered": 12,
-    "onchain_verified_mints": 12,
-    "live_swaps": 205,
-    "unique_live_mints": 12,
-    "unique_live_wallets": 170,
-    "unique_live_signatures": 180
-  },
-  "data_quality": {
-    "strict_verified_quotes": 177,
-    "unknown_quotes": 28,
-    "quote_quality": 0.8634,
-    "tokens_with_live_liquidity": 10,
->>>>>>> Stashed changes
-    "tokens_with_unknown_liquidity": 2,
-    "tokens_with_pool_creation_time": 12,
+    "strict_verified_quotes": 111,
+    "unknown_quotes": 16,
+    "quote_quality": 0.874,
+    "tokens_with_live_liquidity": 8,
+    "tokens_with_unknown_liquidity": 5,
+    "tokens_with_pool_creation_time": 13,
     "tokens_with_unknown_age": 0
   },
   "alpha_pipeline": {
-<<<<<<< Updated upstream
     "early_alpha_scored": 10,
-    "deep_analysis_prioritized": 1,
-    "watchlist": 4,
-    "sniper_candidates": 1,
-    "scoring_rejected": 4
-  },
-  "paper_trading": {
-    "starting_capital": 100.0,
-    "paper_entries": 2,
-    "paper_exits": 2,
-    "open_positions": 0,
-    "total_fees": 0.1,
-    "total_slippage": 0.08,
-    "realized_pnl": -6.81,
-    "unrealized_pnl": 0,
-    "final_equity": 93.19,
-    "max_drawdown_pct": 6.83
-=======
-    "early_alpha_scored": 11,
     "deep_analysis_prioritized": 0,
     "watchlist": 4,
     "sniper_candidates": 0,
-    "scoring_rejected": 7
+    "scoring_rejected": 6
   },
   "paper_trading": {
     "starting_capital": 100.0,
@@ -164,18 +86,13 @@
     "unrealized_pnl": 0,
     "final_equity": 100.0,
     "max_drawdown_pct": 0.0
->>>>>>> Stashed changes
   },
   "accounting": {
     "accounting_invariants_valid": true,
     "accounting_discrepancy": 0.0
   },
   "provenance_guard": {
-<<<<<<< Updated upstream
-    "provenance_checks": 200,
-=======
-    "provenance_checks": 217,
->>>>>>> Stashed changes
+    "provenance_checks": 140,
     "forced_real": 0,
     "forced_verification": 0,
     "synthetic_rows": 0,
