@@ -3,22 +3,107 @@
   ⚡ MEME ALPHA HUNTER — SOLANA INTELLIGENCE & PAPER TRADING PLATFORM ⚡
 ================================================================================
 🚀 [SOLANA LIVE PAPER ENGINE] Initializing mode: LIVE
-⏱ Target Duration: 300.0 minutes | Interval: 2.0s
+⏱ Target Duration: 5.0 minutes | Interval: 2.0s
 💰 Initial Virtual Capital: $100.00 USD (Paper Only)
 
 ================================================================================
 CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 ================================================================================
-2026-09-06 21:33:35 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
-#1      9           9           79        0         $100.00     INVARIANTS_SATISFIED
-2026-09-06 21:37:44 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #2 ---
-#2      13          12          94        0         $100.00     INVARIANTS_SATISFIED
-2026-09-06 21:43:38 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #3 ---
-#3      13          13          112       0         $100.00     INVARIANTS_SATISFIED
-2026-09-06 21:49:47 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #4 ---
-2026-09-06 21:50:42 [INFO] [meme_alpha_hunter.live_paper] 🎯 [REAL LIVE PAPER ENTRY] CHOP @ $0.000103 | Size: $5.02
-#4      11          11          86        2         $99.90      INVARIANTS_SATISFIED
-2026-09-06 21:54:46 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #5 ---
-2026-09-06 21:59:47 [INFO] [meme_alpha_hunter.live_paper] 🏁 [REAL LIVE PAPER EXIT] CHOP @ $0.000087 | PnL: $-0.80 | Reason: STOP_LOSS_TRIGGERED (-15.0% <= -10.0%)
-#5      11          11          76        0         $99.20      INVARIANTS_SATISFIED
-2026-09-06 21:59:49 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #6 ---
+2026-09-07 08:11:50 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
+#1      15          13          71        1         $100.00     INVARIANTS_SATISFIED
+
+================================================================================
+  ⚡ MEME ALPHA HUNTER — SOLANA INTELLIGENCE & PAPER TRADING PLATFORM ⚡
+================================================================================
+
+📊 [VIRTUAL WALLET STATUS]
+--------------------------------------------------------------------------------
+  Starting Capital:  $100.00 USD
+  Current Equity:    $100.00 USD
+  Available Cash:    $100.00 USD
+  Open Positions:    $0.00 USD (0 active)
+  Realized PnL:      $+0.00 USD
+  Unrealized PnL:    $+0.00 USD
+  Total Fees:        -$0.00 USD
+  Total Slippage:    -$0.00 USD
+  Max Drawdown:       0.0%
+--------------------------------------------------------------------------------
+
+🎯 [TOP OPPORTUNITY RANKINGS]
+--------------------------------------------------------------------------------
+  SYMBOL     ALPHA    RISK     CONF     EARLY    FINAL    REGIME             DECISION    
+  ----------------------------------------------------------------------------
+  SIDEYE     57.6     21.0     39.5     98.3     66.4     R2_ACCUMULATION    WATCH       
+  Chipmunk   59.5     21.0     37.8     68.4     62.4     R2_ACCUMULATION    WATCH       
+  Titcoin    53.8     23.0     27.8     92.7     61.5     R0_DEAD            REJECT      
+  POOH       56.7     23.0     27.8     83.5     61.5     R0_DEAD            WATCH       
+  ICOIN      51.5     23.0     27.8     90.7     60.2     R0_DEAD            REJECT      
+  F14        52.7     21.0     37.1     71.1     59.7     R1_DORMANT         REJECT      
+  HOOD       52.9     23.0     27.8     82.8     59.7     R0_DEAD            REJECT      
+  OTC        52.8     21.0     35.2     71.1     59.4     R1_DORMANT         REJECT      
+--------------------------------------------------------------------------------
+
+🩺 [SYSTEM HEALTH]
+--------------------------------------------------------------------------------
+  Overall System Status: [HEALTHY]
+  • RPC             : [HEALTHY] - Initialized
+  • WEBSOCKET       : [HEALTHY] - Initialized
+  • DISCOVERY       : [HEALTHY] - Initialized
+  • SECURITY        : [HEALTHY] - Initialized
+  • SCORING         : [HEALTHY] - Initialized
+  • PAPER_TRADING   : [HEALTHY] - Initialized
+  • DATABASE        : [HEALTHY] - Connected
+================================================================================
+
+
+============================================================
+FINAL LIVE VALIDATION
+============================================================
+COMMIT: 0f8f93a
+MODE: LIVE
+NETWORK_CONNECTED: TRUE
+RPC_REQUESTS: 1360
+RPC_SUCCESS: 152
+RPC_FAILURE: 1208
+RPC_AVG_LATENCY_MS: 193.7
+LIVE_TOKENS: 13
+VERIFIED_MINTS: 13
+LIVE_SWAPS: 71
+VERIFIED_QUOTES: 68
+UNKNOWN_QUOTES: 3
+QUOTE_QUALITY: 0.9577
+TOKENS_WITH_LIVE_LIQUIDITY: 7
+TOKENS_WITH_UNKNOWN_LIQUIDITY: 8
+TOKENS_WITH_POOL_CREATION_TIME: 15
+TOKENS_WITH_UNKNOWN_AGE: 0
+EARLY_ALPHA_SCORED: 13
+DEEP_ANALYSIS_PRIORITIZED: 0
+WATCHLIST: 3
+SECURITY_REJECTED: 10
+SNIPER_CANDIDATES: 0
+PAPER_ENTRIES: 0
+PAPER_EXITS: 0
+OPEN_POSITIONS: 0
+FEES: $0.00
+SLIPPAGE: $0.00
+REALIZED_PNL: $+0.00
+UNREALIZED_PNL: $+0.00
+FINAL_EQUITY: $100.00
+MAX_DRAWDOWN: 0.0%
+ACCOUNTING_DISCREPANCY: $0.000000
+PROVENANCE_CHECKS: 84
+FORCED_REAL: 0
+FORCED_VERIFICATION: 0
+SYNTHETIC_ROWS: 0
+STATIC_MARKET_DATA: 0
+UNKNOWN_TO_NUMERIC_FALLBACKS: 0
+FINAL VERDICT: LIVE_DATA_VALIDATED
+============================================================
+DATA SOURCES USED IN RUN:
+  • Solana Mainnet RPC: https://api.mainnet-beta.solana.com, extrnode, ankr, public-rpc
+  • DEX Public Endpoints: DEXScreener, Pump.fun Frontend API, Birdeye
+  • Replay / Mock / Hardcoded Fallbacks Injected: NONE (0 items)
+  • Static Dictionaries Injected: NONE (0 items)
+============================================================
+
+✅ Live run complete. All reports and CSV datasets generated in 'reports/'.
