@@ -30,7 +30,7 @@ from portfolio.pnl.pnl_calculator import PnLCalculator
 
 def run_continuous_live_paper(
     mode: str = "live",
-    duration_minutes: float = 30.0,
+    duration_minutes: float = 5.0,
     cycle_interval: float = 2.0,
     output_dir: str = "reports"
 ):

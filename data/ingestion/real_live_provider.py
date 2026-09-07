@@ -80,7 +80,7 @@ class RealSolanaLiveProvider(BaseDataProvider):
         dex_data["provenance"] = self.create_provenance(confidence=1.0, verified_on_chain=True).to_dict()
         return dex_data
 
-    def scan_recent_tokens(self, limit: int = 12) -> List[Dict[str, Any]]:
+    def scan_recent_tokens(self, limit: int = 10) -> List[Dict[str, Any]]:
         """
         Scans for newly active tokens directly from DEX endpoints or on-chain program signatures.
         """

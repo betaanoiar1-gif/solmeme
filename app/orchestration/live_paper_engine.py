@@ -113,6 +113,8 @@ class RealLivePaperEngine:
         self.token_first_seen_map: Dict[str, Optional[float]] = {}
         self.top_opportunities: List[OpportunityReport] = []
         self.ingested_swaps: List[RealSwapRecord] = []
+        # Token-level cooldown prevents churn/re-entry on a stale thesis.
+        self.entry_cooldown_until: Dict[str, float] = {}
 
     def run_live_cycle(self) -> LivePaperCycleResult:
         """
@@ -136,7 +138,7 @@ class RealLivePaperEngine:
         is_connected = self.provider.is_network_connected()
 
         # 2. Discover real tokens
-        raw_tokens = self.provider.scan_recent_tokens(limit=12)
+        raw_tokens = self.provider.scan_recent_tokens(limit=10)
         tokens_discovered = len(raw_tokens)
         verified_count = 0
         swaps_count = 0
@@ -375,8 +377,22 @@ class RealLivePaperEngine:
             mode_d = MomentumSniper.evaluate(opp_report, micro.is_pre_ignition, micro.price_velocity)
             mode_e = HybridSniper.evaluate(opp_report, smart_signal.smart_money_score, whale_flow, micro.is_pre_ignition)
 
+            cooldown_active = self.entry_cooldown_until.get(mint, 0.0) > time.time()
             entry_signal = opp_report.recommendation == "PAPER_ENTRY"
-            should_snipe = entry_signal and chase_verdict.is_safe_entry
+            # Early conviction can justify a paper entry below the nominal confidence floor,
+            # but only when the independent Early Impulse evidence is very strong.
+            confidence_ok = (
+                opp_report.confidence_score >= self.config.scoring.min_confidence_score
+                or (opp_report.early_impulse_score >= 85.0 and opp_report.earlyness_score >= 80.0 and opp_report.risk_score <= 35.0)
+            )
+            should_snipe = entry_signal and confidence_ok and chase_verdict.is_safe_entry and not cooldown_active
+
+            if cooldown_active:
+                logger.info(f"⏸ [ENTRY COOLDOWN] {symbol} blocked until prior thesis cools down")
+            elif entry_signal and not confidence_ok:
+                logger.info(f"⏸ [ENTRY EVIDENCE GATE] {symbol} blocked: confidence={opp_report.confidence_score:.1f}, early_impulse={opp_report.early_impulse_score:.1f}")
+            elif entry_signal and not chase_verdict.is_safe_entry:
+                logger.info(f"⏸ [ENTRY CHASE GATE] {symbol} blocked: {chase_verdict.reason}")
 
             # Require verified liquidity >= min_liquidity_usd (None liquidity blocks entry)
             if should_snipe and mint not in self.wallet.positions and (liq_usd is not None and liq_usd >= self.config.discovery.min_liquidity_usd):
@@ -504,6 +520,8 @@ class RealLivePaperEngine:
                     regime=pos.regime
                 )
                 self.risk_manager.register_trade_outcome(is_win=(pnl_usd > 0))
+                # 30-minute thesis cooldown after any exit; prevents immediate churn.
+                self.entry_cooldown_until[mint] = time.time() + 30.0 * 60.0
                 logger.info(f"🏁 [REAL LIVE PAPER EXIT] {pos.symbol} @ ${exit_exec.executed_price:.6f} | PnL: ${pnl_usd:+.2f} | Reason: {verdict.exit_reason}")
 
         # 11. Assert Accounting Invariants

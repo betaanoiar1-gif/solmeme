@@ -208,8 +208,8 @@ class OpportunityScorer:
             "smart_money": True,
             "whale_netflow": True,
             "microstructure": True,
-            "mint_auth_revoked": True,
-            "freeze_auth_revoked": True,
+            "mint_auth_revoked": getattr(security_eval, "mint_auth_status", None) not in (None, "UNKNOWN"),
+            "freeze_auth_revoked": getattr(security_eval, "freeze_auth_status", None) not in (None, "UNKNOWN"),
         }
         known_count = sum(1 for v in features_known.values() if v)
         unknown_count = sum(1 for v in features_known.values() if not v)
