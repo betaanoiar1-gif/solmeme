@@ -9,8 +9,8 @@
 ================================================================================
 CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 ================================================================================
-2026-09-07 08:22:28 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
-#1      17          17          173       0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 08:31:32 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
+#1      15          15          187       2         $100.00     INVARIANTS_SATISFIED
 
 ================================================================================
   ⚡ MEME ALPHA HUNTER — SOLANA INTELLIGENCE & PAPER TRADING PLATFORM ⚡
@@ -33,14 +33,14 @@ CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 --------------------------------------------------------------------------------
   SYMBOL     ALPHA    RISK     CONF     EARLY    FINAL    REGIME             DECISION    
   ----------------------------------------------------------------------------
-  ICOIN      55.0     21.0     38.4     97.4     64.9     R1_DORMANT         WATCH       
-  BTC        60.2     23.0     27.8     93.4     64.5     R0_DEAD            WATCH       
-  Heist      62.8     23.0     27.8     82.6     64.1     R0_DEAD            WATCH       
-  SIDEYE     48.3     21.0     39.9     92.1     61.3     R1_DORMANT         REJECT      
-  SCAT       59.5     23.0     27.8     68.5     60.5     R0_DEAD            WATCH       
-  SILK       50.6     19.0     47.0     67.5     60.2     R1_DORMANT         REJECT      
-  SMP        47.3     23.0     27.8     91.7     58.4     R0_DEAD            REJECT      
-  JETCAT     46.4     19.0     45.3     68.5     58.2     R1_DORMANT         REJECT      
+  NASCAT     64.9     19.0     51.4     86.1     70.1     R1_DORMANT         WATCH       
+  BTC        60.2     23.0     27.8     88.6     63.8     R0_DEAD            WATCH       
+  ICOIN      52.6     21.0     38.6     92.5     63.1     R1_DORMANT         REJECT      
+  SILK       50.4     19.0     45.2     67.3     59.8     R1_DORMANT         REJECT      
+  POOH       54.5     23.0     27.8     72.3     58.8     R0_DEAD            REJECT      
+  Heist      51.8     23.0     27.8     77.8     58.4     R0_DEAD            REJECT      
+  F14        50.4     21.0     38.1     68.3     58.4     R1_DORMANT         REJECT      
+  SIDEYE     47.8     24.0     31.9     87.2     58.4     R1_DORMANT         REJECT      
 --------------------------------------------------------------------------------
 
 🩺 [SYSTEM HEALTH]
@@ -62,23 +62,23 @@ FINAL LIVE VALIDATION
 COMMIT: 0f8f93a
 MODE: LIVE
 NETWORK_CONNECTED: TRUE
-RPC_REQUESTS: 1446
-RPC_SUCCESS: 306
-RPC_FAILURE: 1140
-RPC_AVG_LATENCY_MS: 338.71
-LIVE_TOKENS: 17
-VERIFIED_MINTS: 17
-LIVE_SWAPS: 173
-VERIFIED_QUOTES: 162
-UNKNOWN_QUOTES: 11
-QUOTE_QUALITY: 0.9364
-TOKENS_WITH_LIVE_LIQUIDITY: 8
-TOKENS_WITH_UNKNOWN_LIQUIDITY: 9
-TOKENS_WITH_POOL_CREATION_TIME: 17
+RPC_REQUESTS: 1141
+RPC_SUCCESS: 313
+RPC_FAILURE: 828
+RPC_AVG_LATENCY_MS: 134.88
+LIVE_TOKENS: 15
+VERIFIED_MINTS: 15
+LIVE_SWAPS: 187
+VERIFIED_QUOTES: 172
+UNKNOWN_QUOTES: 15
+QUOTE_QUALITY: 0.9198
+TOKENS_WITH_LIVE_LIQUIDITY: 7
+TOKENS_WITH_UNKNOWN_LIQUIDITY: 8
+TOKENS_WITH_POOL_CREATION_TIME: 15
 TOKENS_WITH_UNKNOWN_AGE: 0
-EARLY_ALPHA_SCORED: 17
+EARLY_ALPHA_SCORED: 15
 DEEP_ANALYSIS_PRIORITIZED: 0
-WATCHLIST: 4
+WATCHLIST: 2
 SECURITY_REJECTED: 13
 SNIPER_CANDIDATES: 0
 PAPER_ENTRIES: 0
@@ -91,7 +91,7 @@ UNREALIZED_PNL: $+0.00
 FINAL_EQUITY: $100.00
 MAX_DRAWDOWN: 0.0%
 ACCOUNTING_DISCREPANCY: $0.000000
-PROVENANCE_CHECKS: 190
+PROVENANCE_CHECKS: 202
 FORCED_REAL: 0
 FORCED_VERIFICATION: 0
 SYNTHETIC_ROWS: 0
