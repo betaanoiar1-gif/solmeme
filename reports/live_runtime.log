@@ -9,349 +9,349 @@
 ================================================================================
 CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 ================================================================================
-2026-09-07 09:59:20 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
+2026-09-07 10:14:10 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
 #1      10          4           0         0         $100.00     INVARIANTS_SATISFIED
-2026-09-07 09:59:25 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #2 ---
+2026-09-07 10:14:16 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #2 ---
 #2      10          7           0         0         $100.00     INVARIANTS_SATISFIED
-2026-09-07 09:59:33 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #3 ---
-#3      10          10          3         0         $100.00     INVARIANTS_SATISFIED
-2026-09-07 09:59:38 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #4 ---
-2026-09-07 09:59:40 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
-2026-09-07 09:59:41 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
-2026-09-07 09:59:42 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
-2026-09-07 09:59:42 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ZesMGYmo... after 3 consecutive RPC failures
-#4      10          10          3         0         $100.00     INVARIANTS_SATISFIED
-2026-09-07 09:59:44 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #5 ---
-2026-09-07 09:59:46 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8136GGN7... after 3 consecutive RPC failures
-2026-09-07 09:59:46 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
-2026-09-07 09:59:47 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
-2026-09-07 09:59:48 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
-2026-09-07 09:59:49 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ZesMGYmo... after 3 consecutive RPC failures
+2026-09-07 10:14:21 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #3 ---
+#3      10          10          5         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 10:14:27 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #4 ---
+2026-09-07 10:14:29 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:14:30 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:14:31 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#4      10          10          2         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 10:14:33 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #5 ---
+2026-09-07 10:14:35 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8yMTZfsd... after 3 consecutive RPC failures
+2026-09-07 10:14:35 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
+2026-09-07 10:14:36 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+2026-09-07 10:14:37 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ZesMGYmo... after 3 consecutive RPC failures
 #5      10          10          0         0         $100.00     INVARIANTS_SATISFIED
-2026-09-07 09:59:51 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #6 ---
-2026-09-07 09:59:52 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 09:59:53 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 09:59:54 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 09:59:55 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 09:59:55 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#6      10          10          1         1         $100.00     INVARIANTS_SATISFIED
-2026-09-07 09:59:58 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #7 ---
-2026-09-07 09:59:59 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 09:59:59 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:00:00 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:00:01 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:00:02 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#7      10          10          1         0         $100.00     INVARIANTS_SATISFIED
-2026-09-07 10:00:04 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #8 ---
-2026-09-07 10:00:05 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:00:05 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:00:06 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:00:07 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:00:07 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#8      10          10          0         0         $100.00     INVARIANTS_SATISFIED
-2026-09-07 10:00:10 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #9 ---
-2026-09-07 10:00:11 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:00:12 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:00:12 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:00:13 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:00:14 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#9      10          10          1         0         $100.00     INVARIANTS_SATISFIED
-2026-09-07 10:00:16 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #10 ---
-2026-09-07 10:00:17 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:00:18 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:00:18 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:00:19 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:00:20 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#10     10          10          2         0         $100.00     INVARIANTS_SATISFIED
-2026-09-07 10:00:22 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #11 ---
-2026-09-07 10:00:23 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:00:24 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:00:24 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:00:25 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:00:26 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#11     10          10          1         0         $100.00     INVARIANTS_SATISFIED
-2026-09-07 10:00:28 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #12 ---
-2026-09-07 10:00:30 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
-2026-09-07 10:00:30 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
-2026-09-07 10:00:31 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
-2026-09-07 10:00:32 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ZesMGYmo... after 3 consecutive RPC failures
-#12     10          10          2         0         $100.00     INVARIANTS_SATISFIED
-2026-09-07 10:00:34 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #13 ---
-2026-09-07 10:00:36 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
-2026-09-07 10:00:36 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
-2026-09-07 10:00:37 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
-2026-09-07 10:00:38 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ZesMGYmo... after 3 consecutive RPC failures
-#13     10          10          0         0         $100.00     INVARIANTS_SATISFIED
-2026-09-07 10:00:40 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #14 ---
-2026-09-07 10:00:41 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:00:42 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:00:42 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:00:43 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:00:44 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#14     10          10          0         0         $100.00     INVARIANTS_SATISFIED
-2026-09-07 10:00:46 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #15 ---
-2026-09-07 10:00:47 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:00:48 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:00:48 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:00:49 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:00:50 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#15     10          10          2         0         $100.00     INVARIANTS_SATISFIED
-2026-09-07 10:00:52 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #16 ---
-2026-09-07 10:00:53 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:00:54 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:00:55 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:00:55 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:00:56 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+2026-09-07 10:14:39 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #6 ---
+2026-09-07 10:14:40 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:14:40 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY EVIDENCE GATE] OTC blocked: confidence=49.0, early_impulse=73.3
+2026-09-07 10:14:41 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:14:42 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:14:42 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:14:43 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#6      10          10          1         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 10:14:45 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #7 ---
+2026-09-07 10:14:47 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:14:47 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:14:48 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:14:49 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:14:49 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#7      10          10          2         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 10:14:51 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #8 ---
+2026-09-07 10:14:53 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:14:53 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:14:54 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:14:55 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:14:56 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#8      10          10          2         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 10:14:58 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #9 ---
+2026-09-07 10:14:59 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:15:00 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:15:00 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:15:01 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:15:02 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#9      10          10          0         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 10:15:04 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #10 ---
+2026-09-07 10:15:05 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:15:05 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:15:06 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:15:07 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:15:07 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#10     10          10          1         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 10:15:10 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #11 ---
+2026-09-07 10:15:12 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8yMTZfsd... after 3 consecutive RPC failures
+2026-09-07 10:15:13 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
+2026-09-07 10:15:13 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+2026-09-07 10:15:14 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ZesMGYmo... after 3 consecutive RPC failures
+#11     10          10          3         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 10:15:16 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #12 ---
+2026-09-07 10:15:17 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8136GGN7... after 3 consecutive RPC failures
+2026-09-07 10:15:18 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8yMTZfsd... after 3 consecutive RPC failures
+2026-09-07 10:15:19 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
+2026-09-07 10:15:20 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+2026-09-07 10:15:20 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ZesMGYmo... after 3 consecutive RPC failures
+#12     10          10          1         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 10:15:22 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #13 ---
+2026-09-07 10:15:24 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:15:25 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:15:26 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#13     10          10          2         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 10:15:28 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #14 ---
+2026-09-07 10:15:29 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:15:30 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:15:30 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:15:31 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:15:32 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#14     10          10          1         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 10:15:34 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #15 ---
+2026-09-07 10:15:35 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:15:36 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:15:36 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:15:37 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:15:38 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#15     10          10          1         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 10:15:40 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #16 ---
+2026-09-07 10:15:41 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:15:42 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:15:42 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:15:43 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:15:44 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
 #16     10          10          1         0         $100.00     INVARIANTS_SATISFIED
-2026-09-07 10:00:58 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #17 ---
-2026-09-07 10:00:59 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:01:00 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:01:00 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:01:01 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:01:02 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#17     10          10          0         0         $100.00     INVARIANTS_SATISFIED
-2026-09-07 10:01:04 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #18 ---
-2026-09-07 10:01:05 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:01:06 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:01:06 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:01:07 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:01:08 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+2026-09-07 10:15:46 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #17 ---
+2026-09-07 10:15:47 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:15:48 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:15:49 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:15:49 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:15:50 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#17     10          10          1         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 10:15:52 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #18 ---
+2026-09-07 10:15:53 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:15:54 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:15:55 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:15:55 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:15:56 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
 #18     10          10          1         0         $100.00     INVARIANTS_SATISFIED
-2026-09-07 10:01:10 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #19 ---
-2026-09-07 10:01:11 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:01:11 [INFO] [meme_alpha_hunter.live_paper] 🎯 [REAL LIVE PAPER ENTRY] OTC @ $0.000044 | Size: $5.65
-2026-09-07 10:01:12 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:01:12 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:01:13 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:01:14 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#19     10          10          1         0         $99.88      INVARIANTS_SATISFIED
-2026-09-07 10:01:16 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #20 ---
-2026-09-07 10:01:18 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:01:19 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:01:19 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:01:20 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:01:21 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#20     10          10          0         0         $99.88      INVARIANTS_SATISFIED
-2026-09-07 10:01:23 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #21 ---
-2026-09-07 10:01:25 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:01:25 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:01:26 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:01:27 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:01:28 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#21     10          10          1         0         $99.88      INVARIANTS_SATISFIED
-2026-09-07 10:01:30 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #22 ---
-2026-09-07 10:01:31 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:01:32 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:01:32 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:01:33 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:01:34 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#22     10          10          0         0         $99.88      INVARIANTS_SATISFIED
-2026-09-07 10:01:36 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #23 ---
-2026-09-07 10:01:37 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:01:38 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:01:39 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:01:39 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:01:40 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-2026-09-07 10:01:40 [INFO] [meme_alpha_hunter.live_paper] 🏁 [REAL LIVE PAPER EXIT] OTC @ $0.000039 | PnL: $-0.75 | Reason: STOP_LOSS_TRIGGERED (-12.2% <= -10.0%)
-#23     10          10          2         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:01:42 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #24 ---
-2026-09-07 10:01:44 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:01:44 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:01:44 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:01:45 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:01:46 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:01:47 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#24     10          10          1         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:01:49 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #25 ---
-2026-09-07 10:01:50 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:01:50 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:01:51 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:01:51 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:01:52 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:01:53 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#25     10          10          0         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:01:55 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #26 ---
-2026-09-07 10:01:56 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:01:56 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:01:57 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:01:58 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:01:58 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:01:59 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#26     10          10          2         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:02:01 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #27 ---
-2026-09-07 10:02:02 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:02:02 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:02:03 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:02:04 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:02:04 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:02:05 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#27     10          10          1         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:02:07 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #28 ---
-2026-09-07 10:02:08 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:02:08 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:02:09 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:02:10 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:02:11 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:02:11 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#28     10          10          2         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:02:13 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #29 ---
-2026-09-07 10:02:15 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:02:15 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:02:15 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:02:16 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:02:17 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:02:17 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#29     10          10          2         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:02:20 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #30 ---
-2026-09-07 10:02:21 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:02:21 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:02:22 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:02:22 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:02:23 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:02:24 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#30     10          10          0         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:02:26 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #31 ---
-2026-09-07 10:02:27 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:02:27 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:02:28 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:02:29 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:02:30 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:02:31 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#31     10          10          1         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:02:33 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #32 ---
-2026-09-07 10:02:34 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:02:36 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:02:37 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:02:38 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#32     10          10          1         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:02:40 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #33 ---
-2026-09-07 10:02:41 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:02:41 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:02:42 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:02:42 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:02:43 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:02:44 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#33     10          10          0         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:02:46 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #34 ---
-2026-09-07 10:02:47 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:02:47 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:02:48 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:02:50 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:02:51 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:02:51 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#34     10          10          1         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:02:54 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #35 ---
-2026-09-07 10:02:55 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:02:55 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:02:55 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:02:56 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:02:57 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:02:58 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#35     10          10          2         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:03:00 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #36 ---
-2026-09-07 10:03:01 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:03:01 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:03:02 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:03:03 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:03:04 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:03:04 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#36     10          10          1         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:03:06 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #37 ---
-2026-09-07 10:03:08 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:03:08 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:03:08 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:03:09 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:03:10 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:03:11 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#37     10          10          1         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:03:13 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #38 ---
-2026-09-07 10:03:14 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:03:14 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:03:15 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:03:15 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:03:16 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:03:17 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#38     10          10          2         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:03:19 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #39 ---
-2026-09-07 10:03:20 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:03:20 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:03:21 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:03:21 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:03:22 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:03:23 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#39     10          10          1         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:03:25 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #40 ---
-2026-09-07 10:03:26 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:03:26 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:03:27 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:03:27 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:03:28 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:03:29 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#40     10          10          0         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:03:31 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #41 ---
-2026-09-07 10:03:33 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:03:33 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:03:33 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:03:34 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:03:35 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:03:36 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#41     10          10          1         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:03:38 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #42 ---
-2026-09-07 10:03:39 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:03:39 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:03:40 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:03:40 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:03:41 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:03:42 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#42     10          10          1         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:03:44 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #43 ---
-2026-09-07 10:03:45 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:03:45 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:03:46 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:03:46 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:03:47 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:03:48 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#43     10          10          0         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:03:50 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #44 ---
-2026-09-07 10:03:51 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:03:51 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:03:52 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:03:52 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:03:53 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:03:54 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#44     10          10          1         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:03:56 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #45 ---
-2026-09-07 10:03:57 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:03:57 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:03:58 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:03:58 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:03:59 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:04:00 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#45     10          10          2         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:04:02 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #46 ---
-2026-09-07 10:04:03 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:04:03 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:04:04 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:04:05 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:04:05 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:04:06 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#46     10          10          2         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:04:08 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #47 ---
-2026-09-07 10:04:09 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:04:09 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:04:10 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:04:11 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:04:11 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:04:12 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#47     10          10          2         0         $99.25      INVARIANTS_SATISFIED
-2026-09-07 10:04:14 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #48 ---
-2026-09-07 10:04:15 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
-2026-09-07 10:04:15 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
-2026-09-07 10:04:16 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
-2026-09-07 10:04:17 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
-2026-09-07 10:04:17 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 10:04:18 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#48     10          10          0         0         $99.25      INVARIANTS_SATISFIED
+2026-09-07 10:15:58 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #19 ---
+2026-09-07 10:15:59 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:16:00 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:16:00 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:16:01 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:16:02 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#19     10          10          1         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 10:16:04 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #20 ---
+2026-09-07 10:16:05 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:16:06 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:16:07 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:16:07 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:16:08 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#20     10          10          1         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 10:16:10 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #21 ---
+2026-09-07 10:16:11 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:16:12 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:16:13 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:16:13 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:16:14 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#21     10          10          2         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 10:16:16 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #22 ---
+2026-09-07 10:16:18 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:16:18 [INFO] [meme_alpha_hunter.live_paper] 🎯 [REAL LIVE PAPER ENTRY] OTC @ $0.000034 | Size: $5.70
+2026-09-07 10:16:18 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:16:19 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:16:20 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:16:20 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#22     10          10          1         0         $99.88      INVARIANTS_SATISFIED
+2026-09-07 10:16:22 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #23 ---
+2026-09-07 10:16:24 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:16:24 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:16:25 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:16:26 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:16:26 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#23     10          10          2         0         $99.88      INVARIANTS_SATISFIED
+2026-09-07 10:16:29 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #24 ---
+2026-09-07 10:16:30 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:16:30 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:16:31 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:16:32 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:16:32 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#24     10          10          1         0         $99.88      INVARIANTS_SATISFIED
+2026-09-07 10:16:35 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #25 ---
+2026-09-07 10:16:36 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:16:36 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:16:37 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:16:38 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:16:39 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#25     10          10          2         0         $99.88      INVARIANTS_SATISFIED
+2026-09-07 10:16:41 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #26 ---
+2026-09-07 10:16:42 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:16:43 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:16:43 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:16:44 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:16:45 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#26     10          10          1         0         $99.72      INVARIANTS_SATISFIED
+2026-09-07 10:16:47 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #27 ---
+2026-09-07 10:16:48 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:16:49 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:16:49 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:16:50 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:16:51 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#27     10          10          2         0         $99.72      INVARIANTS_SATISFIED
+2026-09-07 10:16:53 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #28 ---
+2026-09-07 10:16:54 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:16:55 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:16:55 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:16:56 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:16:57 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#28     10          10          1         0         $99.72      INVARIANTS_SATISFIED
+2026-09-07 10:16:59 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #29 ---
+2026-09-07 10:17:00 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:17:01 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:17:02 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:17:02 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:17:03 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#29     10          10          1         0         $99.72      INVARIANTS_SATISFIED
+2026-09-07 10:17:05 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #30 ---
+2026-09-07 10:17:06 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:17:07 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:17:08 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:17:08 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:17:09 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#30     10          10          1         0         $99.72      INVARIANTS_SATISFIED
+2026-09-07 10:17:11 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #31 ---
+2026-09-07 10:17:12 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:17:13 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:17:14 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:17:15 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:17:15 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+2026-09-07 10:17:15 [INFO] [meme_alpha_hunter.live_paper] 🏁 [REAL LIVE PAPER EXIT] OTC @ $0.000030 | PnL: $-0.76 | Reason: STOP_LOSS_TRIGGERED (-12.3% <= -10.0%)
+#31     10          10          1         0         $99.24      INVARIANTS_SATISFIED
+2026-09-07 10:17:17 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #32 ---
+2026-09-07 10:17:18 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
+2026-09-07 10:17:19 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8yMTZfsd... after 3 consecutive RPC failures
+2026-09-07 10:17:20 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
+2026-09-07 10:17:21 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+2026-09-07 10:17:21 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ZesMGYmo... after 3 consecutive RPC failures
+#32     10          10          0         0         $99.24      INVARIANTS_SATISFIED
+2026-09-07 10:17:23 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #33 ---
+2026-09-07 10:17:24 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
+2026-09-07 10:17:25 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8136GGN7... after 3 consecutive RPC failures
+2026-09-07 10:17:25 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8yMTZfsd... after 3 consecutive RPC failures
+2026-09-07 10:17:26 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
+2026-09-07 10:17:27 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+2026-09-07 10:17:27 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ZesMGYmo... after 3 consecutive RPC failures
+#33     10          10          0         0         $99.24      INVARIANTS_SATISFIED
+2026-09-07 10:17:29 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #34 ---
+2026-09-07 10:17:31 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:17:31 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
+2026-09-07 10:17:32 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:17:33 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:17:33 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:17:34 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#34     10          10          3         0         $99.24      INVARIANTS_SATISFIED
+2026-09-07 10:17:36 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #35 ---
+2026-09-07 10:17:37 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
+2026-09-07 10:17:38 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:17:39 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:17:40 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#35     10          10          2         0         $99.24      INVARIANTS_SATISFIED
+2026-09-07 10:17:42 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #36 ---
+2026-09-07 10:17:43 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:17:43 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
+2026-09-07 10:17:44 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:17:44 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:17:45 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:17:46 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#36     10          10          2         0         $99.24      INVARIANTS_SATISFIED
+2026-09-07 10:17:48 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #37 ---
+2026-09-07 10:17:50 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:17:50 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
+2026-09-07 10:17:50 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:17:51 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:17:52 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:17:52 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#37     10          10          1         0         $99.24      INVARIANTS_SATISFIED
+2026-09-07 10:17:55 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #38 ---
+2026-09-07 10:17:56 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for HGMsXyTs... after 3 consecutive RPC failures
+2026-09-07 10:17:56 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
+2026-09-07 10:17:56 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 847y1VzY... after 3 consecutive RPC failures
+2026-09-07 10:17:57 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6C6UhTUw... after 3 consecutive RPC failures
+2026-09-07 10:17:58 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 10:17:58 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#38     10          10          1         0         $99.24      INVARIANTS_SATISFIED
+2026-09-07 10:18:00 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #39 ---
+2026-09-07 10:18:02 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
+2026-09-07 10:18:03 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
+2026-09-07 10:18:04 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#39     10          10          3         0         $99.24      INVARIANTS_SATISFIED
+2026-09-07 10:18:06 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #40 ---
+2026-09-07 10:18:07 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for AQVZAvm9... after 3 consecutive RPC failures
+2026-09-07 10:18:07 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
+2026-09-07 10:18:08 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8136GGN7... after 3 consecutive RPC failures
+2026-09-07 10:18:09 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8yMTZfsd... after 3 consecutive RPC failures
+2026-09-07 10:18:09 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
+2026-09-07 10:18:10 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#40     10          10          0         0         $99.24      INVARIANTS_SATISFIED
+2026-09-07 10:18:12 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #41 ---
+2026-09-07 10:18:14 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for AQVZAvm9... after 3 consecutive RPC failures
+2026-09-07 10:18:14 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
+2026-09-07 10:18:14 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8136GGN7... after 3 consecutive RPC failures
+2026-09-07 10:18:15 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8yMTZfsd... after 3 consecutive RPC failures
+2026-09-07 10:18:16 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
+2026-09-07 10:18:16 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#41     10          10          1         0         $99.24      INVARIANTS_SATISFIED
+2026-09-07 10:18:19 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #42 ---
+2026-09-07 10:18:20 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for AQVZAvm9... after 3 consecutive RPC failures
+2026-09-07 10:18:20 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
+2026-09-07 10:18:20 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8136GGN7... after 3 consecutive RPC failures
+2026-09-07 10:18:21 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8yMTZfsd... after 3 consecutive RPC failures
+2026-09-07 10:18:22 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
+2026-09-07 10:18:22 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#42     10          10          2         0         $99.24      INVARIANTS_SATISFIED
+2026-09-07 10:18:25 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #43 ---
+2026-09-07 10:18:26 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for AQVZAvm9... after 3 consecutive RPC failures
+2026-09-07 10:18:26 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY EVIDENCE GATE] NASDONK blocked: confidence=53.2, early_impulse=66.4
+2026-09-07 10:18:26 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
+2026-09-07 10:18:27 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8136GGN7... after 3 consecutive RPC failures
+2026-09-07 10:18:27 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8yMTZfsd... after 3 consecutive RPC failures
+2026-09-07 10:18:28 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
+2026-09-07 10:18:29 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#43     10          10          2         0         $99.24      INVARIANTS_SATISFIED
+2026-09-07 10:18:31 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #44 ---
+2026-09-07 10:18:32 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for AQVZAvm9... after 3 consecutive RPC failures
+2026-09-07 10:18:32 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
+2026-09-07 10:18:33 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8136GGN7... after 3 consecutive RPC failures
+2026-09-07 10:18:33 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8yMTZfsd... after 3 consecutive RPC failures
+2026-09-07 10:18:34 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
+2026-09-07 10:18:35 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#44     10          10          1         0         $99.24      INVARIANTS_SATISFIED
+2026-09-07 10:18:37 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #45 ---
+2026-09-07 10:18:38 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for AQVZAvm9... after 3 consecutive RPC failures
+2026-09-07 10:18:38 [INFO] [meme_alpha_hunter.live_paper] 🎯 [REAL LIVE PAPER ENTRY] NASDONK @ $0.000122 | Size: $5.73
+2026-09-07 10:18:38 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
+2026-09-07 10:18:39 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8136GGN7... after 3 consecutive RPC failures
+2026-09-07 10:18:39 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8yMTZfsd... after 3 consecutive RPC failures
+2026-09-07 10:18:40 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
+2026-09-07 10:18:41 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#45     10          10          2         0         $99.13      INVARIANTS_SATISFIED
+2026-09-07 10:18:43 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #46 ---
+2026-09-07 10:18:44 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for AQVZAvm9... after 3 consecutive RPC failures
+2026-09-07 10:18:44 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
+2026-09-07 10:18:45 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8136GGN7... after 3 consecutive RPC failures
+2026-09-07 10:18:45 [INFO] [meme_alpha_hunter.live_paper] 🎯 [REAL LIVE PAPER ENTRY] TITCOIN @ $0.000099 | Size: $6.24
+2026-09-07 10:18:45 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8yMTZfsd... after 3 consecutive RPC failures
+2026-09-07 10:18:46 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
+2026-09-07 10:18:47 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#46     10          10          1         0         $99.00      INVARIANTS_SATISFIED
+2026-09-07 10:18:49 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #47 ---
+2026-09-07 10:18:50 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for AQVZAvm9... after 3 consecutive RPC failures
+2026-09-07 10:18:51 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
+2026-09-07 10:18:51 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8136GGN7... after 3 consecutive RPC failures
+2026-09-07 10:18:52 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8yMTZfsd... after 3 consecutive RPC failures
+2026-09-07 10:18:52 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
+2026-09-07 10:18:53 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#47     10          10          1         0         $99.00      INVARIANTS_SATISFIED
+2026-09-07 10:18:55 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #48 ---
+2026-09-07 10:18:57 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for AQVZAvm9... after 3 consecutive RPC failures
+2026-09-07 10:18:57 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
+2026-09-07 10:18:57 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8136GGN7... after 3 consecutive RPC failures
+2026-09-07 10:18:58 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 8yMTZfsd... after 3 consecutive RPC failures
+2026-09-07 10:18:59 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
+2026-09-07 10:18:59 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#48     10          10          1         0         $99.00      INVARIANTS_SATISFIED
+2026-09-07 10:19:01 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #49 ---
+2026-09-07 10:19:03 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
+2026-09-07 10:19:04 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
+2026-09-07 10:19:05 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ZesMGYmo... after 3 consecutive RPC failures
+#49     10          10          1         0         $98.73      INVARIANTS_SATISFIED
+2026-09-07 10:19:07 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #50 ---
+2026-09-07 10:19:08 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for AQVZAvm9... after 3 consecutive RPC failures
+2026-09-07 10:19:08 [INFO] [meme_alpha_hunter.live_paper] ⏸ [ENTRY COOLDOWN] OTC blocked until prior thesis cools down
+2026-09-07 10:19:09 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ACQxHBwf... after 3 consecutive RPC failures
+2026-09-07 10:19:10 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ZesMGYmo... after 3 consecutive RPC failures
+#50     10          10          2         0         $98.73      INVARIANTS_SATISFIED
 
 ================================================================================
   ⚡ MEME ALPHA HUNTER — SOLANA INTELLIGENCE & PAPER TRADING PLATFORM ⚡
@@ -360,28 +360,34 @@ CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 📊 [VIRTUAL WALLET STATUS]
 --------------------------------------------------------------------------------
   Starting Capital:  $100.00 USD
-  Current Equity:    $99.25 USD
-  Available Cash:    $99.25 USD
-  Open Positions:    $0.00 USD (0 active)
-  Realized PnL:      $-0.75 USD
-  Unrealized PnL:    $+0.00 USD
-  Total Fees:        -$0.06 USD
-  Total Slippage:    -$0.05 USD
-  Max Drawdown:       0.8%
+  Current Equity:    $98.73 USD
+  Available Cash:    $87.21 USD
+  Open Positions:    $11.51 USD (2 active)
+  Realized PnL:      $-0.76 USD
+  Unrealized PnL:    $-0.52 USD
+  Total Fees:        -$0.12 USD
+  Total Slippage:    -$0.11 USD
+  Max Drawdown:       1.3%
+--------------------------------------------------------------------------------
+  [ACTIVE OPEN POSITIONS]
+  SYMBOL       SIZE (USD)   ENTRY PRICE    CURR PRICE     PnL ($)      PnL (%)        
+  ----------------------------------------------------------------------------
+  NASDONK      $5.73        $0.000122      $0.000115      $-0.39       -6.72         %
+  TITCOIN      $6.24        $0.000099      $0.000098      $-0.13       -2.07         %
 --------------------------------------------------------------------------------
 
 🎯 [TOP OPPORTUNITY RANKINGS]
 --------------------------------------------------------------------------------
   SYMBOL     ALPHA    RISK     CONF     EARLY    FINAL    REGIME             DECISION    
   ----------------------------------------------------------------------------
-  OTC        70.7     21.0     54.8     89.3     73.2     R2_ACCUMULATION    PAPER_ENTRY 
-  TITCOIN    56.6     21.0     58.7     83.5     66.5     R1_DORMANT         WATCH       
-  🎒          50.3     19.0     68.5     67.9     63.4     R1_DORMANT         REJECT      
-  Woobi      46.3     19.0     66.8     80.1     63.1     R1_DORMANT         REJECT      
-  Anonymouse 49.3     21.0     60.0     68.7     61.3     R1_DORMANT         REJECT      
-  FERMAT     49.4     23.0     42.2     88.1     61.0     R0_DEAD            REJECT      
-  Norman     52.5     24.0     50.1     68.5     60.4     R1_DORMANT         REJECT      
-  NET        50.4     23.0     42.2     68.7     58.6     R0_DEAD            REJECT      
+  NASDONK    83.7     19.0     62.7     84.3     80.0     R3_EARLY_IGNITION  PAPER_ENTRY 
+  OTC        58.5     21.0     53.9     81.9     66.4     R2_ACCUMULATION    WATCH       
+  TITCOIN    54.2     19.0     62.4     76.1     65.4     R1_DORMANT         REJECT      
+  Woobi      49.2     19.0     64.5     72.6     63.0     R1_DORMANT         REJECT      
+  POOPPONS   48.2     21.0     53.4     75.3     60.8     R1_DORMANT         REJECT      
+  FERMAT     49.2     23.0     42.2     80.7     59.8     R0_DEAD            REJECT      
+  SILK       47.6     23.0     29.4     97.5     59.7     R0_DEAD            REJECT      
+  NET        49.8     23.0     42.2     68.3     58.2     R0_DEAD            REJECT      
 --------------------------------------------------------------------------------
 
 🩺 [SYSTEM HEALTH]
@@ -400,39 +406,39 @@ CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 ============================================================
 FINAL LIVE VALIDATION
 ============================================================
-COMMIT: 6f84ba4c9764df52f4695442c5aaebc6a6a7c8c4
+COMMIT: 9f8deef5fc1a62f494f7ddf40ce0232c9110078d
 MODE: LIVE
 NETWORK_CONNECTED: TRUE
-RPC_REQUESTS: 1300
-RPC_SUCCESS: 352
-RPC_FAILURE: 948
-RPC_AVG_LATENCY_MS: 48.29
-LIVE_TOKENS: 10
-VERIFIED_MINTS: 10
-LIVE_SWAPS: 49
-VERIFIED_QUOTES: 46
+RPC_REQUESTS: 1325
+RPC_SUCCESS: 357
+RPC_FAILURE: 968
+RPC_AVG_LATENCY_MS: 49.66
+LIVE_TOKENS: 12
+VERIFIED_MINTS: 12
+LIVE_SWAPS: 67
+VERIFIED_QUOTES: 64
 UNKNOWN_QUOTES: 3
-QUOTE_QUALITY: 0.9388
-TOKENS_WITH_LIVE_LIQUIDITY: 7
-TOKENS_WITH_UNKNOWN_LIQUIDITY: 3
-TOKENS_WITH_POOL_CREATION_TIME: 10
+QUOTE_QUALITY: 0.9552
+TOKENS_WITH_LIVE_LIQUIDITY: 8
+TOKENS_WITH_UNKNOWN_LIQUIDITY: 4
+TOKENS_WITH_POOL_CREATION_TIME: 12
 TOKENS_WITH_UNKNOWN_AGE: 0
 EARLY_ALPHA_SCORED: 10
 DEEP_ANALYSIS_PRIORITIZED: 1
 WATCHLIST: 1
 SECURITY_REJECTED: 8
 SNIPER_CANDIDATES: 1
-PAPER_ENTRIES: 1
+PAPER_ENTRIES: 3
 PAPER_EXITS: 1
-OPEN_POSITIONS: 0
-FEES: $0.06
-SLIPPAGE: $0.05
-REALIZED_PNL: $-0.75
-UNREALIZED_PNL: $+0.00
-FINAL_EQUITY: $99.25
-MAX_DRAWDOWN: 0.8%
-ACCOUNTING_DISCREPANCY: $0.000000
-PROVENANCE_CHECKS: 59
+OPEN_POSITIONS: 2
+FEES: $0.12
+SLIPPAGE: $0.11
+REALIZED_PNL: $-0.76
+UNREALIZED_PNL: $-0.52
+FINAL_EQUITY: $98.73
+MAX_DRAWDOWN: 1.3%
+ACCOUNTING_DISCREPANCY: $0.010000
+PROVENANCE_CHECKS: 79
 FORCED_REAL: 0
 FORCED_VERIFICATION: 0
 SYNTHETIC_ROWS: 0
