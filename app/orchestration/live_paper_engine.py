@@ -136,7 +136,7 @@ class RealLivePaperEngine:
         is_connected = self.provider.is_network_connected()
 
         # 2. Discover real tokens
-        raw_tokens = self.provider.scan_recent_tokens(limit=30)
+        raw_tokens = self.provider.scan_recent_tokens(limit=12)
         tokens_discovered = len(raw_tokens)
         verified_count = 0
         swaps_count = 0
@@ -189,9 +189,12 @@ class RealLivePaperEngine:
             if verification.is_valid_mint:
                 verified_count += 1
                 self.verified_tokens_map[mint] = verification
+            else:
+                # Invalid mints cannot contribute trustworthy swaps, security, or scoring.
+                continue
 
             # 4. Ingest real trades/swaps (Preserving Provider Provenance)
-            trades = self.provider.get_recent_trades(mint, limit=30)
+            trades = self.provider.get_recent_trades(mint, limit=6)
             token_wallet_volumes: Dict[str, float] = {}
             observed_wallets: List[str] = []
 
@@ -372,7 +375,8 @@ class RealLivePaperEngine:
             mode_d = MomentumSniper.evaluate(opp_report, micro.is_pre_ignition, micro.price_velocity)
             mode_e = HybridSniper.evaluate(opp_report, smart_signal.smart_money_score, whale_flow, micro.is_pre_ignition)
 
-            should_snipe = (mode_a or mode_b or mode_c or mode_d or mode_e) and chase_verdict.is_safe_entry
+            entry_signal = opp_report.recommendation == "PAPER_ENTRY"
+            should_snipe = entry_signal and chase_verdict.is_safe_entry
 
             # Require verified liquidity >= min_liquidity_usd (None liquidity blocks entry)
             if should_snipe and mint not in self.wallet.positions and (liq_usd is not None and liq_usd >= self.config.discovery.min_liquidity_usd):

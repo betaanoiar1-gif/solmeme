@@ -27,7 +27,7 @@ class EndpointHealth:
 
 
 class SolanaRPCClient:
-    def __init__(self, endpoints: Optional[List[str]] = None, timeout: float = 2.0, max_retries: int = 3):
+    def __init__(self, endpoints: Optional[List[str]] = None, timeout: float = 2.0, max_retries: int = 1):
         self.endpoints_list = endpoints or [
             "https://api.mainnet-beta.solana.com",
             "https://solana-mainnet.rpc.extrnode.com",
@@ -41,9 +41,9 @@ class SolanaRPCClient:
         self.timeout = timeout
         self.max_retries = max_retries
         self._cache: Dict[str, Dict[str, Any]] = {}
-        self._cache_ttl_sec = 5.0
+        self._cache_ttl_sec = 8.0
         self._last_call_ts = 0.0
-        self._min_interval_sec = 0.1
+        self._min_interval_sec = 0.08
 
     def _get_available_endpoint(self) -> Optional[str]:
         now = time.time()

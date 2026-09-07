@@ -162,7 +162,7 @@ def _print_final_validation_summary(
     print("\n" + "=" * 60)
     print("FINAL LIVE VALIDATION")
     print("=" * 60)
-    print("COMMIT: 0f8f93a")
+    print(f"COMMIT: {os.getenv('GITHUB_SHA') or 'LOCAL'}")
     print(f"MODE: {mode.upper()}")
     print(f"NETWORK_CONNECTED: {'TRUE' if is_connected else 'FALSE'}")
     print(f"RPC_REQUESTS: {total_rpc_req}")

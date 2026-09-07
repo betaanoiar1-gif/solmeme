@@ -80,7 +80,7 @@ class RealSolanaLiveProvider(BaseDataProvider):
         dex_data["provenance"] = self.create_provenance(confidence=1.0, verified_on_chain=True).to_dict()
         return dex_data
 
-    def scan_recent_tokens(self, limit: int = 50) -> List[Dict[str, Any]]:
+    def scan_recent_tokens(self, limit: int = 12) -> List[Dict[str, Any]]:
         """
         Scans for newly active tokens directly from DEX endpoints or on-chain program signatures.
         """
@@ -138,18 +138,24 @@ class RealSolanaLiveProvider(BaseDataProvider):
 
     def get_recent_trades(self, mint: str, limit: int = 50) -> List[Dict[str, Any]]:
         """Queries recent on-chain signatures and parses real swaps for mint."""
-        signatures = self.rpc.get_signatures_for_address(mint, limit=limit)
+        signatures = self.rpc.get_signatures_for_address(mint, limit=min(limit, 6))
         if not signatures:
             return []
 
         results = []
+        consecutive_tx_failures = 0
         for sig_info in signatures:
             sig = sig_info.get("signature")
             if not sig:
                 continue
             tx = self.rpc.get_transaction(sig)
             if not tx:
+                consecutive_tx_failures += 1
+                if consecutive_tx_failures >= 3:
+                    logger.warning(f"Stopping tx scan for {mint[:8]}... after 3 consecutive RPC failures")
+                    break
                 continue
+            consecutive_tx_failures = 0
             swaps = self.swap_parser.parse_transaction(
                 tx,
                 sol_price_usd=self._live_sol_price_usd,

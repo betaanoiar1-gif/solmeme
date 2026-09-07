@@ -9,8 +9,73 @@
 ================================================================================
 CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 ================================================================================
-2026-09-07 08:55:44 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
-#1      16          10          69        1         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:12:59 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
+#1      7           3           0         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:13:09 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #2 ---
+#2      7           5           0         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:13:16 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #3 ---
+2026-09-07 09:13:28 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
+2026-09-07 09:13:30 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5oR6SgeE... after 3 consecutive RPC failures
+#3      7           5           2         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:13:32 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #4 ---
+#4      7           7           3         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:13:48 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #5 ---
+2026-09-07 09:13:57 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+2026-09-07 09:13:59 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
+2026-09-07 09:14:05 [INFO] [meme_alpha_hunter.live_paper] 🎯 [REAL LIVE PAPER ENTRY] VibeCat @ $0.000221 | Size: $5.33
+#5      7           7           8         0         $99.89      INVARIANTS_SATISFIED
+2026-09-07 09:14:12 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #6 ---
+2026-09-07 09:14:26 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for CivK2uZS... after 3 consecutive RPC failures
+#6      7           7           5         0         $99.99      INVARIANTS_SATISFIED
+2026-09-07 09:14:29 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #7 ---
+2026-09-07 09:14:42 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
+#7      7           7           7         0         $99.99      INVARIANTS_SATISFIED
+2026-09-07 09:14:49 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #8 ---
+2026-09-07 09:15:04 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+2026-09-07 09:15:06 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
+2026-09-07 09:15:08 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5oR6SgeE... after 3 consecutive RPC failures
+#8      7           7           6         0         $100.14     INVARIANTS_SATISFIED
+2026-09-07 09:15:10 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #9 ---
+2026-09-07 09:15:25 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+2026-09-07 09:15:28 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
+2026-09-07 09:15:31 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5oR6SgeE... after 3 consecutive RPC failures
+2026-09-07 09:15:31 [INFO] [meme_alpha_hunter.live_paper] 🏁 [REAL LIVE PAPER EXIT] VibeCat @ $0.000185 | PnL: $-0.89 | Reason: STOP_LOSS_TRIGGERED (-15.8% <= -10.0%)
+#9      7           7           4         0         $99.11      INVARIANTS_SATISFIED
+2026-09-07 09:15:33 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #10 ---
+2026-09-07 09:15:46 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+2026-09-07 09:15:48 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
+2026-09-07 09:15:48 [INFO] [meme_alpha_hunter.live_paper] 🎯 [REAL LIVE PAPER ENTRY] VibeCat @ $0.000187 | Size: $6.45
+2026-09-07 09:15:50 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5oR6SgeE... after 3 consecutive RPC failures
+#10     7           7           8         0         $98.98      INVARIANTS_SATISFIED
+2026-09-07 09:15:52 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #11 ---
+2026-09-07 09:16:05 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+2026-09-07 09:16:08 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
+2026-09-07 09:16:11 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5oR6SgeE... after 3 consecutive RPC failures
+#11     7           7           9         0         $99.18      INVARIANTS_SATISFIED
+2026-09-07 09:16:13 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #12 ---
+2026-09-07 09:16:27 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for CivK2uZS... after 3 consecutive RPC failures
+#12     7           7           8         0         $99.19      INVARIANTS_SATISFIED
+2026-09-07 09:16:29 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #13 ---
+2026-09-07 09:16:45 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+2026-09-07 09:16:49 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
+2026-09-07 09:16:52 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5oR6SgeE... after 3 consecutive RPC failures
+#13     7           7           9         0         $99.19      INVARIANTS_SATISFIED
+2026-09-07 09:16:54 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #14 ---
+2026-09-07 09:17:09 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#14     7           7           7         0         $99.38      INVARIANTS_SATISFIED
+2026-09-07 09:17:15 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #15 ---
+2026-09-07 09:17:29 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
+2026-09-07 09:17:32 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5oR6SgeE... after 3 consecutive RPC failures
+#15     7           7           3         0         $99.45      INVARIANTS_SATISFIED
+2026-09-07 09:17:34 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #16 ---
+2026-09-07 09:17:40 [INFO] [meme_alpha_hunter.live_paper] 🎯 [REAL LIVE PAPER ENTRY] 🎒 @ $0.000167 | Size: $6.77
+2026-09-07 09:17:49 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for CivK2uZS... after 3 consecutive RPC failures
+#16     7           7           3         0         $99.32      INVARIANTS_SATISFIED
+2026-09-07 09:17:51 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #17 ---
+2026-09-07 09:18:02 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+2026-09-07 09:18:04 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
+2026-09-07 09:18:05 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5oR6SgeE... after 3 consecutive RPC failures
+#17     7           7           3         0         $98.41      INVARIANTS_SATISFIED
 
 ================================================================================
   ⚡ MEME ALPHA HUNTER — SOLANA INTELLIGENCE & PAPER TRADING PLATFORM ⚡
@@ -19,28 +84,33 @@ CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 📊 [VIRTUAL WALLET STATUS]
 --------------------------------------------------------------------------------
   Starting Capital:  $100.00 USD
-  Current Equity:    $100.00 USD
-  Available Cash:    $100.00 USD
-  Open Positions:    $0.00 USD (0 active)
-  Realized PnL:      $+0.00 USD
-  Unrealized PnL:    $+0.00 USD
-  Total Fees:        -$0.00 USD
-  Total Slippage:    -$0.00 USD
-  Max Drawdown:       0.0%
+  Current Equity:    $98.41 USD
+  Available Cash:    $85.82 USD
+  Open Positions:    $12.58 USD (2 active)
+  Realized PnL:      $-0.89 USD
+  Unrealized PnL:    $-0.70 USD
+  Total Fees:        -$0.12 USD
+  Total Slippage:    -$0.12 USD
+  Max Drawdown:       1.7%
+--------------------------------------------------------------------------------
+  [ACTIVE OPEN POSITIONS]
+  SYMBOL       SIZE (USD)   ENTRY PRICE    CURR PRICE     PnL ($)      PnL (%)        
+  ----------------------------------------------------------------------------
+  VibeCat      $6.45        $0.000187      $0.000187      $-0.12       -1.79         %
+  🎒            $6.77        $0.000167      $0.000155      $-0.58       -8.60         %
 --------------------------------------------------------------------------------
 
 🎯 [TOP OPPORTUNITY RANKINGS]
 --------------------------------------------------------------------------------
   SYMBOL     ALPHA    RISK     CONF     EARLY    FINAL    REGIME             DECISION    
   ----------------------------------------------------------------------------
-  VibeCat    69.7     19.0     47.9     94.5     73.0     R2_ACCUMULATION    PAPER_ENTRY 
-  NASCAT     64.7     19.0     52.4     73.3     68.2     R2_ACCUMULATION    WATCH       
-  NVIDOG     58.1     19.0     48.6     88.1     66.9     R1_DORMANT         WATCH       
-  Norman     49.9     21.0     40.4     98.1     63.0     R1_DORMANT         REJECT      
-  Heist      60.6     23.0     27.8     68.5     61.0     R0_DEAD            WATCH       
-  JETCAT     47.9     19.0     46.5     67.7     58.9     R1_DORMANT         REJECT      
-  Chipmunk   48.0     24.0     31.8     89.8     58.8     R1_DORMANT         REJECT      
-  SCAT       51.1     23.0     27.8     67.8     56.6     R0_DEAD            REJECT      
+  VibeCat    64.5     19.0     66.7     83.7     71.8     R1_DORMANT         WATCH       
+  Norman     56.1     19.0     73.8     87.1     69.6     R1_DORMANT         WATCH       
+  NET        64.8     23.0     42.2     90.9     68.4     R0_DEAD            WATCH       
+  🎒          57.0     19.0     67.1     71.9     66.8     R1_DORMANT         WATCH       
+  NVIDOG     51.3     19.0     71.3     77.5     65.7     R1_DORMANT         REJECT      
+  BABYAN     49.0     24.0     50.1     85.6     61.4     R1_DORMANT         REJECT      
+  Anonymouse 38.7     21.0     56.0     91.2     59.2     R1_DORMANT         REJECT      
 --------------------------------------------------------------------------------
 
 🩺 [SYSTEM HEALTH]
@@ -59,45 +129,45 @@ CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 ============================================================
 FINAL LIVE VALIDATION
 ============================================================
-COMMIT: 0f8f93a
+COMMIT: c985fae253d5c7fce5443b2cb9334d6025a047fc
 MODE: LIVE
 NETWORK_CONNECTED: TRUE
-RPC_REQUESTS: 1404
-RPC_SUCCESS: 152
-RPC_FAILURE: 1252
-RPC_AVG_LATENCY_MS: 94.63
-LIVE_TOKENS: 10
-VERIFIED_MINTS: 10
-LIVE_SWAPS: 69
-VERIFIED_QUOTES: 66
+RPC_REQUESTS: 487
+RPC_SUCCESS: 304
+RPC_FAILURE: 183
+RPC_AVG_LATENCY_MS: 381.91
+LIVE_TOKENS: 7
+VERIFIED_MINTS: 7
+LIVE_SWAPS: 85
+VERIFIED_QUOTES: 82
 UNKNOWN_QUOTES: 3
-QUOTE_QUALITY: 0.9565
-TOKENS_WITH_LIVE_LIQUIDITY: 9
-TOKENS_WITH_UNKNOWN_LIQUIDITY: 7
-TOKENS_WITH_POOL_CREATION_TIME: 16
+QUOTE_QUALITY: 0.9647
+TOKENS_WITH_LIVE_LIQUIDITY: 6
+TOKENS_WITH_UNKNOWN_LIQUIDITY: 1
+TOKENS_WITH_POOL_CREATION_TIME: 7
 TOKENS_WITH_UNKNOWN_AGE: 0
-EARLY_ALPHA_SCORED: 10
-DEEP_ANALYSIS_PRIORITIZED: 1
-WATCHLIST: 3
-SECURITY_REJECTED: 6
-SNIPER_CANDIDATES: 1
-PAPER_ENTRIES: 0
-PAPER_EXITS: 0
-OPEN_POSITIONS: 0
-FEES: $0.00
-SLIPPAGE: $0.00
-REALIZED_PNL: $+0.00
-UNREALIZED_PNL: $+0.00
-FINAL_EQUITY: $100.00
-MAX_DRAWDOWN: 0.0%
+EARLY_ALPHA_SCORED: 7
+DEEP_ANALYSIS_PRIORITIZED: 0
+WATCHLIST: 4
+SECURITY_REJECTED: 3
+SNIPER_CANDIDATES: 0
+PAPER_ENTRIES: 3
+PAPER_EXITS: 1
+OPEN_POSITIONS: 2
+FEES: $0.12
+SLIPPAGE: $0.12
+REALIZED_PNL: $-0.89
+UNREALIZED_PNL: $-0.70
+FINAL_EQUITY: $98.41
+MAX_DRAWDOWN: 1.7%
 ACCOUNTING_DISCREPANCY: $0.000000
-PROVENANCE_CHECKS: 79
+PROVENANCE_CHECKS: 92
 FORCED_REAL: 0
 FORCED_VERIFICATION: 0
 SYNTHETIC_ROWS: 0
 STATIC_MARKET_DATA: 0
 UNKNOWN_TO_NUMERIC_FALLBACKS: 0
-FINAL VERDICT: LIVE_DATA_VALIDATED
+FINAL VERDICT: LIVE_PAPER_VALIDATED
 ============================================================
 DATA SOURCES USED IN RUN:
   • Solana Mainnet RPC: https://api.mainnet-beta.solana.com, extrnode, ankr, public-rpc
