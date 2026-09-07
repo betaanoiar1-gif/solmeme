@@ -7,7 +7,6 @@ import json
 import logging
 import time
 from typing import Any, Dict, List, Optional
-import urllib.error
 import urllib.request
 
 logger = logging.getLogger("meme_alpha_hunter.rpc")
@@ -72,8 +71,6 @@ class SolanaRPCClient:
         ep.failed_requests += 1
         ep.consecutive_errors += 1
         ep.last_error_time = now
-        # Bound the exponent before constructing it so repeated failures
-        # can never overflow Python's float conversion or kill a long run.
         exponent = min(max(ep.consecutive_errors - 1, 0), 5)
         cooldown_sec = min(5.0 * (2 ** exponent), 120.0)
         ep.cooldown_until = now + cooldown_sec
@@ -83,9 +80,9 @@ class SolanaRPCClient:
         )
         self.current_endpoint_idx = (self.current_endpoint_idx + 1) % len(self.endpoints_list)
 
-    def call(self, method: str, params: Optional[List[Any]] = None, use_cache: bool = True) -> Optional[Dict[str, Any]]:
+    def call(self, method: str, params: Optional[List[Any]] = None, use_cache: bool = True) -> Optional[Any]:
         params = params or []
-        cache_key = f"{method}:{json.dumps(params)}"
+        cache_key = f"{method}:{json.dumps(params, sort_keys=True)}"
 
         if use_cache and cache_key in self._cache:
             entry = self._cache[cache_key]
@@ -125,7 +122,7 @@ class SolanaRPCClient:
                         if use_cache:
                             self._cache[cache_key] = {"ts": time.time(), "data": res_json["result"]}
                         return res_json["result"]
-                    elif "error" in res_json:
+                    if "error" in res_json:
                         logger.warning(f"RPC {endpoint} returned JSON-RPC error: {res_json['error']}")
                         self._record_failure(endpoint)
             except Exception as e:
@@ -137,15 +134,13 @@ class SolanaRPCClient:
 
     def get_token_supply(self, mint: str) -> Optional[float]:
         res = self.call("getTokenSupply", [mint])
-        if res and "value" in res and "uiAmount" in res["value"]:
+        if res and isinstance(res, dict) and "value" in res and "uiAmount" in res["value"]:
             return float(res["value"]["uiAmount"])
         return None
 
     def get_account_info(self, pubkey: str, encoding: str = "jsonParsed") -> Optional[Dict[str, Any]]:
         res = self.call("getAccountInfo", [pubkey, {"encoding": encoding}])
-        if res and isinstance(res, dict):
-            return res
-        return None
+        return res if isinstance(res, dict) else None
 
     def get_health(self) -> Optional[str]:
         res = self.call("getHealth")
@@ -153,14 +148,25 @@ class SolanaRPCClient:
 
     def get_slot(self) -> Optional[int]:
         res = self.call("getSlot")
-        return int(res) if res is not None and isinstance(res, (int, float)) else None
+        return int(res) if isinstance(res, (int, float)) else None
 
     def get_latest_blockhash(self) -> Optional[Dict[str, Any]]:
         res = self.call("getLatestBlockhash")
         return res if isinstance(res, dict) else None
 
-    def get_signatures_for_address(self, address: str, limit: int = 25) -> Optional[List[Dict[str, Any]]]:
-        res = self.call("getSignaturesForAddress", [address, {"limit": limit}])
+    def get_signatures_for_address(
+        self,
+        address: str,
+        limit: int = 25,
+        before: Optional[str] = None,
+        until: Optional[str] = None,
+    ) -> Optional[List[Dict[str, Any]]]:
+        options: Dict[str, Any] = {"limit": max(1, min(int(limit), 1000))}
+        if before:
+            options["before"] = before
+        if until:
+            options["until"] = until
+        res = self.call("getSignaturesForAddress", [address, options], use_cache=False)
         return res if isinstance(res, list) else None
 
     def get_transaction(self, signature: str, encoding: str = "jsonParsed") -> Optional[Dict[str, Any]]:
@@ -169,7 +175,7 @@ class SolanaRPCClient:
 
     def get_token_largest_accounts(self, mint: str) -> Optional[List[Dict[str, Any]]]:
         res = self.call("getTokenLargestAccounts", [mint])
-        if res and isinstance(res, dict) and "value" in res:
+        if isinstance(res, dict) and "value" in res:
             return res["value"]
         return None
 
