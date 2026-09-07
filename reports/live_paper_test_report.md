@@ -5,22 +5,22 @@
 - **Runtime Environment:** GitHub Actions / Cloud VPS / Standalone
 - **Execution Mode:** `DATA_MODE=LIVE`
 - **Git Branch:** `arena/01a07111-solmeme`
-- **Commit SHA:** `ebcfbbc39f8a4abfec647f56ae7c1a3815d505e8`
-- **Test Start Time:** 2026-09-07 08:47:48 UTC
-- **Test End Time:** 2026-09-07 08:54:58 UTC
-- **Total Duration:** 429.81 seconds (7.2 minutes)
+- **Commit SHA:** `213612167ba1325eef2072199c4a3cb3023fd1e5`
+- **Test Start Time:** 2026-09-07 08:55:44 UTC
+- **Test End Time:** 2026-09-07 09:02:06 UTC
+- **Total Duration:** 381.72 seconds (6.4 minutes)
 - **Total Completed Cycles:** 1
 - **REAL_DATA_ONLY:** `TRUE`
 - **Network Status:** `SOLANA_MAINNET_CONNECTED`
-- **Total Real RPC Requests Attempted:** `1178`
-- **Successful Real RPC Requests:** `290`
-- **Failed Real RPC Requests:** `888`
-- **Current Real Tokens Discovered:** `15`
-- **On-Chain Verified Mints:** `15`
-- **Current Ingested Real Swaps:** `164`
-- **Current Whale Events Detected:** `3`
-- **Current Smart Money Events:** `164`
-- **Sniper Candidates:** `0`
+- **Total Real RPC Requests Attempted:** `1404`
+- **Successful Real RPC Requests:** `152`
+- **Failed Real RPC Requests:** `1252`
+- **Current Real Tokens Discovered:** `10`
+- **On-Chain Verified Mints:** `10`
+- **Current Ingested Real Swaps:** `69`
+- **Current Whale Events Detected:** `1`
+- **Current Smart Money Events:** `69`
+- **Sniper Candidates:** `1`
 - **Paper Entries:** `0`
 - **Paper Exits:** `0`
 - **Open Positions:** `0`
@@ -78,28 +78,28 @@
 ============================================================
 FINAL LIVE VALIDATION
 ============================================================
-COMMIT: ebcfbbc39f8a4abfec647f56ae7c1a3815d505e8
+COMMIT: 213612167ba1325eef2072199c4a3cb3023fd1e5
 MODE: LIVE
 NETWORK_CONNECTED: TRUE
-RPC_REQUESTS: 1178
-RPC_SUCCESS: 290
-RPC_FAILURE: 888
-RPC_AVG_LATENCY_MS: 69.08
-LIVE_TOKENS: 15
-VERIFIED_MINTS: 15
-LIVE_SWAPS: 164
-VERIFIED_QUOTES: 153
-UNKNOWN_QUOTES: 11
-QUOTE_QUALITY: 0.9329
-TOKENS_WITH_LIVE_LIQUIDITY: 7
-TOKENS_WITH_UNKNOWN_LIQUIDITY: 8
-TOKENS_WITH_POOL_CREATION_TIME: 15
+RPC_REQUESTS: 1404
+RPC_SUCCESS: 152
+RPC_FAILURE: 1252
+RPC_AVG_LATENCY_MS: 94.63
+LIVE_TOKENS: 10
+VERIFIED_MINTS: 10
+LIVE_SWAPS: 69
+VERIFIED_QUOTES: 66
+UNKNOWN_QUOTES: 3
+QUOTE_QUALITY: 0.9565
+TOKENS_WITH_LIVE_LIQUIDITY: 9
+TOKENS_WITH_UNKNOWN_LIQUIDITY: 7
+TOKENS_WITH_POOL_CREATION_TIME: 16
 TOKENS_WITH_UNKNOWN_AGE: 0
-EARLY_ALPHA_SCORED: 15
-DEEP_ANALYSIS_PRIORITIZED: 0
-WATCHLIST: 4
-SCORING_REJECTED: 11
-SNIPER_CANDIDATES: 0
+EARLY_ALPHA_SCORED: 10
+DEEP_ANALYSIS_PRIORITIZED: 1
+WATCHLIST: 3
+SCORING_REJECTED: 6
+SNIPER_CANDIDATES: 1
 PAPER_ENTRIES: 0
 PAPER_EXITS: 0
 OPEN_POSITIONS: 0
@@ -110,7 +110,7 @@ UNREALIZED_PNL: $+0.00
 FINAL_EQUITY: $100.00
 MAX_DRAWDOWN: 0.0%
 ACCOUNTING_DISCREPANCY: $0.000000
-PROVENANCE_CHECKS: 179
+PROVENANCE_CHECKS: 79
 FORCED_REAL: 0
 FORCED_VERIFICATION: 0
 SYNTHETIC_ROWS: 0
