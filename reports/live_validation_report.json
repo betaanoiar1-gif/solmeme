@@ -1,50 +1,50 @@
 {
-  "commit": "d3b09e68aa43a9d312d91d97dc27efd2925b868b",
+  "commit": "9f76568a34d6e646faa60bcd1d2c837520b8747d",
   "mode": "LIVE",
   "environment": "GitHub Actions / Cloud VPS / Standalone",
-  "start_time_utc": "2026-09-07 09:26:00 UTC",
-  "end_time_utc": "2026-09-07 09:31:07 UTC",
-  "duration_sec": 307.03,
-  "total_cycles": 76,
-  "network_connected": true,
+  "start_time_utc": "2026-09-07 09:42:57 UTC",
+  "end_time_utc": "2026-09-07 09:48:10 UTC",
+  "duration_sec": 313.21,
+  "total_cycles": 12,
+  "network_connected": false,
   "rpc_telemetry": {
-    "total_requests": 688,
-    "success_requests": 280,
-    "failed_requests": 408,
-    "avg_latency_ms": 362.34,
+    "total_requests": 434,
+    "success_requests": 318,
+    "failed_requests": 116,
+    "avg_latency_ms": 399.81,
     "per_endpoint": {
       "https://api.mainnet-beta.solana.com": {
-        "total_requests": 382,
-        "successful_requests": 280,
-        "failed_requests": 102,
-        "consecutive_errors": 0,
-        "avg_latency_ms": 362.3362034817163,
+        "total_requests": 347,
+        "successful_requests": 318,
+        "failed_requests": 29,
+        "consecutive_errors": 1,
+        "avg_latency_ms": 399.810425830764,
         "is_active": true,
         "in_cooldown": true
       },
       "https://solana-mainnet.rpc.extrnode.com": {
-        "total_requests": 102,
+        "total_requests": 29,
         "successful_requests": 0,
-        "failed_requests": 102,
-        "consecutive_errors": 102,
+        "failed_requests": 29,
+        "consecutive_errors": 29,
         "avg_latency_ms": 0.0,
         "is_active": true,
         "in_cooldown": true
       },
       "https://rpc.ankr.com/solana": {
-        "total_requests": 102,
+        "total_requests": 29,
         "successful_requests": 0,
-        "failed_requests": 102,
-        "consecutive_errors": 102,
+        "failed_requests": 29,
+        "consecutive_errors": 29,
         "avg_latency_ms": 0.0,
         "is_active": true,
         "in_cooldown": true
       },
       "https://solana.public-rpc.com": {
-        "total_requests": 102,
+        "total_requests": 29,
         "successful_requests": 0,
-        "failed_requests": 102,
-        "consecutive_errors": 102,
+        "failed_requests": 29,
+        "consecutive_errors": 29,
         "avg_latency_ms": 0.0,
         "is_active": true,
         "in_cooldown": true
@@ -52,53 +52,53 @@
     }
   },
   "discovery": {
-    "live_tokens_discovered": 3,
-    "onchain_verified_mints": 3,
-    "live_swaps": 290,
-    "unique_live_mints": 3,
-    "unique_live_wallets": 56,
-    "unique_live_signatures": 69
+    "live_tokens_discovered": 10,
+    "onchain_verified_mints": 10,
+    "live_swaps": 163,
+    "unique_live_mints": 9,
+    "unique_live_wallets": 129,
+    "unique_live_signatures": 163
   },
   "data_quality": {
-    "strict_verified_quotes": 270,
-    "unknown_quotes": 20,
-    "quote_quality": 0.931,
-    "tokens_with_live_liquidity": 2,
-    "tokens_with_unknown_liquidity": 1,
-    "tokens_with_pool_creation_time": 3,
+    "strict_verified_quotes": 151,
+    "unknown_quotes": 12,
+    "quote_quality": 0.9264,
+    "tokens_with_live_liquidity": 8,
+    "tokens_with_unknown_liquidity": 2,
+    "tokens_with_pool_creation_time": 10,
     "tokens_with_unknown_age": 0
   },
   "alpha_pipeline": {
-    "early_alpha_scored": 3,
-    "deep_analysis_prioritized": 0,
-    "watchlist": 2,
-    "sniper_candidates": 0,
-    "scoring_rejected": 1
+    "early_alpha_scored": 10,
+    "deep_analysis_prioritized": 2,
+    "watchlist": 1,
+    "sniper_candidates": 2,
+    "scoring_rejected": 7
   },
   "paper_trading": {
     "starting_capital": 100.0,
-    "paper_entries": 1,
+    "paper_entries": 2,
     "paper_exits": 0,
-    "open_positions": 1,
-    "total_fees": 0.03,
-    "total_slippage": 0.03,
+    "open_positions": 2,
+    "total_fees": 0.06,
+    "total_slippage": 0.06,
     "realized_pnl": 0.0,
-    "unrealized_pnl": -0.2,
-    "final_equity": 99.8,
-    "max_drawdown_pct": 0.2
+    "unrealized_pnl": -0.62,
+    "final_equity": 99.38,
+    "max_drawdown_pct": 0.72
   },
   "accounting": {
     "accounting_invariants_valid": true,
     "accounting_discrepancy": 0.0
   },
   "provenance_guard": {
-    "provenance_checks": 293,
+    "provenance_checks": 173,
     "forced_real": 0,
     "forced_verification": 0,
     "synthetic_rows": 0,
     "static_market_data": 0,
     "unknown_to_numeric_fallbacks": 0
   },
-  "final_verdict": "LIVE_PAPER_VALIDATED",
+  "final_verdict": "LIVE_PAPER_BLOCKED",
   "audit_note": "Exported smart-money fields are rebuilt from live_swaps.csv using the evidence-gated RealSmartMoneyEngine; no placeholder smart-money score is used."
 }

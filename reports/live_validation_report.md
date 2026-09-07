@@ -5,25 +5,25 @@
 - **Runtime Environment:** GitHub Actions / Cloud VPS / Standalone
 - **Execution Mode:** `DATA_MODE=LIVE`
 - **Git Branch:** `arena/01a07111-solmeme`
-- **Commit SHA:** `d3b09e68aa43a9d312d91d97dc27efd2925b868b`
-- **Test Start Time:** 2026-09-07 09:26:00 UTC
-- **Test End Time:** 2026-09-07 09:31:07 UTC
-- **Total Duration:** 307.03 seconds (5.1 minutes)
-- **Total Completed Cycles:** 76
+- **Commit SHA:** `9f76568a34d6e646faa60bcd1d2c837520b8747d`
+- **Test Start Time:** 2026-09-07 09:42:57 UTC
+- **Test End Time:** 2026-09-07 09:48:10 UTC
+- **Total Duration:** 313.21 seconds (5.2 minutes)
+- **Total Completed Cycles:** 12
 - **REAL_DATA_ONLY:** `TRUE`
 - **Network Status:** `EGRESS_RESTRICTED (Sandbox Container Offline)`
-- **Total Real RPC Requests Attempted:** `687`
-- **Successful Real RPC Requests:** `279`
-- **Failed Real RPC Requests:** `408`
-- **Current Real Tokens Discovered:** `3`
-- **On-Chain Verified Mints:** `3`
-- **Current Ingested Real Swaps:** `290`
-- **Current Whale Events Detected:** `0`
-- **Current Smart Money Events:** `69`
-- **Sniper Candidates:** `0`
-- **Paper Entries:** `1`
+- **Total Real RPC Requests Attempted:** `433`
+- **Successful Real RPC Requests:** `318`
+- **Failed Real RPC Requests:** `115`
+- **Current Real Tokens Discovered:** `10`
+- **On-Chain Verified Mints:** `10`
+- **Current Ingested Real Swaps:** `163`
+- **Current Whale Events Detected:** `2`
+- **Current Smart Money Events:** `163`
+- **Sniper Candidates:** `2`
+- **Paper Entries:** `2`
 - **Paper Exits:** `0`
-- **Open Positions:** `1`
+- **Open Positions:** `2`
 
 ---
 
@@ -49,15 +49,15 @@
 | Invariant Metric | Measured Ledger | Expected Theoretical | Discrepancy | Invariant Status |
 | :--- | :--- | :--- | :--- | :--- |
 | **Starting Capital** | $100.00 USD | $100.00 USD | $0.000000 | **INITIALIZED** |
-| **Available Cash** | $93.15 USD | — | — | **AUDITED** |
-| **Net Liquidation Value** | $6.65 USD | — | — | **AUDITED** |
-| **Ending Equity (Cash + Liq)** | $99.80 USD | $99.80 USD | $0.000000 | **SATISFIED** |
-| **Ending Equity (Capital + PnL)** | $99.80 USD | $99.80 USD | $0.000000 | **SATISFIED** |
+| **Available Cash** | $88.02 USD | — | — | **AUDITED** |
+| **Net Liquidation Value** | $11.36 USD | — | — | **AUDITED** |
+| **Ending Equity (Cash + Liq)** | $99.38 USD | $99.38 USD | $0.000000 | **SATISFIED** |
+| **Ending Equity (Capital + PnL)** | $99.38 USD | $99.38 USD | $0.000000 | **SATISFIED** |
 | **Realized PnL** | $+0.00 USD | — | — | **MEASURED** |
-| **Net Unrealized PnL** | $-0.20 USD | — | — | **MEASURED** |
-| **Total Fees Paid** | $0.03 USD | — | — | **ACCOUNTED** |
-| **Total Slippage Drag** | $0.03 USD | — | — | **ACCOUNTED** |
-| **Max Drawdown** | 0.20% | — | — | **BOUNDED** |
+| **Net Unrealized PnL** | $-0.62 USD | — | — | **MEASURED** |
+| **Total Fees Paid** | $0.06 USD | — | — | **ACCOUNTED** |
+| **Total Slippage Drag** | $0.06 USD | — | — | **ACCOUNTED** |
+| **Max Drawdown** | 0.72% | — | — | **BOUNDED** |
 | **Accounting Invariant Check** | `INVARIANTS_SATISFIED` | `INVARIANTS_SATISFIED` | $0.000000 | **VERIFIED** |
 
 ---
@@ -78,39 +78,39 @@
 ============================================================
 FINAL LIVE VALIDATION
 ============================================================
-COMMIT: d3b09e68aa43a9d312d91d97dc27efd2925b868b
+COMMIT: 9f76568a34d6e646faa60bcd1d2c837520b8747d
 MODE: LIVE
 NETWORK_CONNECTED: FALSE
-RPC_REQUESTS: 687
-RPC_SUCCESS: 279
-RPC_FAILURE: 408
-RPC_AVG_LATENCY_MS: 372.05
-LIVE_TOKENS: 3
-VERIFIED_MINTS: 3
-LIVE_SWAPS: 290
-VERIFIED_QUOTES: 270
-UNKNOWN_QUOTES: 20
-QUOTE_QUALITY: 0.9310
-TOKENS_WITH_LIVE_LIQUIDITY: 2
-TOKENS_WITH_UNKNOWN_LIQUIDITY: 1
-TOKENS_WITH_POOL_CREATION_TIME: 3
+RPC_REQUESTS: 433
+RPC_SUCCESS: 318
+RPC_FAILURE: 115
+RPC_AVG_LATENCY_MS: 399.81
+LIVE_TOKENS: 10
+VERIFIED_MINTS: 10
+LIVE_SWAPS: 163
+VERIFIED_QUOTES: 151
+UNKNOWN_QUOTES: 12
+QUOTE_QUALITY: 0.9264
+TOKENS_WITH_LIVE_LIQUIDITY: 8
+TOKENS_WITH_UNKNOWN_LIQUIDITY: 2
+TOKENS_WITH_POOL_CREATION_TIME: 10
 TOKENS_WITH_UNKNOWN_AGE: 0
-EARLY_ALPHA_SCORED: 3
-DEEP_ANALYSIS_PRIORITIZED: 0
-WATCHLIST: 2
-SCORING_REJECTED: 1
-SNIPER_CANDIDATES: 0
-PAPER_ENTRIES: 1
+EARLY_ALPHA_SCORED: 10
+DEEP_ANALYSIS_PRIORITIZED: 2
+WATCHLIST: 1
+SCORING_REJECTED: 7
+SNIPER_CANDIDATES: 2
+PAPER_ENTRIES: 2
 PAPER_EXITS: 0
-OPEN_POSITIONS: 1
-FEES: $0.03
-SLIPPAGE: $0.03
+OPEN_POSITIONS: 2
+FEES: $0.06
+SLIPPAGE: $0.06
 REALIZED_PNL: $+0.00
-UNREALIZED_PNL: $-0.20
-FINAL_EQUITY: $99.80
-MAX_DRAWDOWN: 0.2%
+UNREALIZED_PNL: $-0.62
+FINAL_EQUITY: $99.38
+MAX_DRAWDOWN: 0.7%
 ACCOUNTING_DISCREPANCY: $0.000000
-PROVENANCE_CHECKS: 293
+PROVENANCE_CHECKS: 173
 FORCED_REAL: 0
 FORCED_VERIFICATION: 0
 SYNTHETIC_ROWS: 0

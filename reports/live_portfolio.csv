@@ -1,2 +1,2 @@
 timestamp,strategy_name,cash_balance_usd,equity_usd,open_positions_val_usd,realized_pnl_usd,unrealized_pnl_usd,total_fees_usd,total_slippage_usd,max_drawdown_pct
-2026-09-07 09:31:08,Real_Live_Paper_Wallet,93.15,99.8,6.65,0.0,-0.2,0.03,0.03,0.2
+2026-09-07 09:48:14,Real_Live_Paper_Wallet,88.02,99.38,11.36,0.0,-0.62,0.06,0.06,0.72
