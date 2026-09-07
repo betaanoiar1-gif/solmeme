@@ -39,81 +39,78 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
 
-          def replace(path, old, new):
+          def replace(path, old, new, count=1):
               p = Path(path)
               text = p.read_text()
               if old not in text:
                   raise SystemExit(f"PATCH_TARGET_NOT_FOUND: {path}: {old!r}")
-              p.write_text(text.replace(old, new, 1))
+              p.write_text(text.replace(old, new, count))
               print(f"PATCHED: {path}")
 
-          # 1) Stop RPC retry storms and keep the live loop responsive.
+          # 1) Stop RPC retry storms while keeping a bounded failover loop.
           replace(
               "blockchain/rpc/rpc_client.py",
-              "def __init__(self, endpoints: Optional[List[str]] = None, timeout: float = 2.0, max_retries: int = 3):",
               "def __init__(self, endpoints: Optional[List[str]] = None, timeout: float = 2.0, max_retries: int = 1):",
+              "def __init__(self, endpoints: Optional[List[str]] = None, timeout: float = 3.0, max_retries: int = 1):",
           )
-          replace(
-              "blockchain/rpc/rpc_client.py",
-              "self._cache_ttl_sec = 5.0",
-              "self._cache_ttl_sec = 8.0",
-          )
-          replace(
-              "blockchain/rpc/rpc_client.py",
-              "self._min_interval_sec = 0.1",
-              "self._min_interval_sec = 0.08",
-          )
+          replace("blockchain/rpc/rpc_client.py", "self._cache_ttl_sec = 8.0", "self._cache_ttl_sec = 10.0")
+          replace("blockchain/rpc/rpc_client.py", "self._min_interval_sec = 0.08", "self._min_interval_sec = 0.10")
 
-          # 2) Reduce repeated transaction fan-out while keeping only real evidence.
+          # 2) Reduce transaction fan-out and stop a token scan when the endpoint is clearly failing.
           replace(
               "data/ingestion/real_live_provider.py",
-              "def scan_recent_tokens(self, limit: int = 50) -> List[Dict[str, Any]]:",
               "def scan_recent_tokens(self, limit: int = 12) -> List[Dict[str, Any]]:",
+              "def scan_recent_tokens(self, limit: int = 10) -> List[Dict[str, Any]]:",
           )
-          replace(
-              "data/ingestion/real_live_provider.py",
-              "signatures = self.rpc.get_signatures_for_address(mint, limit=limit)\n        if not signatures:\n            return []\n\n        results = []\n        for sig_info in signatures:",
-              "signatures = self.rpc.get_signatures_for_address(mint, limit=min(limit, 6))\n        if not signatures:\n            return []\n\n        results = []\n        consecutive_tx_failures = 0\n        for sig_info in signatures:",
-          )
-          replace(
-              "data/ingestion/real_live_provider.py",
-              "            tx = self.rpc.get_transaction(sig)\n            if not tx:\n                continue\n            swaps = self.swap_parser.parse_transaction(",
-              "            tx = self.rpc.get_transaction(sig)\n            if not tx:\n                consecutive_tx_failures += 1\n                if consecutive_tx_failures >= 3:\n                    logger.warning(f\"Stopping tx scan for {mint[:8]}... after 3 consecutive RPC failures\")\n                    break\n                continue\n            consecutive_tx_failures = 0\n            swaps = self.swap_parser.parse_transaction(",
-          )
-
-          # 3) Do not spend RPC calls analyzing tokens that already failed mint verification.
           replace(
               "app/orchestration/live_paper_engine.py",
-              "raw_tokens = self.provider.scan_recent_tokens(limit=30)",
               "raw_tokens = self.provider.scan_recent_tokens(limit=12)",
-          )
-          replace(
-              "app/orchestration/live_paper_engine.py",
-              "            if verification.is_valid_mint:\n                verified_count += 1\n                self.verified_tokens_map[mint] = verification\n\n            # 4. Ingest real trades/swaps (Preserving Provider Provenance)",
-              "            if verification.is_valid_mint:\n                verified_count += 1\n                self.verified_tokens_map[mint] = verification\n            else:\n                # Invalid mints cannot contribute trustworthy swaps, security, or scoring.\n                continue\n\n            # 4. Ingest real trades/swaps (Preserving Provider Provenance)",
-          )
-          replace(
-              "app/orchestration/live_paper_engine.py",
-              "            trades = self.provider.get_recent_trades(mint, limit=30)",
-              "            trades = self.provider.get_recent_trades(mint, limit=6)",
+              "raw_tokens = self.provider.scan_recent_tokens(limit=10)",
           )
 
-          # 4) Make the scorer's PAPER_ENTRY decision the canonical paper-entry signal,
-          #    while retaining the anti-chase protection as a safety gate.
+          # 3) Make paper execution stateful: do not immediately re-enter a token after a stop-loss/exit.
           replace(
               "app/orchestration/live_paper_engine.py",
-              "            should_snipe = (mode_a or mode_b or mode_c or mode_d or mode_e) and chase_verdict.is_safe_entry",
-              "            entry_signal = opp_report.recommendation == \"PAPER_ENTRY\"\n            should_snipe = entry_signal and chase_verdict.is_safe_entry",
+              "        self.ingested_swaps: List[RealSwapRecord] = []",
+              "        self.ingested_swaps: List[RealSwapRecord] = []\n        # Token-level cooldown prevents churn/re-entry on a stale thesis.\n        self.entry_cooldown_until: Dict[str, float] = {}",
+          )
+          replace(
+              "app/orchestration/live_paper_engine.py",
+              "            entry_signal = opp_report.recommendation == \"PAPER_ENTRY\"\n            should_snipe = entry_signal and chase_verdict.is_safe_entry\n\n            # Require verified liquidity >= min_liquidity_usd (None liquidity blocks entry)",
+              "            cooldown_active = self.entry_cooldown_until.get(mint, 0.0) > time.time()\n            entry_signal = opp_report.recommendation == \"PAPER_ENTRY\"\n            # Early conviction can justify a paper entry below the nominal confidence floor,\n            # but only when the independent Early Impulse evidence is very strong.\n            confidence_ok = (\n                opp_report.confidence_score >= self.config.scoring.min_confidence_score\n                or (opp_report.early_impulse_score >= 85.0 and opp_report.earlyness_score >= 80.0 and opp_report.risk_score <= 35.0)\n            )\n            should_snipe = entry_signal and confidence_ok and chase_verdict.is_safe_entry and not cooldown_active\n\n            if cooldown_active:\n                logger.info(f\"⏸ [ENTRY COOLDOWN] {symbol} blocked until prior thesis cools down\")\n            elif entry_signal and not confidence_ok:\n                logger.info(f\"⏸ [ENTRY EVIDENCE GATE] {symbol} blocked: confidence={opp_report.confidence_score:.1f}, early_impulse={opp_report.early_impulse_score:.1f}\")\n            elif entry_signal and not chase_verdict.is_safe_entry:\n                logger.info(f\"⏸ [ENTRY CHASE GATE] {symbol} blocked: {chase_verdict.reason}\")\n\n            # Require verified liquidity >= min_liquidity_usd (None liquidity blocks entry)",
+          )
+          replace(
+              "app/orchestration/live_paper_engine.py",
+              "            if should_snipe and mint not in self.wallet.positions and (liq_usd is not None and liq_usd >= self.config.discovery.min_liquidity_usd):",
+              "            if should_snipe and mint not in self.wallet.positions and (liq_usd is not None and liq_usd >= self.config.discovery.min_liquidity_usd):",
+          )
+          # Set cooldown only after a real paper exit is confirmed.
+          replace(
+              "app/orchestration/live_paper_engine.py",
+              "                self.risk_manager.register_trade_outcome(is_win=(pnl_usd > 0))\n                logger.info(f\"🏁 [REAL LIVE PAPER EXIT] {pos.symbol} @ ${exit_exec.executed_price:.6f} | PnL: ${pnl_usd:+.2f} | Reason: {verdict.exit_reason}\")",
+              "                self.risk_manager.register_trade_outcome(is_win=(pnl_usd > 0))\n                # 30-minute thesis cooldown after any exit; prevents immediate churn.\n                self.entry_cooldown_until[mint] = time.time() + 30.0 * 60.0\n                logger.info(f\"🏁 [REAL LIVE PAPER EXIT] {pos.symbol} @ ${exit_exec.executed_price:.6f} | PnL: ${pnl_usd:+.2f} | Reason: {verdict.exit_reason}\")",
           )
 
-          # 5) Remove stale hardcoded commit identity from live reports.
+          # 4) Count security authority fields as known only when actually known.
+          replace(
+              "scoring/opportunity/opportunity_scorer.py",
+              '            "mint_auth_revoked": True,\n            "freeze_auth_revoked": True,',
+              '            "mint_auth_revoked": getattr(security_eval, "mint_auth_status", None) not in (None, "UNKNOWN"),\n            "freeze_auth_revoked": getattr(security_eval, "freeze_auth_status", None) not in (None, "UNKNOWN"),',
+          )
+
+          # 5) Keep the standalone runner itself aligned with the agreed 5-minute operating window.
+          replace(
+              "scripts/run_live_paper.py",
+              "    duration_minutes: float = 30.0,",
+              "    duration_minutes: float = 5.0,",
+          )
           replace(
               "scripts/run_live_paper.py",
               '    print("COMMIT: 0f8f93a")',
               '    print(f"COMMIT: {os.getenv(\'GITHUB_SHA\') or \'LOCAL\'}")',
           )
 
-          print("ONE_SHOT_HARDENING_COMPLETE")
+          print("FINAL_ONE_SHOT_HARDENING_COMPLETE")
           PY
 
           python3 -m compileall -q app blockchain data portfolio scoring security simulation sniper scripts
@@ -150,6 +147,6 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add reports/ blockchain/rpc/rpc_client.py data/ingestion/real_live_provider.py app/orchestration/live_paper_engine.py scripts/run_live_paper.py
-          git commit -m "chore(live): persist one-shot production hardening and 5-minute validation [skip ci]" || echo "No changes to commit"
+          git add reports/ blockchain/rpc/rpc_client.py data/ingestion/real_live_provider.py app/orchestration/live_paper_engine.py scoring/opportunity/opportunity_scorer.py scripts/run_live_paper.py
+          git commit -m "chore(live): persist final production hardening and 5-minute validation [skip ci]" || echo "No changes to commit"
           git push origin HEAD:arena/01a07111-solmeme
