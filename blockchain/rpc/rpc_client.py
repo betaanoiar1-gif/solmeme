@@ -43,11 +43,10 @@ class SolanaRPCClient:
         self._cache: Dict[str, Dict[str, Any]] = {}
         self._cache_ttl_sec = 5.0
         self._last_call_ts = 0.0
-        self._min_interval_sec = 0.1  # Rate limiting
+        self._min_interval_sec = 0.1
 
     def _get_available_endpoint(self) -> Optional[str]:
         now = time.time()
-        # First try active endpoints not in cooldown
         for i in range(len(self.endpoints_list)):
             idx = (self.current_endpoint_idx + i) % len(self.endpoints_list)
             url = self.endpoints_list[idx]
@@ -55,8 +54,6 @@ class SolanaRPCClient:
             if ep_health.cooldown_until <= now:
                 self.current_endpoint_idx = idx
                 return url
-
-        # If all in cooldown, pick the one with oldest error time
         sorted_eps = sorted(self.endpoints_list, key=lambda u: self.health[u].last_error_time)
         return sorted_eps[0] if sorted_eps else None
 
@@ -75,11 +72,15 @@ class SolanaRPCClient:
         ep.failed_requests += 1
         ep.consecutive_errors += 1
         ep.last_error_time = now
-        # Exponential cooldown: 5s, 15s, 45s up to 120s
-        cooldown_sec = min(5.0 * (2 ** (ep.consecutive_errors - 1)), 120.0)
+        # Bound the exponent before constructing it so repeated failures
+        # can never overflow Python's float conversion or kill a long run.
+        exponent = min(max(ep.consecutive_errors - 1, 0), 5)
+        cooldown_sec = min(5.0 * (2 ** exponent), 120.0)
         ep.cooldown_until = now + cooldown_sec
-        logger.debug(f"RPC endpoint {url} failed ({ep.consecutive_errors} consecutive errors). Cooling down for {cooldown_sec:.1f}s")
-        # Rotate index
+        logger.debug(
+            f"RPC endpoint {url} failed ({ep.consecutive_errors} consecutive errors). "
+            f"Cooling down for {cooldown_sec:.1f}s"
+        )
         self.current_endpoint_idx = (self.current_endpoint_idx + 1) % len(self.endpoints_list)
 
     def call(self, method: str, params: Optional[List[Any]] = None, use_cache: bool = True) -> Optional[Dict[str, Any]]:
@@ -104,7 +105,6 @@ class SolanaRPCClient:
             if not endpoint:
                 break
 
-            # Rate limiting check
             elapsed = time.time() - self._last_call_ts
             if elapsed < self._min_interval_sec:
                 time.sleep(self._min_interval_sec - elapsed)
