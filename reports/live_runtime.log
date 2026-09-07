@@ -9,73 +9,232 @@
 ================================================================================
 CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 ================================================================================
-2026-09-07 09:12:59 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
-#1      7           3           0         0         $100.00     INVARIANTS_SATISFIED
-2026-09-07 09:13:09 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #2 ---
-#2      7           5           0         0         $100.00     INVARIANTS_SATISFIED
-2026-09-07 09:13:16 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #3 ---
-2026-09-07 09:13:28 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
-2026-09-07 09:13:30 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5oR6SgeE... after 3 consecutive RPC failures
-#3      7           5           2         0         $100.00     INVARIANTS_SATISFIED
-2026-09-07 09:13:32 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #4 ---
-#4      7           7           3         0         $100.00     INVARIANTS_SATISFIED
-2026-09-07 09:13:48 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #5 ---
-2026-09-07 09:13:57 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
-2026-09-07 09:13:59 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for Aw6fiDPW... after 3 consecutive RPC failures
-2026-09-07 09:14:05 [INFO] [meme_alpha_hunter.live_paper] 🎯 [REAL LIVE PAPER ENTRY] VibeCat @ $0.000221 | Size: $5.33
-#5      7           7           8         0         $99.89      INVARIANTS_SATISFIED
-2026-09-07 09:14:12 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #6 ---
-2026-09-07 09:14:26 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for CivK2uZS... after 3 consecutive RPC failures
-#6      7           7           5         0         $99.99      INVARIANTS_SATISFIED
-2026-09-07 09:14:29 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #7 ---
-2026-09-07 09:14:42 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
-#7      7           7           7         0         $99.99      INVARIANTS_SATISFIED
-2026-09-07 09:14:49 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #8 ---
-2026-09-07 09:15:04 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-2026-09-07 09:15:06 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
-2026-09-07 09:15:08 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5oR6SgeE... after 3 consecutive RPC failures
-#8      7           7           6         0         $100.14     INVARIANTS_SATISFIED
-2026-09-07 09:15:10 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #9 ---
-2026-09-07 09:15:25 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-2026-09-07 09:15:28 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
-2026-09-07 09:15:31 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5oR6SgeE... after 3 consecutive RPC failures
-2026-09-07 09:15:31 [INFO] [meme_alpha_hunter.live_paper] 🏁 [REAL LIVE PAPER EXIT] VibeCat @ $0.000185 | PnL: $-0.89 | Reason: STOP_LOSS_TRIGGERED (-15.8% <= -10.0%)
-#9      7           7           4         0         $99.11      INVARIANTS_SATISFIED
-2026-09-07 09:15:33 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #10 ---
-2026-09-07 09:15:46 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-2026-09-07 09:15:48 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
-2026-09-07 09:15:48 [INFO] [meme_alpha_hunter.live_paper] 🎯 [REAL LIVE PAPER ENTRY] VibeCat @ $0.000187 | Size: $6.45
-2026-09-07 09:15:50 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5oR6SgeE... after 3 consecutive RPC failures
-#10     7           7           8         0         $98.98      INVARIANTS_SATISFIED
-2026-09-07 09:15:52 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #11 ---
-2026-09-07 09:16:05 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-2026-09-07 09:16:08 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
-2026-09-07 09:16:11 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5oR6SgeE... after 3 consecutive RPC failures
-#11     7           7           9         0         $99.18      INVARIANTS_SATISFIED
-2026-09-07 09:16:13 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #12 ---
-2026-09-07 09:16:27 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for CivK2uZS... after 3 consecutive RPC failures
-#12     7           7           8         0         $99.19      INVARIANTS_SATISFIED
-2026-09-07 09:16:29 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #13 ---
-2026-09-07 09:16:45 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-2026-09-07 09:16:49 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
-2026-09-07 09:16:52 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5oR6SgeE... after 3 consecutive RPC failures
-#13     7           7           9         0         $99.19      INVARIANTS_SATISFIED
-2026-09-07 09:16:54 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #14 ---
-2026-09-07 09:17:09 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-#14     7           7           7         0         $99.38      INVARIANTS_SATISFIED
-2026-09-07 09:17:15 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #15 ---
-2026-09-07 09:17:29 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
-2026-09-07 09:17:32 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5oR6SgeE... after 3 consecutive RPC failures
-#15     7           7           3         0         $99.45      INVARIANTS_SATISFIED
-2026-09-07 09:17:34 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #16 ---
-2026-09-07 09:17:40 [INFO] [meme_alpha_hunter.live_paper] 🎯 [REAL LIVE PAPER ENTRY] 🎒 @ $0.000167 | Size: $6.77
-2026-09-07 09:17:49 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for CivK2uZS... after 3 consecutive RPC failures
-#16     7           7           3         0         $99.32      INVARIANTS_SATISFIED
-2026-09-07 09:17:51 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #17 ---
-2026-09-07 09:18:02 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
-2026-09-07 09:18:04 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5XLc2qsm... after 3 consecutive RPC failures
-2026-09-07 09:18:05 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 5oR6SgeE... after 3 consecutive RPC failures
-#17     7           7           3         0         $98.41      INVARIANTS_SATISFIED
+2026-09-07 09:26:00 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #1 ---
+#1      3           1           0         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:26:03 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #2 ---
+#2      3           2           0         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:26:07 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #3 ---
+#3      3           3           0         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:26:11 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #4 ---
+#4      3           3           3         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:26:15 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #5 ---
+2026-09-07 09:26:17 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#5      3           3           5         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:26:19 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #6 ---
+#6      3           3           7         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:26:23 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #7 ---
+2026-09-07 09:26:25 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#7      3           3           6         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:26:27 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #8 ---
+2026-09-07 09:26:29 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ZesMGYmo... after 3 consecutive RPC failures
+2026-09-07 09:26:30 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#8      3           3           1         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:26:32 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #9 ---
+2026-09-07 09:26:34 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#9      3           3           1         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:26:36 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #10 ---
+2026-09-07 09:26:38 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#10     3           3           2         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:26:41 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #11 ---
+2026-09-07 09:26:42 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ZesMGYmo... after 3 consecutive RPC failures
+2026-09-07 09:26:43 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#11     3           3           2         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:26:45 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #12 ---
+2026-09-07 09:26:47 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#12     3           3           3         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:26:49 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #13 ---
+2026-09-07 09:26:50 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#13     3           3           0         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:26:53 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #14 ---
+2026-09-07 09:26:55 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#14     3           3           0         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:26:57 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #15 ---
+#15     3           3           3         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:27:01 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #16 ---
+2026-09-07 09:27:02 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#16     3           3           1         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:27:05 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #17 ---
+2026-09-07 09:27:07 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#17     3           3           2         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:27:09 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #18 ---
+2026-09-07 09:27:10 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#18     3           3           3         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:27:13 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #19 ---
+#19     3           3           1         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:27:16 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #20 ---
+#20     3           3           2         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:27:20 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #21 ---
+2026-09-07 09:27:21 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#21     3           3           3         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:27:24 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #22 ---
+2026-09-07 09:27:25 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#22     3           3           4         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:27:27 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #23 ---
+2026-09-07 09:27:28 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ZesMGYmo... after 3 consecutive RPC failures
+2026-09-07 09:27:29 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#23     3           3           4         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:27:31 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #24 ---
+#24     3           3           3         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:27:35 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #25 ---
+#25     3           3           5         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:27:38 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #26 ---
+2026-09-07 09:27:40 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#26     3           3           2         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:27:42 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #27 ---
+2026-09-07 09:27:44 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+2026-09-07 09:27:45 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#27     3           3           6         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:27:47 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #28 ---
+2026-09-07 09:27:48 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+2026-09-07 09:27:49 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#28     3           3           7         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:27:51 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #29 ---
+2026-09-07 09:27:53 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#29     3           3           5         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:27:55 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #30 ---
+2026-09-07 09:27:56 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#30     3           3           5         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:27:59 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #31 ---
+2026-09-07 09:28:00 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+2026-09-07 09:28:01 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#31     3           3           4         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:28:03 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #32 ---
+2026-09-07 09:28:04 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+2026-09-07 09:28:05 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#32     3           3           6         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:28:07 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #33 ---
+2026-09-07 09:28:09 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#33     3           3           1         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:28:11 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #34 ---
+#34     3           3           1         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:28:15 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #35 ---
+2026-09-07 09:28:17 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#35     3           3           2         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:28:19 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #36 ---
+2026-09-07 09:28:20 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#36     3           3           4         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:28:22 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #37 ---
+2026-09-07 09:28:24 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#37     3           3           4         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:28:26 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #38 ---
+#38     3           3           5         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:28:31 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #39 ---
+2026-09-07 09:28:32 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#39     3           3           5         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:28:34 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #40 ---
+2026-09-07 09:28:36 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ZesMGYmo... after 3 consecutive RPC failures
+2026-09-07 09:28:36 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#40     3           3           4         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:28:39 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #41 ---
+2026-09-07 09:28:40 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#41     3           3           1         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:28:43 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #42 ---
+2026-09-07 09:28:44 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#42     3           3           3         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:28:46 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #43 ---
+2026-09-07 09:28:48 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#43     3           3           3         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:28:50 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #44 ---
+2026-09-07 09:28:51 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#44     3           3           3         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:28:54 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #45 ---
+2026-09-07 09:28:55 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#45     3           3           5         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:28:57 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #46 ---
+2026-09-07 09:28:59 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ZesMGYmo... after 3 consecutive RPC failures
+2026-09-07 09:28:59 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#46     3           3           5         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:29:02 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #47 ---
+#47     3           3           3         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:29:05 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #48 ---
+2026-09-07 09:29:07 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#48     3           3           3         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:29:09 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #49 ---
+2026-09-07 09:29:11 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#49     3           3           4         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:29:13 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #50 ---
+2026-09-07 09:29:14 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#50     3           3           4         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:29:16 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #51 ---
+2026-09-07 09:29:18 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+2026-09-07 09:29:19 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#51     3           3           4         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:29:21 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #52 ---
+2026-09-07 09:29:23 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#52     3           3           3         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:29:25 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #53 ---
+2026-09-07 09:29:27 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#53     3           3           4         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:29:29 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #54 ---
+2026-09-07 09:29:31 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ZesMGYmo... after 3 consecutive RPC failures
+2026-09-07 09:29:32 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#54     3           3           2         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:29:34 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #55 ---
+2026-09-07 09:29:36 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#55     3           3           4         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:29:38 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #56 ---
+2026-09-07 09:29:40 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#56     3           3           5         0         $100.00     INVARIANTS_SATISFIED
+2026-09-07 09:29:42 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #57 ---
+2026-09-07 09:29:43 [INFO] [meme_alpha_hunter.live_paper] 🎯 [REAL LIVE PAPER ENTRY] 🎒 @ $0.000169 | Size: $6.82
+#57     3           3           4         0         $99.87      INVARIANTS_SATISFIED
+2026-09-07 09:29:46 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #58 ---
+#58     3           3           4         0         $99.87      INVARIANTS_SATISFIED
+2026-09-07 09:29:49 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #59 ---
+2026-09-07 09:29:51 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#59     3           3           6         0         $99.87      INVARIANTS_SATISFIED
+2026-09-07 09:29:53 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #60 ---
+2026-09-07 09:29:55 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#60     3           3           5         0         $99.87      INVARIANTS_SATISFIED
+2026-09-07 09:29:57 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #61 ---
+2026-09-07 09:29:59 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#61     3           3           6         0         $99.87      INVARIANTS_SATISFIED
+2026-09-07 09:30:01 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #62 ---
+2026-09-07 09:30:03 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#62     3           3           6         0         $99.87      INVARIANTS_SATISFIED
+2026-09-07 09:30:05 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #63 ---
+2026-09-07 09:30:06 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+2026-09-07 09:30:07 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#63     3           3           5         0         $99.87      INVARIANTS_SATISFIED
+2026-09-07 09:30:09 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #64 ---
+2026-09-07 09:30:11 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+2026-09-07 09:30:11 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#64     3           3           6         0         $99.87      INVARIANTS_SATISFIED
+2026-09-07 09:30:13 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #65 ---
+2026-09-07 09:30:16 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ECJKUJtq... after 3 consecutive RPC failures
+#65     3           3           5         0         $99.80      INVARIANTS_SATISFIED
+2026-09-07 09:30:18 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #66 ---
+2026-09-07 09:30:20 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for ZesMGYmo... after 3 consecutive RPC failures
+2026-09-07 09:30:21 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#66     3           3           1         0         $99.80      INVARIANTS_SATISFIED
+2026-09-07 09:30:23 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #67 ---
+2026-09-07 09:30:25 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#67     3           3           2         0         $99.80      INVARIANTS_SATISFIED
+2026-09-07 09:30:27 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #68 ---
+2026-09-07 09:30:29 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#68     3           3           5         0         $99.80      INVARIANTS_SATISFIED
+2026-09-07 09:30:31 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #69 ---
+2026-09-07 09:30:33 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#69     3           3           6         0         $99.80      INVARIANTS_SATISFIED
+2026-09-07 09:30:35 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #70 ---
+2026-09-07 09:30:36 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#70     3           3           7         0         $99.80      INVARIANTS_SATISFIED
+2026-09-07 09:30:39 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #71 ---
+2026-09-07 09:30:40 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#71     3           3           6         0         $99.80      INVARIANTS_SATISFIED
+2026-09-07 09:30:42 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #72 ---
+2026-09-07 09:30:44 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#72     3           3           5         0         $99.80      INVARIANTS_SATISFIED
+2026-09-07 09:30:46 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #73 ---
+#73     3           3           7         0         $99.80      INVARIANTS_SATISFIED
+2026-09-07 09:30:50 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #74 ---
+2026-09-07 09:30:52 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#74     3           3           6         0         $99.80      INVARIANTS_SATISFIED
+2026-09-07 09:30:54 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #75 ---
+2026-09-07 09:30:56 [WARNING] [meme_alpha_hunter.real_provider] Stopping tx scan for 6XRziA6J... after 3 consecutive RPC failures
+#75     3           3           6         0         $99.80      INVARIANTS_SATISFIED
+2026-09-07 09:30:59 [INFO] [meme_alpha_hunter.live_paper] --- [LIVE REAL SOLANA] Starting Cycle #76 ---
+#76     3           3           14        0         $99.80      INVARIANTS_SATISFIED
 
 ================================================================================
   ⚡ MEME ALPHA HUNTER — SOLANA INTELLIGENCE & PAPER TRADING PLATFORM ⚡
@@ -84,33 +243,28 @@ CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 📊 [VIRTUAL WALLET STATUS]
 --------------------------------------------------------------------------------
   Starting Capital:  $100.00 USD
-  Current Equity:    $98.41 USD
-  Available Cash:    $85.82 USD
-  Open Positions:    $12.58 USD (2 active)
-  Realized PnL:      $-0.89 USD
-  Unrealized PnL:    $-0.70 USD
-  Total Fees:        -$0.12 USD
-  Total Slippage:    -$0.12 USD
-  Max Drawdown:       1.7%
+  Current Equity:    $99.80 USD
+  Available Cash:    $93.15 USD
+  Open Positions:    $6.65 USD (1 active)
+  Realized PnL:      $+0.00 USD
+  Unrealized PnL:    $-0.20 USD
+  Total Fees:        -$0.03 USD
+  Total Slippage:    -$0.03 USD
+  Max Drawdown:       0.2%
 --------------------------------------------------------------------------------
   [ACTIVE OPEN POSITIONS]
   SYMBOL       SIZE (USD)   ENTRY PRICE    CURR PRICE     PnL ($)      PnL (%)        
   ----------------------------------------------------------------------------
-  VibeCat      $6.45        $0.000187      $0.000187      $-0.12       -1.79         %
-  🎒            $6.77        $0.000167      $0.000155      $-0.58       -8.60         %
+  🎒            $6.82        $0.000169      $0.000166      $-0.20       -2.90         %
 --------------------------------------------------------------------------------
 
 🎯 [TOP OPPORTUNITY RANKINGS]
 --------------------------------------------------------------------------------
   SYMBOL     ALPHA    RISK     CONF     EARLY    FINAL    REGIME             DECISION    
   ----------------------------------------------------------------------------
-  VibeCat    64.5     19.0     66.7     83.7     71.8     R1_DORMANT         WATCH       
-  Norman     56.1     19.0     73.8     87.1     69.6     R1_DORMANT         WATCH       
-  NET        64.8     23.0     42.2     90.9     68.4     R0_DEAD            WATCH       
-  🎒          57.0     19.0     67.1     71.9     66.8     R1_DORMANT         WATCH       
-  NVIDOG     51.3     19.0     71.3     77.5     65.7     R1_DORMANT         REJECT      
-  BABYAN     49.0     24.0     50.1     85.6     61.4     R1_DORMANT         REJECT      
-  Anonymouse 38.7     21.0     56.0     91.2     59.2     R1_DORMANT         REJECT      
+  🎒          64.3     19.0     67.6     68.6     69.6     R2_ACCUMULATION    WATCH       
+  NET        63.3     23.0     42.2     84.4     66.7     R0_DEAD            WATCH       
+  BABYAN     47.9     24.0     50.1     79.0     59.9     R1_DORMANT         REJECT      
 --------------------------------------------------------------------------------
 
 🩺 [SYSTEM HEALTH]
@@ -129,39 +283,39 @@ CYCLE   DISCOVERED  VERIFIED    SWAPS     WHALES    EQUITY      STATUS
 ============================================================
 FINAL LIVE VALIDATION
 ============================================================
-COMMIT: c985fae253d5c7fce5443b2cb9334d6025a047fc
+COMMIT: d3b09e68aa43a9d312d91d97dc27efd2925b868b
 MODE: LIVE
 NETWORK_CONNECTED: TRUE
-RPC_REQUESTS: 487
-RPC_SUCCESS: 304
-RPC_FAILURE: 183
-RPC_AVG_LATENCY_MS: 381.91
-LIVE_TOKENS: 7
-VERIFIED_MINTS: 7
-LIVE_SWAPS: 85
-VERIFIED_QUOTES: 82
-UNKNOWN_QUOTES: 3
-QUOTE_QUALITY: 0.9647
-TOKENS_WITH_LIVE_LIQUIDITY: 6
+RPC_REQUESTS: 688
+RPC_SUCCESS: 280
+RPC_FAILURE: 408
+RPC_AVG_LATENCY_MS: 362.34
+LIVE_TOKENS: 3
+VERIFIED_MINTS: 3
+LIVE_SWAPS: 290
+VERIFIED_QUOTES: 270
+UNKNOWN_QUOTES: 20
+QUOTE_QUALITY: 0.9310
+TOKENS_WITH_LIVE_LIQUIDITY: 2
 TOKENS_WITH_UNKNOWN_LIQUIDITY: 1
-TOKENS_WITH_POOL_CREATION_TIME: 7
+TOKENS_WITH_POOL_CREATION_TIME: 3
 TOKENS_WITH_UNKNOWN_AGE: 0
-EARLY_ALPHA_SCORED: 7
+EARLY_ALPHA_SCORED: 3
 DEEP_ANALYSIS_PRIORITIZED: 0
-WATCHLIST: 4
-SECURITY_REJECTED: 3
+WATCHLIST: 2
+SECURITY_REJECTED: 1
 SNIPER_CANDIDATES: 0
-PAPER_ENTRIES: 3
-PAPER_EXITS: 1
-OPEN_POSITIONS: 2
-FEES: $0.12
-SLIPPAGE: $0.12
-REALIZED_PNL: $-0.89
-UNREALIZED_PNL: $-0.70
-FINAL_EQUITY: $98.41
-MAX_DRAWDOWN: 1.7%
+PAPER_ENTRIES: 1
+PAPER_EXITS: 0
+OPEN_POSITIONS: 1
+FEES: $0.03
+SLIPPAGE: $0.03
+REALIZED_PNL: $+0.00
+UNREALIZED_PNL: $-0.20
+FINAL_EQUITY: $99.80
+MAX_DRAWDOWN: 0.2%
 ACCOUNTING_DISCREPANCY: $0.000000
-PROVENANCE_CHECKS: 92
+PROVENANCE_CHECKS: 293
 FORCED_REAL: 0
 FORCED_VERIFICATION: 0
 SYNTHETIC_ROWS: 0
