@@ -37,7 +37,7 @@ jobs:
       - name: One-Shot Production Hardening
         run: |
           set -e
-          python3 -m compileall -q app blockchain data portfolio scoring security simulation sniper scripts
+          python3 -m compileall -q app blockchain data portfolio scoring security simulation sniper scripts strategies
           git diff --check
           python3 - <<'PY'
           from pathlib import Path
@@ -46,7 +46,9 @@ jobs:
               "data/ingestion/real_live_provider.py": ["def scan_recent_tokens(self, limit: int = 10)"],
               "app/orchestration/live_paper_engine.py": ["self.entry_cooldown_until", "confidence_ok", "not cooldown_active"],
               "scoring/opportunity/opportunity_scorer.py": ["mint_auth_status", "freeze_auth_status"],
-              "scripts/run_live_paper.py": ["duration_minutes: float = 5.0", "os.getenv('GITHUB_SHA') or 'LOCAL'"]
+              "scripts/run_live_paper.py": ["duration_minutes: float = 5.0", "os.getenv('GITHUB_SHA') or 'LOCAL'"],
+              "strategies/pump_graduation_strategy.py": ["class PumpGraduationStrategy", "PUMP_API_V3"],
+              "scripts/run_pump_graduation_paper.py": ["pump_fun_pre_graduation_to_dex", "PAPER_ONLY"]
           }
           for path, needles in checks.items():
               text = Path(path).read_text()
@@ -68,6 +70,10 @@ jobs:
         run: |
           mkdir -p reports
           python3 scripts/run_live_paper.py --mode live --duration-minutes 5.0 | tee reports/live_runtime.log
+
+      - name: Run Pump.fun Pre-Graduation to DEX Paper Strategy (5 Minutes)
+        run: |
+          python3 scripts/run_pump_graduation_paper.py --duration-minutes 5.0 --candidates 3 --poll-seconds 3.0 --output reports/pump_graduation_strategy.json | tee reports/pump_graduation_runtime.log
 
       - name: Reconcile Live Report Fields
         env:
