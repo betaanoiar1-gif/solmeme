@@ -1,50 +1,50 @@
 {
-  "commit": "9f8deef5fc1a62f494f7ddf40ce0232c9110078d",
+  "commit": "5b9d1b11257584282b10788e0544a94c632031a9",
   "mode": "LIVE",
   "environment": "GitHub Actions / Cloud VPS / Standalone",
-  "start_time_utc": "2026-09-07 10:14:10 UTC",
-  "end_time_utc": "2026-09-07 10:19:12 UTC",
-  "duration_sec": 301.66,
-  "total_cycles": 50,
+  "start_time_utc": "2026-09-07 10:23:53 UTC",
+  "end_time_utc": "2026-09-07 10:29:05 UTC",
+  "duration_sec": 312.08,
+  "total_cycles": 34,
   "network_connected": true,
   "rpc_telemetry": {
-    "total_requests": 1325,
-    "success_requests": 357,
-    "failed_requests": 968,
-    "avg_latency_ms": 49.66,
+    "total_requests": 932,
+    "success_requests": 356,
+    "failed_requests": 576,
+    "avg_latency_ms": 399.8,
     "per_endpoint": {
       "https://api.mainnet-beta.solana.com": {
-        "total_requests": 599,
-        "successful_requests": 357,
-        "failed_requests": 242,
+        "total_requests": 500,
+        "successful_requests": 356,
+        "failed_requests": 144,
         "consecutive_errors": 0,
-        "avg_latency_ms": 49.655750448875054,
+        "avg_latency_ms": 399.80429139926696,
         "is_active": true,
         "in_cooldown": true
       },
       "https://solana-mainnet.rpc.extrnode.com": {
-        "total_requests": 242,
+        "total_requests": 144,
         "successful_requests": 0,
-        "failed_requests": 242,
-        "consecutive_errors": 242,
+        "failed_requests": 144,
+        "consecutive_errors": 144,
         "avg_latency_ms": 0.0,
         "is_active": true,
         "in_cooldown": true
       },
       "https://rpc.ankr.com/solana": {
-        "total_requests": 242,
+        "total_requests": 144,
         "successful_requests": 0,
-        "failed_requests": 242,
-        "consecutive_errors": 242,
+        "failed_requests": 144,
+        "consecutive_errors": 144,
         "avg_latency_ms": 0.0,
         "is_active": true,
         "in_cooldown": true
       },
       "https://solana.public-rpc.com": {
-        "total_requests": 242,
+        "total_requests": 144,
         "successful_requests": 0,
-        "failed_requests": 242,
-        "consecutive_errors": 242,
+        "failed_requests": 144,
+        "consecutive_errors": 144,
         "avg_latency_ms": 0.0,
         "is_active": true,
         "in_cooldown": true
@@ -54,17 +54,17 @@
   "discovery": {
     "live_tokens_discovered": 12,
     "onchain_verified_mints": 12,
-    "live_swaps": 67,
-    "unique_live_mints": 4,
-    "unique_live_wallets": 54,
-    "unique_live_signatures": 67
+    "live_swaps": 111,
+    "unique_live_mints": 11,
+    "unique_live_wallets": 90,
+    "unique_live_signatures": 111
   },
   "data_quality": {
-    "strict_verified_quotes": 64,
-    "unknown_quotes": 3,
-    "quote_quality": 0.9552,
-    "tokens_with_live_liquidity": 8,
-    "tokens_with_unknown_liquidity": 4,
+    "strict_verified_quotes": 104,
+    "unknown_quotes": 7,
+    "quote_quality": 0.9369,
+    "tokens_with_live_liquidity": 7,
+    "tokens_with_unknown_liquidity": 5,
     "tokens_with_pool_creation_time": 12,
     "tokens_with_unknown_age": 0
   },
@@ -77,22 +77,22 @@
   },
   "paper_trading": {
     "starting_capital": 100.0,
-    "paper_entries": 3,
+    "paper_entries": 1,
     "paper_exits": 1,
-    "open_positions": 2,
-    "total_fees": 0.12,
-    "total_slippage": 0.11,
-    "realized_pnl": -0.76,
-    "unrealized_pnl": -0.52,
-    "final_equity": 98.73,
-    "max_drawdown_pct": 1.27
+    "open_positions": 0,
+    "total_fees": 0.06,
+    "total_slippage": 0.05,
+    "realized_pnl": -1.28,
+    "unrealized_pnl": 0,
+    "final_equity": 98.72,
+    "max_drawdown_pct": 1.57
   },
   "accounting": {
     "accounting_invariants_valid": true,
-    "accounting_discrepancy": 0.010000000000005116
+    "accounting_discrepancy": 0.0
   },
   "provenance_guard": {
-    "provenance_checks": 79,
+    "provenance_checks": 123,
     "forced_real": 0,
     "forced_verification": 0,
     "synthetic_rows": 0,
