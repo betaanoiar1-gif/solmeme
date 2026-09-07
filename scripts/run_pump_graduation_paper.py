@@ -7,9 +7,15 @@ It never signs or submits a transaction.
 import argparse
 import json
 import os
+import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any, Dict, List
+
+# Allow direct execution as `python3 scripts/...py` from repository root.
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
 
 from data.ingestion.dex_provider import DexPublicProvider
 from strategies.pump_graduation_strategy import PumpGraduationStrategy
