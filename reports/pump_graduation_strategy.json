@@ -1,17 +1,36 @@
 {
   "strategy": "pump_fun_pre_graduation_to_dex",
   "mode": "PAPER_ONLY",
-  "duration_minutes": 5.0,
-  "started_at": 1788777504.3092568,
-  "finished_at": 1788777504.309338,
-  "candidates": [],
+  "duration_minutes": 240.0,
+  "started_at": 1788778462.3493664,
+  "updated_at": 1788792864.8632655,
+  "finished_at": 1788792864.8632655,
+  "wallet": {
+    "initial_cash_usd": 100.0,
+    "cash_usd": 100.0,
+    "open_positions": 0,
+    "open_cost_basis_usd": 0,
+    "realized_pnl_usd": 0.0,
+    "paper_equity_cost_basis_usd": 100.0
+  },
+  "scan_stats": {
+    "scans": 1184,
+    "discovered_unique_mints": 0,
+    "active_pregraduation_candidates_seen": 0,
+    "entries": 0,
+    "graduations_seen": 0,
+    "dex_quotes_seen": 0,
+    "api_errors": 0,
+    "last_api_error": "HTTPError: HTTP Error 530: <none>"
+  },
   "paper_trades": [],
-  "graduated_trades": 0,
-  "dex_exits": 0,
   "max_multiple": null,
-  "data_sources": [
-    "Pump.fun public HTTP",
-    "DexScreener public HTTP"
-  ],
-  "live_money_execution": false
+  "candidate_events": [],
+  "live_money_execution": false,
+  "notes": [
+    "Entry is before Pump.fun graduation.",
+    "Exit is counted only after completion and the first real Solana DEX quote.",
+    "Ungraduated positions are not forcibly sold at the end of the window.",
+    "No synthetic, guessed, or fallback DEX price is used."
+  ]
 }
