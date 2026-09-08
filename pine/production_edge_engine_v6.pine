@@ -1,0 +1,545 @@
+//@version=6
+// Production Edge Engine v6
+// A non-repainting, trend-following decision engine with a transparent score and
+// an internal TradingView strategy tester. Signals are evaluated on confirmed bars.
+strategy(
+     "Production Edge Engine | Non-Repainting v6",
+     shorttitle = "PEE v6",
+     overlay = true,
+     pyramiding = 0,
+     initial_capital = 10000,
+     default_qty_type = strategy.percent_of_equity,
+     default_qty_value = 10,
+     commission_type = strategy.commission.percent,
+     commission_value = 0.05,
+     process_orders_on_close = true,
+     calc_on_every_tick = false,
+     max_labels_count = 500)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Inputs
+// ─────────────────────────────────────────────────────────────────────────────
+const string G_CORE = "01 · Core / MTF"
+const string G_TREND = "02 · Trend / Momentum"
+const string G_STRUCTURE = "03 · Market Structure"
+const string G_REGIME = "04 · Regime / Volatility"
+const string G_SCORE = "05 · Score Weights"
+const string G_RISK = "06 · Risk / Exits"
+const string G_FILTERS = "07 · Filters"
+const string G_SAMPLE = "08 · Walk-Forward Sample"
+const string G_DISPLAY = "09 · Display"
+
+string htfInput = input.timeframe("240", "Confirmed higher timeframe", group = G_CORE)
+bool useHTF = input.bool(true, "Use higher-timeframe alignment", group = G_CORE)
+int htfFastLen = input.int(20, "HTF fast length", minval = 2, group = G_CORE)
+int htfSlowLen = input.int(50, "HTF slow length", minval = 3, group = G_CORE)
+
+int emaFastLen = input.int(21, "Chart fast trend length", minval = 2, group = G_TREND)
+int emaSlowLen = input.int(55, "Chart slow trend length", minval = 3, group = G_TREND)
+int adxDiLen = input.int(14, "DMI length", minval = 2, group = G_TREND)
+int adxSmoothLen = input.int(14, "ADX smoothing", minval = 2, group = G_TREND)
+int rocLen = input.int(12, "Rate-of-change length", minval = 2, group = G_TREND)
+int rsiLen = input.int(14, "RSI confirmation length", minval = 2, group = G_TREND)
+int volumeLen = input.int(20, "Relative-volume length", minval = 2, group = G_TREND)
+float minRelativeVolume = input.float(1.10, "Preferred relative volume", minval = 0.1, step = 0.05, group = G_TREND)
+
+int pivotLeft = input.int(3, "Pivot left bars", minval = 1, maxval = 20, group = G_STRUCTURE)
+int pivotRight = input.int(3, "Pivot confirmation bars", minval = 1, maxval = 20, group = G_STRUCTURE)
+int structureFreshBars = input.int(30, "Fresh BOS / CHoCH window", minval = 1, group = G_STRUCTURE)
+int breakoutLen = input.int(20, "Breakout lookback", minval = 3, group = G_STRUCTURE)
+int targetLookback = input.int(50, "Opposing-liquidity lookback", minval = 5, group = G_STRUCTURE)
+
+int atrLen = input.int(14, "ATR length", minval = 2, group = G_REGIME)
+int atrBaselineLen = input.int(50, "ATR baseline length", minval = 5, group = G_REGIME)
+float adxTrendThreshold = input.float(20.0, "ADX strong-trend threshold", minval = 1, step = 0.5, group = G_REGIME)
+float highVolRatio = input.float(1.75, "High-volatility ATR ratio", minval = 1.05, step = 0.05, group = G_REGIME)
+float lowVolRatio = input.float(0.65, "Low-volatility ATR ratio", minval = 0.10, maxval = 0.95, step = 0.05, group = G_REGIME)
+bool allowHighVolatility = input.bool(false, "Allow entries in high volatility", group = G_REGIME)
+bool allowLowVolatility = input.bool(false, "Allow entries in low volatility", group = G_REGIME)
+bool allowWeakTrend = input.bool(true, "Allow weak trend regime", group = G_REGIME)
+
+int weightTrend = input.int(20, "Trend weight", minval = 0, maxval = 100, group = G_SCORE)
+int weightStructure = input.int(20, "Structure weight", minval = 0, maxval = 100, group = G_SCORE)
+int weightMomentum = input.int(15, "Momentum weight", minval = 0, maxval = 100, group = G_SCORE)
+int weightVolume = input.int(10, "Volume weight", minval = 0, maxval = 100, group = G_SCORE)
+int weightVolatility = input.int(10, "Volatility weight", minval = 0, maxval = 100, group = G_SCORE)
+int weightPriceAction = input.int(15, "Price-action / liquidity weight", minval = 0, maxval = 100, group = G_SCORE)
+int weightRiskReward = input.int(10, "Risk / reward weight", minval = 0, maxval = 100, group = G_SCORE)
+float minimumScore = input.float(70.0, "Minimum entry score", minval = 0, maxval = 100, step = 1, group = G_SCORE)
+float highQualityScore = input.float(85.0, "High-quality alert threshold", minval = 0, maxval = 100, step = 1, group = G_SCORE)
+
+float stopAtrMultiple = input.float(1.50, "Minimum ATR stop multiple", minval = 0.1, step = 0.05, group = G_RISK)
+float structureStopBufferAtr = input.float(0.20, "Structure stop buffer in ATR", minval = 0, step = 0.05, group = G_RISK)
+float maximumStopAtr = input.float(4.0, "Maximum stop distance in ATR", minval = 0.5, step = 0.25, group = G_RISK)
+float tp1R = input.float(1.0, "TP1 in R", minval = 0.25, step = 0.25, group = G_RISK)
+float tp2R = input.float(2.0, "TP2 in R", minval = 0.5, step = 0.25, group = G_RISK)
+float tp3R = input.float(3.0, "TP3 in R", minval = 0.75, step = 0.25, group = G_RISK)
+float minimumRoomRR = input.float(1.50, "Minimum room-to-liquidity R/R", minval = 0.25, step = 0.25, group = G_RISK)
+float fallbackTargetAtr = input.float(3.0, "Fallback target room in ATR", minval = 0.5, step = 0.25, group = G_RISK)
+float rrScoreCeiling = input.float(3.0, "R/R value scored as 100", minval = 1, step = 0.25, group = G_RISK)
+bool moveStopToBreakeven = input.bool(true, "Move stop to breakeven after TP1", group = G_RISK)
+bool useAtrTrail = input.bool(true, "Use ATR trailing stop after TP1", group = G_RISK)
+float trailAtrMultiple = input.float(2.0, "ATR trailing multiple", minval = 0.25, step = 0.25, group = G_RISK)
+bool exitOnOppositeSignal = input.bool(true, "Exit on confirmed opposite signal", group = G_RISK)
+
+float minimumBodyFraction = input.float(0.45, "Minimum directional candle body fraction", minval = 0.05, maxval = 1, step = 0.05, group = G_FILTERS)
+int signalCooldownBars = input.int(8, "Bars between new signals", minval = 0, group = G_FILTERS)
+
+string sampleMode = input.string("ALL", "Active sample", options = ["ALL", "TRAIN", "VALIDATION", "HOLDOUT"], group = G_SAMPLE)
+int allStart = input.time(timestamp(2018, 1, 1, 0, 0), "ALL start", group = G_SAMPLE)
+int allEnd = input.time(timestamp(2035, 1, 1, 0, 0), "ALL end", group = G_SAMPLE)
+int trainStart = input.time(timestamp(2018, 1, 1, 0, 0), "TRAIN start", group = G_SAMPLE)
+int trainEnd = input.time(timestamp(2021, 12, 31, 0, 0), "TRAIN end", group = G_SAMPLE)
+int validationStart = input.time(timestamp(2022, 1, 1, 0, 0), "VALIDATION start", group = G_SAMPLE)
+int validationEnd = input.time(timestamp(2023, 12, 31, 0, 0), "VALIDATION end", group = G_SAMPLE)
+int holdoutStart = input.time(timestamp(2024, 1, 1, 0, 0), "HOLDOUT start", group = G_SAMPLE)
+int holdoutEnd = input.time(timestamp(2035, 1, 1, 0, 0), "HOLDOUT end", group = G_SAMPLE)
+
+bool showTrendPlots = input.bool(true, "Plot trend lines", group = G_DISPLAY)
+bool showRiskPlots = input.bool(true, "Plot active entry / risk levels", group = G_DISPLAY)
+bool showStructureMarkers = input.bool(true, "Plot BOS / CHoCH markers", group = G_DISPLAY)
+bool showDashboard = input.bool(true, "Show dashboard", group = G_DISPLAY)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Utility functions
+// ─────────────────────────────────────────────────────────────────────────────
+f_clamp(float value, float lower, float upper) =>
+    math.max(lower, math.min(upper, value))
+
+f_safe_div(float numerator, float denominator, float fallback) =>
+    denominator != 0 and not na(denominator) ? numerator / denominator : fallback
+
+f_adx(int diLength, int smoothingLength) =>
+    [diPlus, diMinus, adxValue] = ta.dmi(diLength, smoothingLength)
+    adxValue
+
+f_score(
+     float trendValue,
+     float structureValue,
+     float momentumValue,
+     float volumeValue,
+     float volatilityValue,
+     float priceActionValue,
+     float riskRewardValue,
+     int trendWeight,
+     int structureWeight,
+     int momentumWeight,
+     int volumeWeight,
+     int volatilityWeight,
+     int priceActionWeight,
+     int riskRewardWeight) =>
+    float totalWeight = trendWeight + structureWeight + momentumWeight + volumeWeight + volatilityWeight + priceActionWeight + riskRewardWeight
+    totalWeight > 0 ? (trendValue * trendWeight + structureValue * structureWeight + momentumValue * momentumWeight + volumeValue * volumeWeight + volatilityValue * volatilityWeight + priceActionValue * priceActionWeight + riskRewardValue * riskRewardWeight) / totalWeight : na
+
+f_price(float value) =>
+    na(value) ? "n/a" : str.tostring(value, format.mintick)
+
+f_number(float value) =>
+    na(value) ? "n/a" : str.tostring(value, "#.##")
+
+f_percent(float value) =>
+    na(value) ? "n/a" : str.tostring(value, "#.##") + "%"
+
+f_score_color(float value) =>
+    na(value) ? color.gray : value >= 85 ? color.lime : value >= 75 ? color.green : value >= 65 ? color.orange : color.red
+
+f_alert_message(string eventName, int direction, float entryValue, float stopValue, float target1, float target2, float target3, float scoreValue, float rrValue) =>
+    string side = direction == 1 ? "LONG" : direction == -1 ? "SHORT" : "FLAT"
+    eventName + " | " + syminfo.ticker + " | TF=" + timeframe.period + " | " + side + " | Entry=" + f_price(entryValue) + " | SL=" + f_price(stopValue) + " | TP1=" + f_price(target1) + " | TP2=" + f_price(target2) + " | TP3=" + f_price(target3) + " | Score=" + f_number(scoreValue) + " | RR=" + f_number(rrValue)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Sample selection and non-repainting higher-timeframe data
+// ─────────────────────────────────────────────────────────────────────────────
+float chartSeconds = timeframe.in_seconds()
+float requestedHTFSeconds = timeframe.in_seconds(htfInput)
+if useHTF and not na(requestedHTFSeconds) and requestedHTFSeconds <= chartSeconds
+    runtime.error("Confirmed higher timeframe must be strictly higher than the chart timeframe.")
+
+bool inSelectedWindow = sampleMode == "ALL" ? time >= allStart and time <= allEnd : sampleMode == "TRAIN" ? time >= trainStart and time <= trainEnd : sampleMode == "VALIDATION" ? time >= validationStart and time <= validationEnd : time >= holdoutStart and time <= holdoutEnd
+
+// Every higher-timeframe expression is offset by one context bar and uses
+// lookahead_on. If HTF is disabled, the request context is the chart timeframe
+// and its values are ignored by the regime engine.
+string requestTimeframe = useHTF ? htfInput : timeframe.period
+[htfClose, htfFast, htfSlow] = request.security(syminfo.tickerid, requestTimeframe, [close[1], ta.ema(close, htfFastLen)[1], ta.ema(close, htfSlowLen)[1]], gaps = barmerge.gaps_off, lookahead = barmerge.lookahead_on)
+float htfAdx = request.security(syminfo.tickerid, requestTimeframe, f_adx(adxDiLen, adxSmoothLen)[1], gaps = barmerge.gaps_off, lookahead = barmerge.lookahead_on)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Core measurements
+// ─────────────────────────────────────────────────────────────────────────────
+float emaFast = ta.ema(close, emaFastLen)
+float emaSlow = ta.ema(close, emaSlowLen)
+float atr = ta.atr(atrLen)
+float atrBaseline = ta.sma(atr, atrBaselineLen)
+float atrRatio = f_safe_div(atr, atrBaseline, 1.0)
+[diPlus, diMinus, adx] = ta.dmi(adxDiLen, adxSmoothLen)
+float rsi = ta.rsi(close, rsiLen)
+float roc = ta.roc(close, rocLen)
+float relativeVolumeBaseline = ta.sma(volume, volumeLen)
+bool hasVolume = not na(volume) and not na(relativeVolumeBaseline) and relativeVolumeBaseline > 0
+float relativeVolume = hasVolume ? f_safe_div(volume, relativeVolumeBaseline, 1.0) : na
+float sessionVwap = ta.vwap(hlc3)
+float usableVwap = na(sessionVwap) ? close : sessionVwap
+
+bool htfBull = htfClose > htfFast and htfFast > htfSlow and htfFast >= htfFast[1]
+bool htfBear = htfClose < htfFast and htfFast < htfSlow and htfFast <= htfFast[1]
+bool localBull = emaFast > emaSlow and emaFast >= emaFast[1]
+bool localBear = emaFast < emaSlow and emaFast <= emaFast[1]
+bool bullReference = useHTF ? htfBull : localBull
+bool bearReference = useHTF ? htfBear : localBear
+float trendStrength = useHTF ? htfAdx : adx
+bool alignedBull = bullReference and emaFast > emaSlow
+bool alignedBear = bearReference and emaFast < emaSlow
+bool strongBull = alignedBull and trendStrength >= adxTrendThreshold and localBull
+bool strongBear = alignedBear and trendStrength >= adxTrendThreshold and localBear
+bool highVolatility = atrRatio >= highVolRatio
+bool lowVolatility = atrRatio <= lowVolRatio
+
+string directionalRegime = strongBull ? "STRONG BULL" : strongBear ? "STRONG BEAR" : alignedBull ? "WEAK BULL" : alignedBear ? "WEAK BEAR" : "SIDEWAYS"
+string volatilityRegime = highVolatility ? "HIGH VOLATILITY" : lowVolatility ? "LOW VOLATILITY" : "NORMAL VOLATILITY"
+string marketRegime = volatilityRegime + " / " + directionalRegime
+bool volatilityAllowed = (not highVolatility or allowHighVolatility) and (not lowVolatility or allowLowVolatility)
+bool trendRegimeAllowedLong = alignedBull and (strongBull or allowWeakTrend) and volatilityAllowed
+bool trendRegimeAllowedShort = alignedBear and (strongBear or allowWeakTrend) and volatilityAllowed
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Confirmed market structure: pivots are used only on the bar where they become
+// known. They are never plotted back on the pivot bar.
+// ─────────────────────────────────────────────────────────────────────────────
+float confirmedPivotHigh = ta.pivothigh(high, pivotLeft, pivotRight)
+float confirmedPivotLow = ta.pivotlow(low, pivotLeft, pivotRight)
+var float lastSwingHigh = na
+var float priorSwingHigh = na
+var float lastSwingLow = na
+var float priorSwingLow = na
+var string highStructureTag = "n/a"
+var string lowStructureTag = "n/a"
+
+bool newConfirmedHigh = not na(confirmedPivotHigh)
+bool newConfirmedLow = not na(confirmedPivotLow)
+if newConfirmedHigh
+    priorSwingHigh := lastSwingHigh
+    lastSwingHigh := confirmedPivotHigh
+    highStructureTag := na(priorSwingHigh) ? "H" : confirmedPivotHigh > priorSwingHigh ? "HH" : "LH"
+if newConfirmedLow
+    priorSwingLow := lastSwingLow
+    lastSwingLow := confirmedPivotLow
+    lowStructureTag := na(priorSwingLow) ? "L" : confirmedPivotLow > priorSwingLow ? "HL" : "LL"
+
+bool bullBOS = not na(lastSwingHigh) and close > lastSwingHigh and close[1] <= lastSwingHigh
+bool bearBOS = not na(lastSwingLow) and close < lastSwingLow and close[1] >= lastSwingLow
+var int structureDirection = 0
+bool bullCHoCH = bullBOS and structureDirection == -1
+bool bearCHoCH = bearBOS and structureDirection == 1
+if bullBOS
+    structureDirection := 1
+if bearBOS
+    structureDirection := -1
+
+int barsSinceBullBreak = ta.barssince(bullBOS)
+int barsSinceBearBreak = ta.barssince(bearBOS)
+bool freshBullBreak = not na(barsSinceBullBreak) and barsSinceBullBreak <= structureFreshBars
+bool freshBearBreak = not na(barsSinceBearBreak) and barsSinceBearBreak <= structureFreshBars
+float structureLongScore = structureDirection == 1 ? freshBullBreak ? 100.0 : 78.0 : 25.0
+float structureShortScore = structureDirection == -1 ? freshBearBreak ? 100.0 : 78.0 : 25.0
+string structureText = bullBOS ? bullCHoCH ? "CHoCH UP" : "BOS UP" : bearBOS ? bearCHoCH ? "CHoCH DOWN" : "BOS DOWN" : structureDirection == 1 ? highStructureTag + " / " + lowStructureTag + " · BULL" : structureDirection == -1 ? highStructureTag + " / " + lowStructureTag + " · BEAR" : highStructureTag + " / " + lowStructureTag + " · UNCONFIRMED"
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Setup, liquidity and dynamic risk levels
+// ─────────────────────────────────────────────────────────────────────────────
+float channelHigh = ta.highest(high, breakoutLen)[1]
+float channelLow = ta.lowest(low, breakoutLen)[1]
+bool breakoutLong = not na(channelHigh) and ta.crossover(close, channelHigh)
+bool breakoutShort = not na(channelLow) and ta.crossunder(close, channelLow)
+bool failedBreakoutLong = not na(channelHigh) and high > channelHigh and close <= channelHigh
+bool failedBreakoutShort = not na(channelLow) and low < channelLow and close >= channelLow
+
+float candleRange = high - low
+float bodyFraction = candleRange > 0 ? math.abs(close - open) / candleRange : 0.0
+bool directionalLongBar = close > open and bodyFraction >= minimumBodyFraction
+bool directionalShortBar = close < open and bodyFraction >= minimumBodyFraction
+bool pullbackLongRaw = low <= emaFast and close > emaFast and close > close[1] and close > open
+bool pullbackShortRaw = high >= emaFast and close < emaFast and close < close[1] and close < open
+bool pullbackLong = pullbackLongRaw and not pullbackLongRaw[1]
+bool pullbackShort = pullbackShortRaw and not pullbackShortRaw[1]
+bool longSetup = (breakoutLong or pullbackLong) and not failedBreakoutLong
+bool shortSetup = (breakoutShort or pullbackShort) and not failedBreakoutShort
+
+float stopLongBase = close - atr * stopAtrMultiple
+float stopLongStructure = not na(lastSwingLow) and lastSwingLow < close ? lastSwingLow - atr * structureStopBufferAtr : stopLongBase
+float stopLong = math.min(stopLongBase, stopLongStructure)
+float stopShortBase = close + atr * stopAtrMultiple
+float stopShortStructure = not na(lastSwingHigh) and lastSwingHigh > close ? lastSwingHigh + atr * structureStopBufferAtr : stopShortBase
+float stopShort = math.max(stopShortBase, stopShortStructure)
+float riskLong = close - stopLong
+float riskShort = stopShort - close
+
+float previousRangeHigh = ta.highest(high, targetLookback)[1]
+float previousRangeLow = ta.lowest(low, targetLookback)[1]
+float longResistance = not na(lastSwingHigh) and lastSwingHigh > close ? lastSwingHigh : previousRangeHigh > close ? previousRangeHigh : na
+float shortSupport = not na(lastSwingLow) and lastSwingLow < close ? lastSwingLow : previousRangeLow < close ? previousRangeLow : na
+float longRoom = not na(longResistance) ? longResistance - close : atr * fallbackTargetAtr
+float shortRoom = not na(shortSupport) ? close - shortSupport : atr * fallbackTargetAtr
+float roomRRLong = f_safe_div(longRoom, riskLong, 0.0)
+float roomRRShort = f_safe_div(shortRoom, riskShort, 0.0)
+float rrScoreLong = f_clamp(f_safe_div(roomRRLong, rrScoreCeiling, 0.0) * 100.0, 0.0, 100.0)
+float rrScoreShort = f_clamp(f_safe_div(roomRRShort, rrScoreCeiling, 0.0) * 100.0, 0.0, 100.0)
+
+float trendLongScore = (emaFast > emaSlow ? 45.0 : 0.0) + (emaFast >= emaFast[1] ? 20.0 : 0.0) + (bullReference ? 35.0 : 0.0)
+float trendShortScore = (emaFast < emaSlow ? 45.0 : 0.0) + (emaFast <= emaFast[1] ? 20.0 : 0.0) + (bearReference ? 35.0 : 0.0)
+float momentumLongScore = (roc > 0 ? 55.0 : 0.0) + (rsi >= 50 ? 25.0 : 0.0) + (roc >= roc[1] ? 20.0 : 0.0)
+float momentumShortScore = (roc < 0 ? 55.0 : 0.0) + (rsi <= 50 ? 25.0 : 0.0) + (roc <= roc[1] ? 20.0 : 0.0)
+float volumeLongScore = not hasVolume ? 50.0 : (relativeVolume >= minRelativeVolume ? 65.0 : 30.0) + (close > open ? 35.0 : 0.0)
+float volumeShortScore = not hasVolume ? 50.0 : (relativeVolume >= minRelativeVolume ? 65.0 : 30.0) + (close < open ? 35.0 : 0.0)
+float volatilityScore = highVolatility ? 40.0 : lowVolatility ? 30.0 : 100.0
+float priceActionLongScore = failedBreakoutLong ? 0.0 : (breakoutLong ? 45.0 : pullbackLong ? 35.0 : 0.0) + (directionalLongBar ? 30.0 : 0.0) + (close > usableVwap ? 25.0 : 0.0)
+float priceActionShortScore = failedBreakoutShort ? 0.0 : (breakoutShort ? 45.0 : pullbackShort ? 35.0 : 0.0) + (directionalShortBar ? 30.0 : 0.0) + (close < usableVwap ? 25.0 : 0.0)
+
+float longScore = f_score(trendLongScore, structureLongScore, momentumLongScore, volumeLongScore, volatilityScore, priceActionLongScore, rrScoreLong, weightTrend, weightStructure, weightMomentum, weightVolume, weightVolatility, weightPriceAction, weightRiskReward)
+float shortScore = f_score(trendShortScore, structureShortScore, momentumShortScore, volumeShortScore, volatilityScore, priceActionShortScore, rrScoreShort, weightTrend, weightStructure, weightMomentum, weightVolume, weightVolatility, weightPriceAction, weightRiskReward)
+float longConfidence = f_clamp(longScore + (strongBull ? 4.0 : 0.0) - (highVolatility ? 8.0 : 0.0), 0.0, 100.0)
+float shortConfidence = f_clamp(shortScore + (strongBear ? 4.0 : 0.0) - (highVolatility ? 8.0 : 0.0), 0.0, 100.0)
+
+bool riskDistanceLongOK = riskLong > 0 and f_safe_div(riskLong, atr, 999.0) <= maximumStopAtr
+bool riskDistanceShortOK = riskShort > 0 and f_safe_div(riskShort, atr, 999.0) <= maximumStopAtr
+bool htfReady = not useHTF or (not na(htfClose) and not na(htfAdx))
+bool ready = not na(emaSlow) and not na(atr) and not na(atrBaseline) and htfReady and not na(longScore) and not na(shortScore)
+
+var int lastSignalBar = na
+bool cooldownOK = na(lastSignalBar) or bar_index - lastSignalBar > signalCooldownBars
+bool longSignal = barstate.isconfirmed and ready and inSelectedWindow and strategy.position_size == 0 and cooldownOK and trendRegimeAllowedLong and longSetup and longScore >= minimumScore and roomRRLong >= minimumRoomRR and riskDistanceLongOK
+bool shortSignal = barstate.isconfirmed and ready and inSelectedWindow and strategy.position_size == 0 and cooldownOK and trendRegimeAllowedShort and shortSetup and shortScore >= minimumScore and roomRRShort >= minimumRoomRR and riskDistanceShortOK
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Position state and exits
+// ─────────────────────────────────────────────────────────────────────────────
+var int activeDirection = 0
+var float activeEntry = na
+var float activeStop = na
+var float activeTP1 = na
+var float activeTP2 = na
+var float activeTP3 = na
+var float activeScore = na
+var float activeConfidence = na
+var float activeRR = na
+var bool tp1Reached = false
+var bool tp2Reached = false
+var bool tp3Reached = false
+var bool breakevenApplied = false
+var string lastSignalText = "NO TRADE"
+
+if longSignal
+    activeDirection := 1
+    activeEntry := close
+    activeStop := stopLong
+    activeTP1 := close + riskLong * tp1R
+    activeTP2 := close + riskLong * tp2R
+    activeTP3 := close + riskLong * tp3R
+    activeScore := longScore
+    activeConfidence := longConfidence
+    activeRR := roomRRLong
+    tp1Reached := false
+    tp2Reached := false
+    tp3Reached := false
+    breakevenApplied := false
+    lastSignalBar := bar_index
+    lastSignalText := "LONG"
+    strategy.entry("LONG", strategy.long, comment = "LONG")
+    // Place the initial bracket on the same calculation as the entry so the
+    // first live/backtest bar is not intentionally left unprotected.
+    strategy.exit("L-TP1", from_entry = "LONG", stop = activeStop, limit = activeTP1, qty_percent = 33, comment = "TP1 / SL")
+    strategy.exit("L-TP2", from_entry = "LONG", stop = activeStop, limit = activeTP2, qty_percent = 33, comment = "TP2 / SL")
+    strategy.exit("L-TP3", from_entry = "LONG", stop = activeStop, limit = activeTP3, qty_percent = 34, comment = "TP3 / SL")
+    alert(f_alert_message("LONG", 1, activeEntry, activeStop, activeTP1, activeTP2, activeTP3, activeScore, activeRR), alert.freq_once_per_bar_close)
+
+if shortSignal
+    activeDirection := -1
+    activeEntry := close
+    activeStop := stopShort
+    activeTP1 := close - riskShort * tp1R
+    activeTP2 := close - riskShort * tp2R
+    activeTP3 := close - riskShort * tp3R
+    activeScore := shortScore
+    activeConfidence := shortConfidence
+    activeRR := roomRRShort
+    tp1Reached := false
+    tp2Reached := false
+    tp3Reached := false
+    breakevenApplied := false
+    lastSignalBar := bar_index
+    lastSignalText := "SHORT"
+    strategy.entry("SHORT", strategy.short, comment = "SHORT")
+    strategy.exit("S-TP1", from_entry = "SHORT", stop = activeStop, limit = activeTP1, qty_percent = 33, comment = "TP1 / SL")
+    strategy.exit("S-TP2", from_entry = "SHORT", stop = activeStop, limit = activeTP2, qty_percent = 33, comment = "TP2 / SL")
+    strategy.exit("S-TP3", from_entry = "SHORT", stop = activeStop, limit = activeTP3, qty_percent = 34, comment = "TP3 / SL")
+    alert(f_alert_message("SHORT", -1, activeEntry, activeStop, activeTP1, activeTP2, activeTP3, activeScore, activeRR), alert.freq_once_per_bar_close)
+
+// Events are evaluated only from the confirmed OHLC bar. When a bar touches both
+// a stop and a target, TradingView's broker emulator determines fill ordering;
+// see the documented limitation in the accompanying report.
+bool tp1LongEvent = activeDirection == 1 and strategy.position_size > 0 and not tp1Reached and not na(activeTP1) and high >= activeTP1
+bool tp2LongEvent = activeDirection == 1 and strategy.position_size > 0 and not tp2Reached and not na(activeTP2) and high >= activeTP2
+bool tp3LongEvent = activeDirection == 1 and strategy.position_size > 0 and not tp3Reached and not na(activeTP3) and high >= activeTP3
+bool tp1ShortEvent = activeDirection == -1 and strategy.position_size < 0 and not tp1Reached and not na(activeTP1) and low <= activeTP1
+bool tp2ShortEvent = activeDirection == -1 and strategy.position_size < 0 and not tp2Reached and not na(activeTP2) and low <= activeTP2
+bool tp3ShortEvent = activeDirection == -1 and strategy.position_size < 0 and not tp3Reached and not na(activeTP3) and low <= activeTP3
+bool stopLongEvent = activeDirection == 1 and strategy.position_size > 0 and not na(activeStop) and low <= activeStop
+bool stopShortEvent = activeDirection == -1 and strategy.position_size < 0 and not na(activeStop) and high >= activeStop
+bool breakEvenLongEvent = activeDirection == 1 and strategy.position_size > 0 and moveStopToBreakeven and not breakevenApplied and (tp1Reached or tp1LongEvent)
+bool breakEvenShortEvent = activeDirection == -1 and strategy.position_size < 0 and moveStopToBreakeven and not breakevenApplied and (tp1Reached or tp1ShortEvent)
+
+if tp1LongEvent or tp1ShortEvent
+    tp1Reached := true
+if tp2LongEvent or tp2ShortEvent
+    tp2Reached := true
+if tp3LongEvent or tp3ShortEvent
+    tp3Reached := true
+if breakEvenLongEvent or breakEvenShortEvent
+    breakevenApplied := true
+
+if activeDirection == 1 and strategy.position_size > 0 and tp1Reached
+    if moveStopToBreakeven
+        activeStop := math.max(activeStop, activeEntry)
+    if useAtrTrail and not na(atr)
+        activeStop := math.max(activeStop, close - atr * trailAtrMultiple)
+if activeDirection == -1 and strategy.position_size < 0 and tp1Reached
+    if moveStopToBreakeven
+        activeStop := math.min(activeStop, activeEntry)
+    if useAtrTrail and not na(atr)
+        activeStop := math.min(activeStop, close + atr * trailAtrMultiple)
+
+bool longExitCandidate = failedBreakoutLong or bearBOS or (bearReference and localBear) or (not na(shortScore) and shortScore >= minimumScore)
+bool shortExitCandidate = failedBreakoutShort or bullBOS or (bullReference and localBull) or (not na(longScore) and longScore >= minimumScore)
+bool longExitEvent = activeDirection == 1 and strategy.position_size > 0 and barstate.isconfirmed and exitOnOppositeSignal and longExitCandidate
+bool shortExitEvent = activeDirection == -1 and strategy.position_size < 0 and barstate.isconfirmed and exitOnOppositeSignal and shortExitCandidate
+
+if activeDirection == 1 and strategy.position_size > 0
+    if longExitEvent
+        strategy.close("LONG", comment = "EXIT")
+        alert(f_alert_message("EXIT", 1, activeEntry, activeStop, activeTP1, activeTP2, activeTP3, activeScore, activeRR), alert.freq_once_per_bar_close)
+    else
+        strategy.exit("L-TP1", from_entry = "LONG", stop = activeStop, limit = activeTP1, qty_percent = 33, comment = "TP1 / SL")
+        strategy.exit("L-TP2", from_entry = "LONG", stop = activeStop, limit = activeTP2, qty_percent = 33, comment = "TP2 / SL")
+        strategy.exit("L-TP3", from_entry = "LONG", stop = activeStop, limit = activeTP3, qty_percent = 34, comment = "TP3 / SL")
+if activeDirection == -1 and strategy.position_size < 0
+    if shortExitEvent
+        strategy.close("SHORT", comment = "EXIT")
+        alert(f_alert_message("EXIT", -1, activeEntry, activeStop, activeTP1, activeTP2, activeTP3, activeScore, activeRR), alert.freq_once_per_bar_close)
+    else
+        strategy.exit("S-TP1", from_entry = "SHORT", stop = activeStop, limit = activeTP1, qty_percent = 33, comment = "TP1 / SL")
+        strategy.exit("S-TP2", from_entry = "SHORT", stop = activeStop, limit = activeTP2, qty_percent = 33, comment = "TP2 / SL")
+        strategy.exit("S-TP3", from_entry = "SHORT", stop = activeStop, limit = activeTP3, qty_percent = 34, comment = "TP3 / SL")
+
+// Force the selected sample to be flat at its end. This prevents a holdout trade
+// from leaking P/L into the next segment when the user changes sampleMode.
+if not inSelectedWindow and strategy.position_size != 0
+    strategy.close(activeDirection == 1 ? "LONG" : "SHORT", comment = "SAMPLE END")
+
+if tp1LongEvent or tp1ShortEvent
+    alert(f_alert_message("TP1", activeDirection, activeEntry, activeStop, activeTP1, activeTP2, activeTP3, activeScore, activeRR), alert.freq_once_per_bar_close)
+if tp2LongEvent or tp2ShortEvent
+    alert(f_alert_message("TP2", activeDirection, activeEntry, activeStop, activeTP1, activeTP2, activeTP3, activeScore, activeRR), alert.freq_once_per_bar_close)
+if tp3LongEvent or tp3ShortEvent
+    alert(f_alert_message("TP3", activeDirection, activeEntry, activeStop, activeTP1, activeTP2, activeTP3, activeScore, activeRR), alert.freq_once_per_bar_close)
+if stopLongEvent or stopShortEvent
+    alert(f_alert_message("STOP LOSS", activeDirection, activeEntry, activeStop, activeTP1, activeTP2, activeTP3, activeScore, activeRR), alert.freq_once_per_bar_close)
+if breakEvenLongEvent or breakEvenShortEvent
+    alert(f_alert_message("BREAK EVEN", activeDirection, activeEntry, activeStop, activeTP1, activeTP2, activeTP3, activeScore, activeRR), alert.freq_once_per_bar_close)
+if (longSignal and longScore >= highQualityScore) or (shortSignal and shortScore >= highQualityScore)
+    alert(f_alert_message("HIGH QUALITY SIGNAL", longSignal ? 1 : -1, activeEntry, activeStop, activeTP1, activeTP2, activeTP3, activeScore, activeRR), alert.freq_once_per_bar_close)
+
+if strategy.position_size == 0 and strategy.position_size[1] != 0 and not longSignal and not shortSignal
+    activeDirection := 0
+    tp1Reached := false
+    tp2Reached := false
+    tp3Reached := false
+    breakevenApplied := false
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Plots and alerts
+// ─────────────────────────────────────────────────────────────────────────────
+plot(showTrendPlots ? emaFast : na, "Chart fast EMA", color = color.new(color.teal, 0), linewidth = 2)
+plot(showTrendPlots ? emaSlow : na, "Chart slow EMA", color = color.new(color.orange, 0), linewidth = 2)
+plot(showRiskPlots and activeDirection != 0 ? activeEntry : na, "Active entry", color = color.new(color.blue, 0), linewidth = 2, style = plot.style_linebr)
+plot(showRiskPlots and activeDirection != 0 ? activeStop : na, "Active stop", color = color.new(color.red, 0), linewidth = 2, style = plot.style_linebr)
+plot(showRiskPlots and activeDirection != 0 ? activeTP1 : na, "TP1", color = color.new(color.green, 15), style = plot.style_linebr)
+plot(showRiskPlots and activeDirection != 0 ? activeTP2 : na, "TP2", color = color.new(color.green, 35), style = plot.style_linebr)
+plot(showRiskPlots and activeDirection != 0 ? activeTP3 : na, "TP3", color = color.new(color.green, 55), style = plot.style_linebr)
+plotshape(longSignal, title = "LONG signal", style = shape.labelup, location = location.belowbar, color = color.lime, textcolor = color.black, text = "LONG", size = size.tiny)
+plotshape(shortSignal, title = "SHORT signal", style = shape.labeldown, location = location.abovebar, color = color.red, textcolor = color.white, text = "SHORT", size = size.tiny)
+plotshape(showStructureMarkers and bullBOS, title = "Bullish BOS / CHoCH", style = shape.circle, location = location.belowbar, color = color.new(color.lime, 20), text = "BOS", size = size.tiny)
+plotshape(showStructureMarkers and bearBOS, title = "Bearish BOS / CHoCH", style = shape.circle, location = location.abovebar, color = color.new(color.red, 20), text = "BOS", size = size.tiny)
+plotshape(showStructureMarkers and failedBreakoutLong, title = "Failed bullish breakout", style = shape.xcross, location = location.abovebar, color = color.orange, text = "FAIL", size = size.tiny)
+plotshape(showStructureMarkers and failedBreakoutShort, title = "Failed bearish breakout", style = shape.xcross, location = location.belowbar, color = color.orange, text = "FAIL", size = size.tiny)
+
+// This is a strategy, so alert() calls above are the authoritative dynamic alert
+// channel. TradingView does not activate alertcondition() triggers in strategies.
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Dashboard
+// ─────────────────────────────────────────────────────────────────────────────
+var table dashboard = table.new(position.top_right, 2, 25, border_width = 1, frame_width = 1, frame_color = color.new(color.gray, 65))
+
+float displayScore = activeDirection != 0 ? activeScore : math.max(nz(longScore, 0), nz(shortScore, 0))
+float displayConfidence = activeDirection != 0 ? activeConfidence : math.max(nz(longConfidence, 0), nz(shortConfidence, 0))
+string displaySignal = activeDirection == 1 ? "LONG ACTIVE" : activeDirection == -1 ? "SHORT ACTIVE" : longSignal ? "LONG" : shortSignal ? "SHORT" : "NO TRADE"
+string positionStatus = strategy.position_size > 0 ? "LONG POSITION" : strategy.position_size < 0 ? "SHORT POSITION" : "FLAT"
+int tradeCount = strategy.closedtrades
+int winCount = strategy.wintrades
+int lossCount = strategy.losstrades
+float winRate = tradeCount > 0 ? winCount * 100.0 / tradeCount : na
+float profitFactor = strategy.grossloss != 0 ? strategy.grossprofit / math.abs(strategy.grossloss) : na
+float expectancy = tradeCount > 0 ? strategy.netprofit / tradeCount : na
+float averageTrade = expectancy
+
+if barstate.islast and showDashboard
+    table.cell(dashboard, 0, 0, "PRODUCTION EDGE ENGINE", text_color = color.white, bgcolor = color.rgb(25, 35, 55), text_size = size.small)
+    table.cell(dashboard, 1, 0, "v6 · CONFIRMED", text_color = color.aqua, bgcolor = color.rgb(25, 35, 55), text_size = size.small)
+    table.cell(dashboard, 0, 1, "MARKET REGIME", text_color = color.silver, bgcolor = color.new(color.black, 10))
+    table.cell(dashboard, 1, 1, marketRegime, text_color = highVolatility ? color.orange : directionalRegime == "SIDEWAYS" ? color.yellow : color.white)
+    table.cell(dashboard, 0, 2, "TREND", text_color = color.silver)
+    table.cell(dashboard, 1, 2, alignedBull ? "BULL / HTF ALIGNED" : alignedBear ? "BEAR / HTF ALIGNED" : "MIXED", text_color = alignedBull ? color.lime : alignedBear ? color.red : color.yellow)
+    table.cell(dashboard, 0, 3, "STRUCTURE", text_color = color.silver)
+    table.cell(dashboard, 1, 3, failedBreakoutLong ? "FAILED BREAK UP" : failedBreakoutShort ? "FAILED BREAK DOWN" : structureText, text_color = failedBreakoutLong or failedBreakoutShort ? color.orange : structureDirection == 1 ? color.lime : structureDirection == -1 ? color.red : color.yellow)
+    table.cell(dashboard, 0, 4, "SIGNAL", text_color = color.silver, bgcolor = color.new(color.black, 10))
+    table.cell(dashboard, 1, 4, displaySignal, text_color = activeDirection == 1 or longSignal ? color.lime : activeDirection == -1 or shortSignal ? color.red : color.silver, bgcolor = color.new(color.black, 10))
+    table.cell(dashboard, 0, 5, "SIGNAL SCORE", text_color = color.silver)
+    table.cell(dashboard, 1, 5, f_number(displayScore), text_color = f_score_color(displayScore))
+    table.cell(dashboard, 0, 6, "CONFIDENCE*", text_color = color.silver)
+    table.cell(dashboard, 1, 6, f_number(displayConfidence), text_color = f_score_color(displayConfidence))
+    table.cell(dashboard, 0, 7, "ENTRY", text_color = color.silver)
+    table.cell(dashboard, 1, 7, f_price(activeEntry), text_color = color.white)
+    table.cell(dashboard, 0, 8, "STOP LOSS", text_color = color.silver)
+    table.cell(dashboard, 1, 8, f_price(activeStop), text_color = color.red)
+    table.cell(dashboard, 0, 9, "TP1 / TP2 / TP3", text_color = color.silver)
+    table.cell(dashboard, 1, 9, f_price(activeTP1) + " / " + f_price(activeTP2) + " / " + f_price(activeTP3), text_color = color.lime)
+    table.cell(dashboard, 0, 10, "R/R TO ROOM", text_color = color.silver)
+    table.cell(dashboard, 1, 10, f_number(activeRR), text_color = activeRR >= minimumRoomRR ? color.lime : color.red)
+    table.cell(dashboard, 0, 11, "ATR / ATR RATIO", text_color = color.silver)
+    table.cell(dashboard, 1, 11, f_price(atr) + " / " + f_number(atrRatio), text_color = highVolatility ? color.orange : color.white)
+    table.cell(dashboard, 0, 12, "POSITION STATUS", text_color = color.silver)
+    table.cell(dashboard, 1, 12, positionStatus, text_color = strategy.position_size == 0 ? color.silver : color.aqua)
+    table.cell(dashboard, 0, 13, "SAMPLE", text_color = color.silver)
+    table.cell(dashboard, 1, 13, sampleMode, text_color = color.aqua)
+    table.cell(dashboard, 0, 14, "────────────", text_color = color.gray)
+    table.cell(dashboard, 1, 14, "────────────", text_color = color.gray)
+    table.cell(dashboard, 0, 15, "TRADES", text_color = color.silver)
+    table.cell(dashboard, 1, 15, str.tostring(tradeCount), text_color = color.white)
+    table.cell(dashboard, 0, 16, "WINS / LOSSES", text_color = color.silver)
+    table.cell(dashboard, 1, 16, str.tostring(winCount) + " / " + str.tostring(lossCount), text_color = color.white)
+    table.cell(dashboard, 0, 17, "WIN RATE", text_color = color.silver)
+    table.cell(dashboard, 1, 17, f_percent(winRate), text_color = color.white)
+    table.cell(dashboard, 0, 18, "PROFIT FACTOR", text_color = color.silver)
+    table.cell(dashboard, 1, 18, f_number(profitFactor), text_color = profitFactor >= 1 ? color.lime : color.orange)
+    table.cell(dashboard, 0, 19, "EXPECTANCY", text_color = color.silver)
+    table.cell(dashboard, 1, 19, f_price(expectancy), text_color = expectancy >= 0 ? color.lime : color.red)
+    table.cell(dashboard, 0, 20, "NET P&L", text_color = color.silver)
+    table.cell(dashboard, 1, 20, f_price(strategy.netprofit), text_color = strategy.netprofit >= 0 ? color.lime : color.red)
+    table.cell(dashboard, 0, 21, "MAX DRAWDOWN", text_color = color.silver)
+    table.cell(dashboard, 1, 21, f_price(strategy.max_drawdown), text_color = color.orange)
+    table.cell(dashboard, 0, 22, "AVERAGE TRADE", text_color = color.silver)
+    table.cell(dashboard, 1, 22, f_price(averageTrade), text_color = averageTrade >= 0 ? color.lime : color.red)
+    table.cell(dashboard, 0, 23, "HTF DATA", text_color = color.silver)
+    table.cell(dashboard, 1, 23, useHTF ? htfInput + " · confirmed [1]" : "DISABLED", text_color = color.aqua)
+    table.cell(dashboard, 0, 24, "* NOT A PROBABILITY", text_color = color.gray, text_size = size.tiny)
+    table.cell(dashboard, 1, 24, "Score ≠ guarantee", text_color = color.gray, text_size = size.tiny)
